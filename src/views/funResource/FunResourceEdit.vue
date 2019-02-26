@@ -13,7 +13,7 @@
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="类型" prop="type">
-        <self-dict-select v-model="form.type" type="funResource_type"></self-dict-select>
+        <self-dict-select v-model="form.type" v-on:change="typeChange" type="funResource_type"></self-dict-select>
       </el-form-item>
       <el-form-item label="图标" prop="icon">
         <el-input  v-model="form.icon">
@@ -165,16 +165,16 @@
       },
       funResourceIconChange (icon) {
         this.form.icon = icon
-      }
-    },
-    watch: {
-      'form.type' (val) {
-        if (val === 'menu' || val === 'link_page' || val === 'link') {
+      },
+      typeChange (val) {
+        if ((val === 'menu' || val === 'link_page' || val === 'link')) {
           this.form.isShow = 'Y'
         } else {
           this.form.isShow = 'N'
         }
       }
+    },
+    watch: {
     },
     // tab切换如果参数不一样，重新加载数据
     beforeRouteEnter  (to, from, next) {
