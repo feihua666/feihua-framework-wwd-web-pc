@@ -1,4 +1,4 @@
-# feihua-framework-base-web-pc
+# web-pc
 
 > A Vue.js project
 
