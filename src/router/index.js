@@ -5,7 +5,8 @@ const _import = require('@/router/_import_' + process.env.NODE_ENV)
 Vue.use(Router)
 
 const router = new Router({
-  // base: '/sss',
+  // 改两个地方一个是路由base，一个是build config 变量assetsSubDirectory
+  base: '/pc-admin',
   mode: 'history',
   routes: [
     {
