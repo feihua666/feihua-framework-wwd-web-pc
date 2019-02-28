@@ -10,7 +10,7 @@ module.exports = {
     // Paths
     //assetsSubDirectory: 'static',
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/' + assetsPublicPath + '/',
+    assetsPublicPath: '/' + assetsPublicPath,
     proxyTable: {
       // proxy all requests starting with /api to jsonplaceholder
       // 用nginx代理
@@ -61,15 +61,13 @@ module.exports = {
 
   build: {
     // Template for index.html
-    //index: path.resolve(__dirname, '../dist/index.html'),
-    index: path.resolve(__dirname, '../dist/'+ assetsPublicPath +'/index.html'),
+    index: path.resolve(__dirname, '../dist/index.html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
-    //assetsSubDirectory: 'static',
-    assetsSubDirectory: assetsPublicPath + '/static',
-    assetsPublicPath: '/',
-
+    assetsSubDirectory: 'static',
+    //assetsPublicPath: '/',
+    assetsPublicPath: '/' + assetsPublicPath,
     /**
      * Source Maps
      */
