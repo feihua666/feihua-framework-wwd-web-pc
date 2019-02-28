@@ -3,14 +3,14 @@
 // see http://vuejs-templates.github.io/webpack for documentation.
 
 const path = require('path')
-const assetsPublicPath='pc-admin'
+const assetsPublicPath = 'pc-admin'
 module.exports = {
   dev: {
 
     // Paths
     //assetsSubDirectory: 'static',
     assetsSubDirectory: 'static',
-    assetsPublicPath: '/' + assetsPublicPath,
+    assetsPublicPath: '/' + assetsPublicPath + '/',
     proxyTable: {
       // proxy all requests starting with /api to jsonplaceholder
       // 用nginx代理
@@ -67,7 +67,7 @@ module.exports = {
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     //assetsPublicPath: '/',
-    assetsPublicPath: '/' + assetsPublicPath,
+    assetsPublicPath: '/' + assetsPublicPath + '/',
     /**
      * Source Maps
      */

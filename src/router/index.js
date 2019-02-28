@@ -6,7 +6,7 @@ Vue.use(Router)
 
 const router = new Router({
   // 改两个地方一个是路由base，一个是build config 变量assetsSubDirectory
-  base: '/pc-admin',
+  base: '/pc-admin/',
   mode: 'history',
   routes: [
     {
