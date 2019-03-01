@@ -100,6 +100,10 @@
               {
                 label: '删除',
                 click: this.deleteTableRowClick
+              },
+              {
+                label: '强制删除',
+                click: this.deleteForceTableRowClick
               }
             ]
           }
@@ -197,6 +201,25 @@
           type: 'warning'
         }).then(() => {
           this.$http.delete('/base/functionResource/' + row.id)
+            .then(function (response) {
+              self.$message.success('删除成功')
+              // 重新加载数据
+              self.searchBtnClick()
+            })
+            .catch(function (error) {
+              if (error.response.status === 404) {
+                self.$message.error('删除失败，请刷新数据再试')
+              }
+            })
+        })
+      },
+      // tablb 表格强制删除行
+      deleteForceTableRowClick (index, row) {
+        let self = this
+        this.$confirm('确定要强制删除吗,当前节点及子孙节点都会被删除, 是否继续?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.$http.delete('/base/functionResource/' + row.id + '/force')
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
