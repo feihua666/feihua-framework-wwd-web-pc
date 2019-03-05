@@ -1,0 +1,147 @@
+.content-tabs {
+
+    position: relative;
+    height: 42px;
+    background: #fafafa;
+    line-height: 40px;
+    z-index:1;
+    border-bottom: solid 2px #ededed;
+}
+.content-tabs .roll-nav, .page-tabs-list {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    text-align: center;
+    color: #999;
+    z-index: 2;
+    top: 0
+}
+.content-tabs .roll-left {
+    left: 0;
+    border-right: solid 1px #eee;
+
+}
+.content-tabs .roll-right {
+    right: 0;
+    border-left: solid 1px #eee;
+
+}
+.content-tabs button {
+    background: #fff;
+    border: 0;
+    height: 40px;
+    width: 40px;
+    outline: 0
+}
+.content-tabs button:hover {
+    background: #fafafa
+}nav.page-tabs {
+
+     width: 100000px;
+     height: 40px;
+     overflow: hidden;
+
+ }
+nav.page-tabs .page-tabs-content {
+    float: left
+}
+.page-tabs a {
+    display: block;
+    float: left;
+    border-right: solid 1px #eee;
+    padding: 0 15px;
+    color:#999;
+}
+.page-tabs a i:hover {
+    color: #fff
+}
+.page-tabs-content a:hover{ color:#fff;}
+.content-tabs .roll-nav:hover{
+    cursor: pointer
+}
+.page-tabs a:hover {
+    /*color: #fff;*/
+    background: #089ded;
+    cursor: pointer
+}
+.roll-right.J_tabRight {
+    right: 80px
+}
+.roll-right.btn-group {
+    width: 80px;
+    padding: 0
+}
+.roll-right.btn-group button {
+    width: 80px
+}
+.roll-right.J_tabExit {
+    background: #fff;
+    height: 40px;
+    width: 60px;
+    outline: 0
+}
+.dropdown-menu-right {
+    left: auto
+}
+.dropdown-menu-right {
+    left: auto
+}
+.content-tabs .roll-nav:hover{
+    cursor: pointer
+}
+.J_menuTab {
+    -webkit-transition: all .3s ease-out 0s;
+    transition: all .3s ease-out 0s
+}
+.page-tabs a {
+    color: #999
+}
+.page-tabs a i {
+    color: #ccc
+}
+.page-tabs a.active i {
+    color: #fff
+}
+.page-tabs a.active {
+    background: #089ded;
+    color: #fff
+}
+.page-tabs a.active i:hover, .page-tabs a.active:hover {
+    background: #089ded;
+    color: #fff
+}
+.page-tabs a.active:hover i {
+    color: #fff
+}
+.dropdown-menu {
+    border: medium none;
+    display: none;
+    float: left;
+    list-style: none outside none;
+    padding: 0;
+    position: absolute;
+    text-shadow: none;
+    top: 100%;
+    z-index: 1000;
+    border-radius: 0;
+    box-shadow: 0 0 3px rgba(86,96,117,.3)
+}
+.dropdown-menu>li>a {
+    border-radius: 3px;
+    color: inherit;
+    line-height: 25px;
+    margin: 4px;
+    text-align: left;
+    font-weight: 400
+}
+.dropdown-menu>li:hover{ color:#000;}
+.dropdown-menu>li>a.font-bold {
+    font-weight: 600
+}
+nav.page-tabs {
+
+    width: 100000px;
+    height: 40px;
+    overflow: hidden;
+
+}
