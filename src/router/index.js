@@ -484,6 +484,24 @@ const router = new Router({
           name: 'CmsOptions',
           component: _import('cms/survey/Options'),
           meta: { menu: {name: '调查问题选项'}, keepAlive: true }
+        },
+        // wwd
+        {
+          path: 'Wwd/Activity',
+          name: 'WwdActivity',
+          component: _import('wwd/activity/WwdActivity')
+        },
+        {
+          path: 'Wwd/Activity/WwdActivityAdd',
+          name: 'WwdActivityAdd',
+          component: _import('wwd/activity/WwdActivityAdd'),
+          meta: { menu: {name: '活动添加'}, keepAlive: true }
+        },
+        {
+          path: 'Wwd/Activity/WwdActivityEdit/:id',
+          name: 'WwdActivityEdit',
+          component: _import('wwd/activity/WwdActivityEdit'),
+          meta: { menu: {name: '活动修改'}, keepAlive: true }
         }
       ]
     }
