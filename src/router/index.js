@@ -484,6 +484,29 @@ const router = new Router({
           name: 'CmsOptions',
           component: _import('cms/survey/Options'),
           meta: { menu: {name: '调查问题选项'}, keepAlive: true }
+        },
+        {
+          path: 'BaseConfig',
+          name: 'BaseConfig',
+          component: _import('baseConfig/BaseConfig')
+        },
+        {
+          path: 'BaseConfig/BaseConfigAdd',
+          name: 'BaseConfigAdd',
+          component: _import('baseConfig/BaseConfigAdd'),
+          meta: { menu: {name: '添加系统配置'}, keepAlive: true }
+        },
+        {
+          path: 'BaseConfig/BaseConfigEdit/:id',
+          name: 'BaseConfigEdit',
+          component: _import('baseConfig/BaseConfigEdit'),
+          meta: { menu: {name: '修改系统配置'}, keepAlive: true }
+        },
+        {
+          path: 'BaseConfig/OssConfig/:id',
+          name: 'OssConfig',
+          component: _import('baseConfig/OssConfig'),
+          meta: { menu: {name: 'OSS配置'}, keepAlive: true }
         }
       ]
     }

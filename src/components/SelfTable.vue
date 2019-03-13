@@ -1,11 +1,11 @@
 <template>
  <div>
-   <el-table v-loading="tableLoading"
+   <el-table v-loading="tableLoading" :default-sort="defaultSort" @sort-change="sortChange"
              border stripe
      size="mini"
      style="width: 100%" :data="tableData">
      <template  v-for="item in columns">
-       <el-table-column v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
+       <el-table-column  v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
          <template slot-scope="scope">
            <el-button v-for="btn in item.buttons"  :key="scope.$index"
                       @click.native.prevent="btn.click(scope.$index, scope.row)"
@@ -43,7 +43,7 @@
            <div v-if="item.html" v-html="item.html(scope.row)"></div>
          </template>
        </el-table-column>
-       <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
+       <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
        </el-table-column>
      </template>
 
@@ -64,6 +64,11 @@
     props: {
       showPage: {
         default: true
+      },
+      defaultSort: {
+        default: function () {
+          return {}
+        }
       },
       columns: {
         default: function () {
@@ -93,6 +98,20 @@
     mounted () {
     },
     methods: {
+      // 排序
+      sortChange (val) {
+        if (val && val.column.sortable != null) {
+          // 加了sortBy字段才返回
+          if (val.column.sortBy) {
+            if (val.order === 'descending') {
+              val.sortBy = val.column.sortBy + '-desc'
+            } else {
+              val.sortBy = val.column.sortBy + '-asc'
+            }
+            this.$emit('sortChange', val)
+          }
+        }
+      },
       // 页面大小改变重新查询数据
       pageSizeChange (val) {
         this.$emit('pageSizeChange', val)

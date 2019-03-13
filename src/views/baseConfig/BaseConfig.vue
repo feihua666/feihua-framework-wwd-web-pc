@@ -6,16 +6,16 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="名称" prop="keyword">
+              <el-form-item label="关键字" prop="keyword">
                 <el-input  v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
-              <el-form-item label="类型" prop="type">
-                <self-dict-select v-model="searchFormModel.type" type="file_type"></self-dict-select>
+              <el-form-item label="启用状态" prop="status">
+                <self-dict-select v-model="searchFormModel.status" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button @click="resetFormClick">重置</el-button>
-                <el-button type="primary" @click="addTableRowClick">上传</el-button>
+                <el-button type="danger" @click="addConfig">添加配置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -23,73 +23,64 @@
         <self-table  @sortChange="sortChange" :default-sort="defaultSort" :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
     </el-container>
-
-    <file-upload ref="fileupload" :onSuccess="fileUploadSucess"></file-upload>
-    <file-download-dialog ref="filedownload"></file-download-dialog>
   </div>
 </template>
 
 <script>
+  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
+  import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import FileUpload from '@/components/FileUpload'
-  import FileDownloadDialog from '@/components/FileDownloadDialog'
   export default {
-    name: 'File',
+    name: 'BaseConfig',
     components: {
-      FileDownloadDialog,
-      FileUpload,
       SelfDictSelect,
-      SelfTable},
+      SelfTable,
+      SelfPage
+    },
     data () {
       return {
-        defaultSort: {prop: 'createAt', order: 'descending'},
+        defaultSort: {prop: 'updateAt', order: 'descending'},
         columns: [
           {
-            name: 'name',
-            label: '名称'
+            name: 'status',
+            width: '50',
+            dict: 'yes_no',
+            label: '启用状态'
           },
           {
-            name: 'filename',
-            label: '文件原名称'
+            name: 'configKey',
+            label: 'KEY'
           },
           {
-            name: 'type',
-            label: '分类',
-            dict: 'file_type'
+            name: 'description',
+            label: '配置说明'
           },
           {
-            name: 'downloadNum',
-            label: '下载数'
-          },
-          {
-            name: 'duration',
-            label: '耗时(s)'
-          },
-          {
-            name: 'filePath',
-            label: '路径'
+            name: 'configValue',
+            label: 'VALUE'
           },
           {
             sortable: 'custom',
-            sortBy: 'create_at',
-            name: 'createAt',
+            sortBy: 'update_at',
+            name: 'updateAt',
             label: '创建时间'
           },
           {
             label: '操作',
+            width: '200',
             buttons: [
               {
-                label: '修改名称',
-                click: this.updateName
-              },
-              {
-                label: '下载',
-                click: this.downloadFile
+                label: '编辑',
+                click: this.editConfigClick
               },
               {
                 label: '删除',
                 click: this.deleteTableRowClick
+              },
+              {
+                label: '配置',
+                click: this.updateConfigClick
               }
             ]
           }
@@ -102,11 +93,10 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
+          status: '',
+          keyword: '',
           orderable: true,
           orderby: 'update_at-desc',
-          name: '',
-          keyword: '',
-          type: '',
           pageable: true,
           pageNo: 1,
           pageSize: 10
@@ -121,12 +111,12 @@
         this.searchFormModel.orderby = val.sortBy
         this.searchBtnClick()
       },
-      resetFormClick () {
-        this.$refs['searchForm'].resetFields()
-      },
       // 查询按钮点击事件
       searchBtnClick () {
         this.loadTableData(1)
+      },
+      resetFormClick () {
+        this.$refs['searchForm'].resetFields()
       },
       // 加载表格数据
       loadTableData (pageNo) {
@@ -135,7 +125,7 @@
           self.searchFormModel.pageNo = pageNo
         }
         self.tableLoading = true
-        this.$http.get('/base/files', self.searchFormModel)
+        this.$http.get('/base/configs', self.searchFormModel)
           .then(function (response) {
             let content = response.data.data.content
             self.tableData = content
@@ -146,6 +136,7 @@
             if (error.response.status === 404) {
               self.tableData = []
               self.page.dataNum = 0
+              self.tableOffice = {}
             }
             self.tableLoading = false
           })
@@ -159,36 +150,23 @@
       pageNoChange (val) {
         this.loadTableData(val)
       },
-      // 修改名称
-      updateName (index, row) {
-        let self = this
-        this.$prompt('请输入名称', '提示', {
-          inputErrorMessage: '请输入名称',
-          inputValidator: function (value) {
-            return !!value
-          }
-        }).then(({value}) => {
-          this.$http.put('/base/file/' + row.id, {name: value})
-            .then(function (response) {
-              self.$message.success('更新成功')
-              // 重新加载数据
-              self.searchBtnClick()
-            }).catch()
-        })
+      addConfig () {
+        loadDataControl.add(this.$store, 'BaseConfigAddAddLoadData=true')
+        this.$router.push('/Main/BaseConfig/BaseConfigAdd')
       },
-      // 下载
-      downloadFile (index, row) {
-        let self = this
-        this.$http.put('/base/file/' + row.id + '/download')
-          .then(function (response) {
-            self.$refs.filedownload.show()
-            self.$refs.filedownload.setPath(row.filePath)
+      editConfigClick (index, row) {
+        this.$router.push('/Main/BaseConfig/BaseConfigEdit/' + row.id)
+      },
+      updateConfigClick (index, row) {
+        var self = this
+        if (row.configKey === 'OSS_CLOUD_STORAGE_CONFIG_KEY') {
+          self.$router.push('/Main/BaseConfig/OssConfig/' + row.id)
+        } else {
+          this.$confirm('没有可配置项', '提示', {
+            type: 'warning'
+          }).then(() => {
           })
-          .catch(function (error) {
-            if (error.response.status === 404) {
-              self.$message.success('下载失败，数据不存在，请刷新数据再试')
-            }
-          })
+        }
       },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
@@ -196,7 +174,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/file/' + row.id)
+          this.$http.delete('/base/config/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -208,14 +186,6 @@
               }
             })
         })
-      },
-      // 上传
-      addTableRowClick () {
-        this.$refs.fileupload.show()
-      },
-      fileUploadSucess () {
-        this.searchBtnClick()
-        this.$refs.fileupload.hide()
       }
     },
     watch: {
@@ -237,6 +207,7 @@
 .wrapper,.el-container{
   height:100%;
 }
+
 </style>
 <style>
 .el-collapse-item__arrow {
