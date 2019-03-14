@@ -39,7 +39,10 @@
         <el-input v-model="form.addr" style="width: 50%"></el-input>
       </el-form-item>
       <el-form-item label="活动人数" prop="headcount">
-        <el-input-number :min="1" v-model="form.headcount"></el-input-number>默认0为不限人数
+        <el-input-number :min="0" v-model="form.headcount"></el-input-number>默认0为不限人数
+      </el-form-item>
+      <el-form-item label="人数说明" prop="headcountDesc">
+        <el-input v-model="form.headcountDesc" style="width: 50%"></el-input>
       </el-form-item>
       <el-form-item label="支付规则" prop="payRule" required>
         <el-radio-group v-model="form.payRule" size="small">
@@ -103,6 +106,7 @@
           type: '户外',
           status: '1',
           headcount: 0,
+          headcountDesc: null,
           payRule: '1',
           price: null,
           malePrice: null,
@@ -143,6 +147,7 @@
             self.form.type = content.type
             self.form.status = content.status
             self.form.headcount = content.headcount
+            self.form.headcountDesc = content.headcountDesc
             self.form.payRule = content.payRule
             self.form.price = content.price
             self.form.malePrice = content.malePrice
@@ -177,6 +182,7 @@
               activity.type = self.form.type
               activity.status = self.form.status
               activity.headcount = self.form.headcount
+              activity.headcountDesc = self.form.headcountDesc
               activity.payRule = self.form.payRule
               activity.price = self.form.price
               activity.malePrice = self.form.malePrice
