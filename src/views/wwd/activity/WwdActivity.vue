@@ -62,17 +62,14 @@
             label: '状态'
           },
           {
-            name: 'payRule',
-            dict: 'wwd_pay_rule',
-            label: '支付规则'
-          },
-          {
             name: 'headcount',
+            html: this.headcountFormatter,
             label: '总人数'
           },
           {
-            name: 'price',
-            label: '人均'
+            name: 'payRule',
+            dict: 'wwd_pay_rule',
+            label: '支付规则'
           },
           {
             name: 'malePrice',
@@ -98,6 +95,14 @@
               {
                 label: '删除',
                 click: this.deleteTableRowClick
+              },
+              {
+                label: '复制',
+                click: this.copyTableRowClick
+              },
+              {
+                label: '查看活动人员',
+                click: this.participateRowClick
               }
             ]
           }
@@ -127,6 +132,15 @@
       this.loadTableData(1)
     },
     methods: {
+      headcountFormatter (row) {
+        let html
+        if (row.headcount === 0) {
+          html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / 不限'
+        } else {
+          html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / ' + row.headcount
+        }
+        return html
+      },
       photoFormatter (row) {
         let url = null
         if (row.titleUrl) {
@@ -203,6 +217,28 @@
               }
             })
         })
+      },
+      // tablb 表格复制行
+      copyTableRowClick (index, row) {
+        let self = this
+        this.$confirm('确定要复制该活动吗，如复制需要重新编辑复制的活动, 是否继续?', '提示', {
+          type: 'warning'
+        }).then(() => {
+          this.$http.get('/wwd/activity/copy/' + row.id)
+            .then(function (response) {
+              self.$message.success('复制成功，记得去重新编辑哦')
+              // 重新加载数据
+              self.searchBtnClick()
+            })
+            .catch(function (error) {
+              if (error.response.status === 404) {
+                self.$message.success('复制失败，请刷新数据再试')
+              }
+            })
+        })
+      },
+      participateRowClick (index, row) {
+        this.$router.push('/Main/Wwd/Activity/WwdParticipate/' + row.id)
       },
       addTableRowClick () {
         loadDataControl.add(this.$store, 'WwdActivityAddLoadData=true')

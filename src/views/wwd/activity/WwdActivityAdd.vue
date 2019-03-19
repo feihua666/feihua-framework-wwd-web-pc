@@ -17,7 +17,7 @@
         <el-input v-model="form.title" style="width: 50%"></el-input>
       </el-form-item>
       <el-form-item label="活动类型" prop="type">
-        <el-radio-group v-model="form.type" size="small">
+        <el-radio-group v-model="form.type">
           <el-radio-button label="户外">户外</el-radio-button>
           <el-radio-button label="室内">室内</el-radio-button>
         </el-radio-group>
@@ -46,7 +46,7 @@
         <el-input v-model="form.headcountDesc" style="width: 50%"></el-input>
       </el-form-item>
       <el-form-item label="支付规则" prop="payRule" required>
-        <el-radio-group v-model="form.payRule" size="small">
+        <el-radio-group v-model="form.payRule">
           <el-radio-button label="1">人均</el-radio-button>
           <el-radio-button label="2">自定义</el-radio-button>
         </el-radio-group>
@@ -105,7 +105,7 @@
           addr: null,
           content: null,
           type: '户外',
-          status: '1',
+          status: '0',
           headcount: 0,
           headcountDesc: null,
           payRule: '1',
@@ -121,6 +121,24 @@
         },
         formRules: {
           title: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          myDateRange: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          addr: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          price: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          malePrice: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          femalePrice: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          content: [
             {required: true, message: '必填', trigger: 'blur'}
           ]
         }
@@ -148,8 +166,13 @@
               activity.headcountDesc = self.form.headcountDesc
               activity.payRule = self.form.payRule
               activity.price = self.form.price
-              activity.malePrice = self.form.malePrice
-              activity.femalePrice = self.form.femalePrice
+              if (self.form.payRule === '1') {
+                activity.malePrice = self.form.price
+                activity.femalePrice = self.form.price
+              } else {
+                activity.malePrice = self.form.malePrice
+                activity.femalePrice = self.form.femalePrice
+              }
               activity.introduced = self.form.introduced
               activity.activityStatement = self.form.activityStatement
               if (self.form.myDateRange.length === 2) {

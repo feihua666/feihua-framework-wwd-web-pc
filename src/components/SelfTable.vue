@@ -26,7 +26,7 @@
              <template v-else>
                <div v-if="item.html" v-html="item.html(scope.row)"></div>
                <template v-else>
-                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? getDictLabel(item.dict, scope.row[item.name]) : scope.row[item.name])}}
+                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? getDictLabel(item.dict, scope.row[item.name]) : scope.row[item.name],scope.row,item.name)}}
                </template>
              </template>
            </el-button>
@@ -35,7 +35,7 @@
        </el-table-column>
        <el-table-column v-else-if="item.dict" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
          <template slot-scope="scope">
-         {{getDictLabel(item.dict, scope.row[item.name],item.dictValue)}}
+         {{getDictLabel(item.dict, scope.row[item.name],item.dictValue,scope.row,item.name)}}
          </template>
        </el-table-column>
        <el-table-column v-else-if="item.html" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
@@ -101,7 +101,18 @@
       pageNoChange (val) {
         this.$emit('pageNoChange', val)
       },
-      getDictLabel (type, value, dictValue) {
+      getDictLabel (type, value, dictValue, row, name) {
+        // 字典对象 xx.xx.xx 取值不到 所以有了下面的。。。
+        // eslint-disable-next-line
+        let names =  name.split('.')
+        if (names.length === 2) {
+          value = row[names[0]][names[1]]
+        } else if (names.length === 3) {
+          value = row[names[0]][names[1]][names[2]]
+          // 应该不会超过四个，超过在加吧，如有优雅的方式改下
+        } else if (names.length === 4) {
+          value = row[names[0]][names[1]][names[2]][names[3]]
+        }
         let dict = getDictByValueSync(this, type, value)
         let str = dict ? dict.name : null
         if (str && dictValue) {
