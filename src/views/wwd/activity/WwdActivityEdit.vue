@@ -251,12 +251,12 @@
       handleAvatarSuccess (res, file) {
         let titleUrl = res.data.content.path
         this.form.titleUrl = titleUrl
-        this.imgUrl = self.$config.file.getDownloadUrl(titleUrl)
+        this.imgUrl = this.$config.file.getDownloadUrl(titleUrl)
       },
       beforeAvatarUpload (file) {
-        const isJPG = file.type === 'image/jpeg'
+        const isJPG = (file.type === 'image/jpeg' || file.type === 'image/png')
         if (!isJPG) {
-          this.$message.error('上传头像图片只能是 JPG 格式!')
+          this.$message.error('图片只能是 JP或png 格式!')
         }
         return isJPG
       }
