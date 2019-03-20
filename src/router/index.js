@@ -508,6 +508,11 @@ const router = new Router({
           name: 'WwdParticipate',
           component: _import('wwd/activity/WwdParticipate'),
           meta: { menu: {name: '活动参与'}, keepAlive: true }
+        },
+        {
+          path: 'Wwd/ActivityOrder',
+          name: 'WwdActivityOrder',
+          component: _import('wwd/activity/WwdActivityOrder')
         }
       ]
     }

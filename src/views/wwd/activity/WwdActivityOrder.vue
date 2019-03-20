@@ -6,12 +6,11 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="名称" prop="title">
-                <el-input v-model="searchFormModel.title"></el-input>
+              <el-form-item label="关键字" prop="keyword">
+                <el-input v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="addTableRowClick">添加</el-button>
                 <el-button @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
@@ -29,11 +28,10 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
-    name: 'WwdActivity',
+    name: 'WwdActivityOrder',
     components: {
       SelfDictSelect,
       SelfTable,
@@ -42,46 +40,48 @@
     data () {
       return {
         columns: [
+
           {
-            name: 'titleUrl',
+            name: 'activityUrl',
             width: '100',
             image: true,
             label: '标题图'
           },
           {
-            name: 'title',
+            name: 'activityTitle',
             label: '标题'
           },
           {
-            name: 'author',
-            label: '作者'
+            name: 'orderNo',
+            label: '订单编号'
+          },
+          {
+            name: 'baseUserDto.photo',
+            width: '100',
+            image: true,
+            label: '用户头像'
+          },
+          {
+            name: 'baseUserDto.nickname',
+            label: '用户名'
+          },
+          {
+            name: 'baseUserDto.gender',
+            dict: 'gender',
+            label: '性别'
+          },
+          {
+            name: 'type',
+            label: '订单类型'
           },
           {
             name: 'status',
-            dict: 'activity_status',
-            label: '状态'
+            dict: 'yes_no',
+            label: '订单状态'
           },
           {
-            name: 'headcount',
-            html: this.headcountFormatter,
-            label: '总人数'
-          },
-          {
-            name: 'payRule',
-            dict: 'wwd_pay_rule',
-            label: '支付规则'
-          },
-          {
-            name: 'malePrice',
-            label: '人均男'
-          },
-          {
-            name: 'femalePrice',
-            label: '人均女'
-          },
-          {
-            name: 'addr',
-            label: '地址'
+            name: 'remarks',
+            label: '订单备注'
           },
           {
             label: '操作',
@@ -89,20 +89,8 @@
             width: '200',
             buttons: [
               {
-                label: '编辑',
-                click: this.editTableRowClick
-              },
-              {
                 label: '删除',
                 click: this.deleteTableRowClick
-              },
-              {
-                label: '复制',
-                click: this.copyTableRowClick
-              },
-              {
-                label: '查看活动人员',
-                click: this.participateRowClick
               }
             ]
           }
@@ -116,7 +104,7 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
-          title: '',
+          keyword: '',
           type: '',
           status: '',
           pageable: true,
@@ -132,15 +120,6 @@
       this.loadTableData(1)
     },
     methods: {
-      headcountFormatter (row) {
-        let html
-        if (row.headcount === 0) {
-          html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / 不限'
-        } else {
-          html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / ' + row.headcount
-        }
-        return html
-      },
       searchBtnClick () {
         this.loadTableData(1)
       },
@@ -161,7 +140,7 @@
           }
         }
         self.tableLoading = true
-        this.$http.get('/wwd/activitys', self.searchFormModel)
+        this.$http.get('/wwd/activity/orders', self.searchFormModel)
           .then(function (response) {
             let content = response.data.data.content
             self.tableData = content
@@ -188,7 +167,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
-        this.$router.push('/Main/Wwd/Activity/WwdActivityEdit/' + row.id)
+        //
       },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
@@ -196,7 +175,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/wwd/activity/' + row.id)
+          this.$http.delete('/wwd/activity/order/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -208,32 +187,6 @@
               }
             })
         })
-      },
-      // tablb 表格复制行
-      copyTableRowClick (index, row) {
-        let self = this
-        this.$confirm('确定要复制该活动吗，如复制需要重新编辑复制的活动, 是否继续?', '提示', {
-          type: 'warning'
-        }).then(() => {
-          this.$http.get('/wwd/activity/copy/' + row.id)
-            .then(function (response) {
-              self.$message.success('复制成功，记得去重新编辑哦')
-              // 重新加载数据
-              self.searchBtnClick()
-            })
-            .catch(function (error) {
-              if (error.response.status === 404) {
-                self.$message.success('复制失败，请刷新数据再试')
-              }
-            })
-        })
-      },
-      participateRowClick (index, row) {
-        this.$router.push('/Main/Wwd/Activity/WwdParticipate/' + row.id)
-      },
-      addTableRowClick () {
-        loadDataControl.add(this.$store, 'WwdActivityAddLoadData=true')
-        this.$router.push('/Main/Wwd/Activity/WwdActivityAdd')
       }
     },
     watch: {}

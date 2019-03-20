@@ -98,9 +98,9 @@
         },
         columns: [
           {
-            name: 'id',
-            html: this.photoFormatter,
-            label: '头像'
+            name: 'baseUserDto.photo',
+            image: true,
+            label: '用户头像'
           },
           {
             name: 'wwdUserDto.name',
