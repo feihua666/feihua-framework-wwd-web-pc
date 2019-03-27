@@ -10,12 +10,12 @@
                 <el-input  v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
               <el-form-item label="类型" prop="type">
-                <self-dict-select v-model="searchFormModel.type" type="file_type"></self-dict-select>
+                <self-dict-select v-model="searchFormModel.type" type="upload_download_type"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button @click="resetFormClick">重置</el-button>
-                <el-button type="primary" @click="addTableRowClick">上传</el-button>
+                <file-upload style="display: inline-block" ref="fileupload" trigger-btn-text="上传" :limit="1" :upload-btn-show="false" :show-file-list="false" :auto-upload="true" list-type="text" :on-success="fileUploadSucess"></file-upload>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -24,7 +24,7 @@
       </el-main>
     </el-container>
 
-    <file-upload ref="fileupload" :onSuccess="fileUploadSucess"></file-upload>
+
     <file-download-dialog ref="filedownload"></file-download-dialog>
   </div>
 </template>
@@ -56,7 +56,7 @@
           {
             name: 'type',
             label: '分类',
-            dict: 'file_type'
+            dict: 'upload_download_type'
           },
           {
             name: 'downloadNum',
@@ -131,6 +131,9 @@
       // 加载表格数据
       loadTableData (pageNo) {
         let self = this
+        if (self.tableLoading) {
+          return
+        }
         if (pageNo) {
           self.searchFormModel.pageNo = pageNo
         }
@@ -209,13 +212,8 @@
             })
         })
       },
-      // 上传
-      addTableRowClick () {
-        this.$refs.fileupload.show()
-      },
       fileUploadSucess () {
         this.searchBtnClick()
-        this.$refs.fileupload.hide()
       }
     },
     watch: {

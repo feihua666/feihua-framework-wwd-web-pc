@@ -111,9 +111,9 @@
                   if (response.response.status === 404) {
                     self.$message.error('角色修改失败，数据不存在或已被他人修改，请刷新列表后再试')
                   } else if (response.response.status === 409) {
-                    self.$message.error('字典修改失败，编码已存在')
+                    self.$message.error('角色修改失败，编码已存在')
                   } else {
-                    self.$message.error('字典修改失败，请稍候再试')
+                    self.$message.error('角色修改失败，请稍候再试')
                   }
                   self.addLoading = false
                 })

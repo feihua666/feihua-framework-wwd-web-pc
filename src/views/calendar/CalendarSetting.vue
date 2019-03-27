@@ -28,7 +28,6 @@
 
 <script>
   import SelfCalendar from '@/components/SelfCalendar'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   export default {
     components: {SelfCalendar},
     name: 'CalendarSetting',
@@ -87,7 +86,7 @@
             }).catch((error) => {
               if (error.response.status === 404) {
                 // 不存在
-                loadDataControl.add(this.$store, 'CalendarSettingAddLoadData=true')
+                this.$utils.loadDataControl.add('CalendarSettingAddLoadData=true')
                 self.$router.push('/Main/CalendarSetting/CalendarSettingAdd/' + val.year + '-' + val.month + '-' + val.day)
               }
             })

@@ -3,7 +3,7 @@
    <el-table v-loading="tableLoading" :default-sort="defaultSort" @sort-change="sortChange"
              border stripe
      size="mini"
-     style="width: 100%" :data="tableData">
+     style="width: 100%" :data="mytableData">
      <template  v-for="item in columns">
        <el-table-column  v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
          <template slot-scope="scope">
@@ -24,9 +24,9 @@
                <div v-else v-html="btn.html"></div>
              </template>
              <template v-else>
-               <div v-if="item.html" v-html="item.html(scope.row)"></div>
+               <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
                <template v-else>
-                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? getDictLabel(item.dict, scope.row[item.name]) : scope.row[item.name])}}
+                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item) : scope.row[item.name])}}
                </template>
              </template>
            </el-button>
@@ -35,12 +35,12 @@
        </el-table-column>
        <el-table-column v-else-if="item.dict" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
          <template slot-scope="scope">
-         {{getDictLabel(item.dict, scope.row[item.name],item.dictValue)}}
+         {{scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item)}}
          </template>
        </el-table-column>
        <el-table-column v-else-if="item.html" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
          <template slot-scope="scope">
-           <div v-if="item.html" v-html="item.html(scope.row)"></div>
+           <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
          </template>
        </el-table-column>
        <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
@@ -55,7 +55,6 @@
 
 <script>
   import SelfPage from '@/components/SelfPage.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   export default {
     name: 'SelfTable',
     components: {
@@ -93,9 +92,15 @@
     },
     data () {
       return {
+        mytableData: []
       }
     },
     mounted () {
+    },
+    watch: {
+      tableData (val) {
+        this.mytableData = val
+      }
     },
     methods: {
       // 排序
@@ -120,13 +125,22 @@
       pageNoChange (val) {
         this.$emit('pageNoChange', val)
       },
-      getDictLabel (type, value, dictValue) {
-        let dict = getDictByValueSync(this, type, value)
-        let str = dict ? dict.name : null
-        if (str && dictValue) {
-          str = str + '(' + value + ')'
-        }
-        return str
+      setDictLabel (index, row, colItem) {
+        let self = this
+        let attr = colItem.dict + '' + index
+        let value = row[colItem.name]
+        row[attr] = value
+        self.$http.getDictByValue(colItem.dict, value)
+          .then(function (dict) {
+            let str = dict.name
+            if (str && colItem.dictValue) {
+              str = str + '(' + value + ')'
+            }
+            row[attr] = str
+            self.mytableData.splice(index, 1, row)
+          }).catch(function () {
+            self.mytableData.splice(index, 1, row)
+          })
       },
       btnDisabled (disabled, index, row) {
         if (typeof disabled === 'function') {

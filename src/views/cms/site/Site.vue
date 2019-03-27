@@ -32,7 +32,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     name: 'Site',
@@ -185,7 +184,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'SiteAddLoadData=true')
+        this.$utils.loadDataControl.add('SiteAddLoadData=true')
         this.$router.push('/Main/Cms/SiteAdd')
       },
       jumpToChannel (index, row) {

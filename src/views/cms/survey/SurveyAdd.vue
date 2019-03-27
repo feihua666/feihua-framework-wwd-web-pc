@@ -37,7 +37,6 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     components: {
@@ -109,7 +108,7 @@
               survey.repeatLimit = self.form.repeatLimit
               survey.status = self.form.status
 
-              self.$http.post('/cms/survey', survey, {'dataType': 'json'})
+              self.$http.postJson('/cms/survey', survey)
                 .then(function (response) {
                   self.$message.info('调查添加成功')
                   self.addLoading = false
@@ -138,10 +137,10 @@
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'SurveyAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

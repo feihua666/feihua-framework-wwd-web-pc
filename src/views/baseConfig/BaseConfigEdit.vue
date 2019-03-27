@@ -75,7 +75,7 @@
               // 请求添加
               self.addLoading = true
               self.form.id = self.id
-              self.$http.put('/base/config/' + self.form.id, self.form, {'dataType': 'json'})
+              self.$http.putJson('/base/config/' + self.form.id, self.form)
                 .then(function (response) {
                   self.$message.info('系统配置修改成功')
                   self.addLoading = false

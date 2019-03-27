@@ -29,7 +29,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     name: 'DataScope',
@@ -157,7 +156,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'DataScopeAddLoadData=true')
+        this.$utils.loadDataControl.add('DataScopeAddLoadData=true')
         this.$router.push('/Main/DataScopeAdd')
       },
       dataScopeClick (index, row) {

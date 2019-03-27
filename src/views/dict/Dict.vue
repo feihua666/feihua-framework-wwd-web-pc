@@ -46,9 +46,7 @@
   import DictTree from './DictTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   import DictInputSelect from '@/views/dict/DictInputSelect'
   export default {
     name: 'Dict',
@@ -77,7 +75,7 @@
           {
             name: 'isSystem',
             label: '是否系统',
-            formatter: this.isSystemFormatter
+            dict: 'yes_no'
           },
           {
             name: 'sequence',
@@ -230,12 +228,8 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'DictAddLoadData=true')
+        this.$utils.loadDataControl.add('DictAddLoadData=true')
         this.$router.push('/Main/DictAdd')
-      },
-      isSystemFormatter (row) {
-        let dict = getDictByValueSync(this, 'yes_no', row.isSystem)
-        return dict ? dict.name : null
       },
       dataOfficeFormatter (row) {
         let dataOfficeName = null

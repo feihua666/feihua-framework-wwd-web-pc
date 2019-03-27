@@ -5,7 +5,6 @@
 </template>
 
 <script>
-  import { getDictsByType } from '@/utils/dictUtils.js'
   export default {
     name: 'SelfDictCheckboxGroup',
     props: {
@@ -77,8 +76,8 @@
         if (self.type === undefined || self.type === '' || self.type === null) {
           return
         }
-        getDictsByType(this, self.type).then(function (value) {
-          self.options = value
+        this.$http.getDictsByType(self.type).then(function (content) {
+          self.options = content
         }).catch(error => {
           if (error.response.status === 404) {
             self.$message.error('字典下拉选项加载失败:' + self.type)

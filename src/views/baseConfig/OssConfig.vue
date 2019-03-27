@@ -1,100 +1,110 @@
 <template>
   <div class="wrapper">
     <el-form ref="form" :rules="ossRules" :model="form" label-width="150px">
-      <el-form-item label="OSS类型" prop="type" label-width="150px">
-        <el-radio-group v-model="form.type" size="small">
-          <el-radio-button label="ALY">阿里云</el-radio-button>
-          <el-radio-button label="QNY">七牛云</el-radio-button>
-          <el-radio-button label="TXY">腾讯云</el-radio-button>
-        </el-radio-group>
-      </el-form-item>
-      <el-form-item label="是否启用配置" prop="open">
-        <el-switch v-model="form.open"
-                   active-value="Y"
-                   inactive-value="N">
-        </el-switch>
-      </el-form-item>
-      <el-form-item label="是否启用压缩" prop="compress">
+
+      <el-form-item label="启用图片压缩" prop="compress">
         <el-switch v-model="form.compress"
                    active-value="Y"
                    inactive-value="N">
         </el-switch>
       </el-form-item>
+      <el-form-item v-if="form.compress == 'Y'" label="图片压缩系数" prop="aliyunDomain">
+        <el-input v-model="form.compressQuality" autocomplete="off"
+                  placeholder="小数两位，越小越清析，文件越大"></el-input>
+      </el-form-item>
+      <el-form-item label="存储选择" prop="type" label-width="150px">
+        <el-radio-group v-model="form.type" size="small">
+          <el-radio-button label="ALY">阿里云</el-radio-button>
+          <el-radio-button label="QNY">七牛云</el-radio-button>
+          <el-radio-button label="TXY">腾讯云</el-radio-button>
+          <el-radio-button label="LOCAL">本地存储</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <div v-if="form.type==='ALY'">
         <el-form-item label="阿里云域名" prop="aliyunDomain">
-          <el-input v-model="form.aliyunDomain" autocomplete="off"
+          <el-input v-model="form.aliyun.aliyunDomain" autocomplete="off"
                     placeholder="阿里云绑定的域名"></el-input>
         </el-form-item>
         <el-form-item label="阿里云路径前缀" prop="aliyunPrefix">
-          <el-input v-model="form.aliyunPrefix" autocomplete="off"
+          <el-input v-model="form.aliyun.aliyunPrefix" autocomplete="off"
                     placeholder="默认为空"></el-input>
         </el-form-item>
         <el-form-item label="阿里云EndPoint" prop="aliyunEndPoint">
-          <el-input v-model="form.aliyunEndPoint" autocomplete="off"
+          <el-input v-model="form.aliyun.aliyunEndPoint" autocomplete="off"
                     placeholder="阿里云EndPoint"></el-input>
         </el-form-item>
         <el-form-item label="阿里云AccessKeyId" prop="aliyunAccessKeyId">
-          <el-input v-model="form.aliyunAccessKeyId" autocomplete="off"
+          <el-input v-model="form.aliyun.aliyunAccessKeyId" autocomplete="off"
                     placeholder="阿里云AccessKeyId"></el-input>
         </el-form-item>
         <el-form-item label="阿里云AccessKeySecret" prop="aliyunAccessKeySecret">
-          <el-input v-model="form.aliyunAccessKeySecret" autocomplete="off"
+          <el-input v-model="form.aliyun.aliyunAccessKeySecret" autocomplete="off"
                     placeholder="阿里云AccessKeySecret"></el-input>
         </el-form-item>
         <el-form-item label="阿里云BucketName" prop="aliyunBucketName">
-          <el-input v-model="form.aliyunBucketName" autocomplete="off"
+          <el-input v-model="form.aliyun.aliyunBucketName" autocomplete="off"
                     placeholder="阿里云BucketName"></el-input>
         </el-form-item>
       </div>
       <div v-if="form.type==='QNY'">
         <el-form-item label="七牛域名" prop="qiniuDomain">
-          <el-input v-model="form.qiniuDomain" autocomplete="off"
+          <el-input v-model="form.qiniu.qiniuDomain" autocomplete="off"
                     placeholder="七牛绑定的域名"></el-input>
         </el-form-item>
         <el-form-item label="七牛路径前缀" prop="qiniuPrefix">
-          <el-input v-model="form.qiniuPrefix" autocomplete="off" placeholder="默认为空"></el-input>
+          <el-input v-model="form.qiniu.qiniuPrefix" autocomplete="off" placeholder="默认为空"></el-input>
         </el-form-item>
         <el-form-item label="七牛AccessKey" prop="qiniuAccessKey">
-          <el-input v-model="form.qiniuAccessKey" autocomplete="off"
+          <el-input v-model="form.qiniu.qiniuAccessKey" autocomplete="off"
                     placeholder="七牛AccessKey"></el-input>
         </el-form-item>
         <el-form-item label="七牛SecretKey" prop="qiniuSecretKey">
-          <el-input v-model="form.qiniuSecretKey" autocomplete="off"
+          <el-input v-model="form.qiniu.qiniuSecretKey" autocomplete="off"
                     placeholder="七牛SecretKey"></el-input>
         </el-form-item>
         <el-form-item label="七牛BucketName" prop="qiniuBucketName">
-          <el-input v-model="form.qiniuBucketName" autocomplete="off"
+          <el-input v-model="form.qiniu.qiniuBucketName" autocomplete="off"
                     placeholder="七牛BucketName"></el-input>
         </el-form-item>
       </div>
       <div v-if="form.type==='TXY'">
         <el-form-item label="腾讯云域名" prop="qcloudDomain">
-          <el-input v-model="form.qcloudDomain" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudDomain" autocomplete="off"
                     placeholder="腾讯云绑定的域名"></el-input>
         </el-form-item>
         <el-form-item label="腾讯云路径前缀" prop="qcloudPrefix">
-          <el-input v-model="form.qcloudPrefix" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudPrefix" autocomplete="off"
                     placeholder="默认为空"></el-input>
         </el-form-item>
         <el-form-item label="腾讯云AppId" prop="qcloudAppId">
-          <el-input v-model="form.qcloudAppId" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudAppId" autocomplete="off"
                     placeholder="腾讯云AppId"></el-input>
         </el-form-item>
         <el-form-item label="腾讯云SecretId" prop="qcloudSecretId">
-          <el-input v-model="form.qcloudSecretId" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudSecretId" autocomplete="off"
                     placeholder="腾讯云SecretId"></el-input>
         </el-form-item>
         <el-form-item label="腾讯云SecretKey" prop="qcloudSecretKey">
-          <el-input v-model="form.qcloudSecretKey" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudSecretKey" autocomplete="off"
                     placeholder="腾讯云SecretKey"></el-input>
         </el-form-item>
         <el-form-item label="腾讯云BucketName" prop="qcloudBucketName">
-          <el-input v-model="form.qcloudBucketName" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudBucketName" autocomplete="off"
                     placeholder="腾讯云BucketName"></el-input>
         </el-form-item>
         <el-form-item label="腾讯云Bucket所属地区" prop="qcloudRegion">
-          <el-input v-model="form.qcloudRegion" autocomplete="off"
+          <el-input v-model="form.qcloud.qcloudRegion" autocomplete="off"
                     placeholder="如：sh（可选值 ，华南：gz 华北：tj 华东：sh）"></el-input>
+        </el-form-item>
+      </div>
+      <div v-if="form.type==='LOCAL'">
+        <el-form-item label="文件存放跟路径" prop="qcloudDomain">
+          <el-input v-model="form.local.locationPath" autocomplete="off"
+                    placeholder="请填写绝对路径"></el-input>
+        </el-form-item>
+        <el-form-item label="分类路径" prop="qcloudDomain">
+          <el-input v-model="form.local.localPrefix" autocomplete="off"
+                    placeholder="如：photo"></el-input>
         </el-form-item>
       </div>
       <el-form-item>
@@ -110,83 +120,92 @@
       return {
         addLoading: false,
         form: {
-          type: 'ALY',
-          open: 'Y',
-          compress: 'N',
-          aliyunDomain: null,
-          aliyunPrefix: null,
-          aliyunEndPoint: null,
-          aliyunAccessKeyId: null,
-          aliyunAccessKeySecret: null,
-          aliyunBucketName: null,
+          type: '',
+          compress: '',
+          compressQuality: 0.3,
+          aliyun: {
+            aliyunDomain: null,
+            aliyunPrefix: null,
+            aliyunEndPoint: null,
+            aliyunAccessKeyId: null,
+            aliyunAccessKeySecret: null,
+            aliyunBucketName: null
+          },
+          qiniu: {
+            qiniuDomain: null,
+            qiniuPrefix: null,
+            qiniuAccessKey: null,
+            qiniuSecretKey: null,
+            qiniuBucketName: null
+          },
+          qcloud: {
+            qcloudDomain: null,
+            qcloudPrefix: null,
+            qcloudAppId: null,
+            qcloudSecretId: null,
+            qcloudSecretKey: null,
+            qcloudBucketName: null,
+            qcloudRegion: null
+          },
+          local: {
+            locationPath: 'D:/feihua-framework/file/upload',
+            localPrefix: 'file'
+          }
 
-          qiniuDomain: null,
-          qiniuPrefix: null,
-          qiniuAccessKey: null,
-          qiniuSecretKey: null,
-          qiniuBucketName: null,
-
-          qcloudDomain: null,
-          qcloudPrefix: null,
-          qcloudAppId: null,
-          qcloudSecretId: null,
-          qcloudSecretKey: null,
-          qcloudBucketName: null,
-          qcloudRegion: null
         },
         ossRules: {
-          aliyunDomain: [
+          'aliyun.aliyunDomain': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          aliyunPrefix: [
+          'aliyun.aliyunPrefix': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          aliyunEndPoint: [
+          'aliyun.aliyunEndPoint': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          aliyunAccessKeyId: [
+          'aliyun.aliyunAccessKeyId': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          aliyunAccessKeySecret: [
+          'aliyun.aliyunAccessKeySecret': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          aliyunBucketName: [
+          'aliyun.aliyunBucketName': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qiniuDomain: [
+          'qiniu.qiniuDomain': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qiniuPrefix: [
+          'qiniu.qiniuPrefix': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qiniuAccessKey: [
+          'qiniu.qiniuAccessKey': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qiniuSecretKey: [
+          'qiniu.qiniuSecretKey': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qiniuBucketName: [
+          'qiniu.qiniuBucketName': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudDomain: [
+          'qcloud.qcloudDomain': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudPrefix: [
+          'qcloud.qcloudPrefix': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudAppId: [
+          'qcloud.qcloudAppId': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudSecretId: [
+          'qcloud.qcloudSecretId': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudSecretKey: [
+          'qcloud.qcloudSecretKey': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudBucketName: [
+          'qcloud.qcloudBucketName': [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          qcloudRegion: [
+          'qcloud.qcloudRegion': [
             {required: true, message: '必填', trigger: 'blur'}
           ]
         }
@@ -214,7 +233,7 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.put('/base/config/saveOssConfig/' + self.id, self.form, {'dataType': 'json'})
+              self.$http.putJson('/base/config/saveOssConfig/' + self.id, self.form)
                 .then(function (response) {
                   self.$message.info('配置保存成功')
                   self.addLoading = false

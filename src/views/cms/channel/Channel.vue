@@ -44,7 +44,6 @@
   import ChannelTree from './ChannelTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import ChannelInputSelect from '@/views/cms/channel/ChannelInputSelect.vue'
   import SiteSelect from '@/views/cms/site/SiteSelect.vue'
   import SiteSelectDialog from '@/views/cms/site/SiteSelectDialog'
@@ -231,7 +230,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'ChannelAddLoadData=true')
+        this.$utils.loadDataControl.add('ChannelAddLoadData=true')
         this.$router.push('/Main/Cms/ChannelAdd?siteId=' + this.searchFormModel.siteId)
       },
       dataParentFormatter (row) {

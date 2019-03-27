@@ -47,7 +47,6 @@
 
 <script>
   import FunResourceTree from './FunResourceTree.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import OfficeTree from '@/views/office/OfficeTree.vue'
   import FunResourceIcon from '@/views/funResource/FunResourceIcon.vue'
@@ -150,10 +149,10 @@
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'FunResourceAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

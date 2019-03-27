@@ -42,9 +42,7 @@
   import FunResourceTree from './FunResourceTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   import OfficeTree from '@/views/office/OfficeTree.vue'
   import FunResourceInputSelect from '@/views/funResource/FunResourceInputSelect'
   export default {
@@ -233,12 +231,8 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'FunResourceAddLoadData=true')
+        this.$utils.loadDataControl.add('FunResourceAddLoadData=true')
         this.$router.push('/Main/FunResourceAdd')
-      },
-      typeFormatter (row) {
-        let dict = getDictByValueSync(this, 'funResource_type', row.type)
-        return dict ? dict.name : null
       },
       dataParentFormatter (row) {
         let name = null

@@ -8,7 +8,7 @@
         <el-col :span="18" :class="isCollapse ? 'hidden': ''" style="font-size: 0.75rem;color:azure;overflow: hidden; padding: 6px;">
           <i class="glyphicon glyphicon-user"></i>&nbsp;<span class="login-username" v-if="loginUser" @click="personalDetailDialogVisible = true"> {{loginUser.nickname}}</span>
           <br>
-          <i class="glyphicon glyphicon-lock"></i>&nbsp;<span v-if="loginUser"> {{loginUser.additionalAttr.role.name}}</span>
+          <i class="glyphicon glyphicon-lock"></i>&nbsp;<span v-if="loginUser && loginUser.additionalAttr"> {{loginUser.additionalAttr.role.name}}</span>
         </el-col>
         <el-col :span="6" :class="isCollapse ? 'widthfull': ''" style="padding: 2px;text-align: center;">
           <el-dropdown @command="handleCommand">
@@ -53,7 +53,7 @@
           <el-row>
             <el-col :span="10">姓别</el-col>
             <el-col :span="2"></el-col>
-            <el-col :span="12">{{getDictLabel('gender',loginUser.gender)}}</el-col>
+            <el-col :span="12"><self-dict-text type="gender" :val="loginUser.gender"></self-dict-text></el-col>
           </el-row>
           <el-row>
             <el-col :span="10">手机</el-col>
@@ -89,12 +89,11 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import FileUpload from '@/components/FileUpload.vue'
+  import FileUpload from '@/components/FileUploadDialog.vue'
+  import SelfDictText from '@/components/SelfDictText.vue'
   import UserUpdatePasswordCurrent from '@/views/user/UserUpdatePasswordCurrent.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   export default {
-    components: {FileUpload, UserUpdatePasswordCurrent},
+    components: {FileUpload, UserUpdatePasswordCurrent, SelfDictText},
     name: 'Profile',
     props: {
       isCollapse: {
@@ -104,12 +103,17 @@
     data () {
       return {
         messageNum: null,
-        personalDetailDialogVisible: false
+        personalDetailDialogVisible: false,
+        loginUser: null
       }
     },
     mounted () {
       this.getMessageNum()
       this.getMessageNumInterval()
+      let self = this
+      this.$http.getCurrentUserinfo().then(function (content) {
+        self.loginUser = content
+      })
     },
     methods: {
       handleCommand (cmmand) {
@@ -137,17 +141,13 @@
         let self = this
         self.$http.put('/base/user/photo/current', {photoUrl: content.path})
           .then(response => {
-            self.$store.commit('setLoginUserPhoto', content.path)
+            self.$set(self.loginUser, 'photo', content.path)
             self.$message.success('头像上传成功')
             this.$refs.fileupload.hide()
           }).catch(() => {
             self.$message.error('头像上传失败，请重新尝试')
           })
         // 修改头像信息
-      },
-      getDictLabel (type, value) {
-        let dict = getDictByValueSync(this, type, value)
-        return dict ? dict.name : null
       },
       myMessageClick () {
         this.$router.push('/Main/MyMessage')
@@ -169,9 +169,6 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'loginUser'
-      ]),
       headPic () {
         if (this.loginUser && this.loginUser.photo) {
           return this.$config.file.getDownloadUrl(this.loginUser.photo)
@@ -181,9 +178,6 @@
       }
     },
     watch: {
-      // 防止刷新的时候没有数据
-      loginUser () {
-      }
     }
   }
 </script>
@@ -191,10 +185,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .head-pic{
-    width: 100%;
-    height: 100%;
+    width: 60px;
+    height: 60px;
     border: none;
-    border-radius: 10%;
+    border-radius: 50%;
   }
   .head-pic:hover{
     cursor: pointer;

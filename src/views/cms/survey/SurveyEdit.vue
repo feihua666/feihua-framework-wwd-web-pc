@@ -138,7 +138,7 @@
               survey.repeatLimit = self.form.repeatLimit
               survey.url = self.form.url
               survey.updateTime = self.form.updateAt
-              self.$http.put('/cms/survey/' + self.id, survey, {'dataType': 'json'})
+              self.$http.putJson('/cms/survey/' + self.id, survey)
                 .then(function (response) {
                   self.$message.info('调查修改成功')
                   self.addLoading = false

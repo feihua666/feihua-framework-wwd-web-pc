@@ -1,36 +1,36 @@
 <template>
-  <el-dialog
-    :title="options.title"
-    :visible.sync="dialogVisible"
-    width="30%">
-
     <el-upload
       ref="upload"
       class="avatar-uploader"
-      :action="$config.file.uploadUrl"
+      :action="$config.file.uploadUrl + '?t=' + (new Date().getTime() + Math.random())"
       :data="dataParam"
-      :accept="options.accept"
-      :limit="options.limit"
+      :accept="accept"
+      :limit="limit"
+      :disabled="disabled"
       name="file"
-      :show-file-list="true"
-      list-type="picture-card"
-      :auto-upload="false"
+      :file-list="fileList"
+      :show-file-list="showFileList"
+      :list-type="listType"
+      :auto-upload="autoUpload"
+      :multiple="multiple"
       :on-success="handleSuccess"
       :on-change="handleChange"
       :on-error="handleError"
       :on-exceed="onExceed"
+      :on-remove="handleRemove"
       :before-upload="beforeUpload">
-      <i slot="trigger" class="el-icon-plus avatar-uploader-icon"></i>
+      <template v-if="listType == 'picture-card'">
+        <i slot="trigger" ref="cardTrigger" class="el-icon-plus avatar-uploader-icon"></i>
+      </template>
+      <template v-else>
+        <el-button slot="trigger" size="small" :disabled="fileSelectSize >= limit" :loading="loading && !uploadBtnShow" type="primary">{{triggerBtnText}}</el-button>
+        <el-button style="margin-left: 10px;" size="small" v-if="uploadBtnShow" type="success" :loading="loading" @click="submit">{{uploadBtnText}}</el-button>
+      </template>
     </el-upload>
-
-    <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="submit" :loading="loading">确 定</el-button>
-  </span>
-  </el-dialog>
 </template>
 
 <script>
+  import $ from 'jquery'
   export default {
     name: 'FileUpload',
     props: {
@@ -42,8 +42,40 @@
       limit: {
         default: 1
       },
+      // 是否显示已上传的文件列表
+      showFileList: {
+        default: true
+      },
+      uploadBtnShow: {
+        default: true
+      },
+      triggerBtnText: {
+        default: '选取文件'
+      },
+      uploadBtnText: {
+        default: '上传到服务器'
+      },
+      // 已上传的文件列表{name:'',url:''}
+      fileList: {
+        default: function () {
+          return []
+        }
+      },
+      listType: {
+        default: 'picture-card'
+      },
+      multiple: {
+        default: false
+      },
+      autoUpload: {
+        default: false
+      },
+      disabled: {
+        default: false
+      },
       // 上传成功回调
       onSuccess: null,
+      onDelete: null,
       // 弹窗标题
       title: {
         default: '文件上传'
@@ -51,75 +83,26 @@
     },
     data () {
       return {
-        dialogVisible: false,
-        disabled: false,
         loading: false,
-        fileSelectSize: 0,
-        options: {
-          data: null,
-          accept: null,
-          limit: 1,
-          onSuccess: null,
-          title: '文件上传'
-        }
+        fileSelectSize: 0
       }
     },
     mounted () {
-      this.propToOptions()
+      this.fileSelectSize = this.fileList.length
     },
     computed: {
       dataParam () {
-        if (!this.options.data) {
-          return {path: 'upload'}
-        } else {
-          return this.options.data
+        let p = {}
+        if (this.data) {
+          p = this.data
         }
+        if (!p.path) {
+          p.path = 'upload'
+        }
+        return p
       }
     },
     methods: {
-      show () {
-        this.dialogVisible = true
-      },
-      showWithOptions (options) {
-        if (options) {
-          if (options.data) {
-            this.options.data = options.data
-          }
-          if (options.accept) {
-            this.options.accept = options.accept
-          }
-          if (options.limit) {
-            this.options.limit = options.limit
-          }
-          if (options.onSuccess) {
-            this.options.onSuccess = options.onSuccess
-          }
-          if (options.title) {
-            this.options.title = options.title
-          }
-        }
-        this.show()
-      },
-      propToOptions () {
-        if (this.data) {
-          this.options.data = this.data
-        }
-        if (this.accept) {
-          this.options.accept = this.accept
-        }
-        if (this.limit) {
-          this.options.limit = this.limit
-        }
-        if (this.onSuccess) {
-          this.options.onSuccess = this.onSuccess
-        }
-        if (this.title) {
-          this.options.title = this.title
-        }
-      },
-      hide () {
-        this.dialogVisible = false
-      },
       submit () {
         this.loading = true
         if (this.fileSelectSize === 0) {
@@ -130,13 +113,11 @@
         this.$refs.upload.submit()
       },
       handleSuccess (res, file, fileList) {
-        if (this.options.onSuccess && typeof this.options.onSuccess === 'function') {
-          this.options.onSuccess(res, file, fileList)
-        } else if (this.onSuccess && typeof this.onSuccess === 'function') {
-          this.onSuccess(res, file, fileList)
-        }
         this.clearFiles()
         this.loading = false
+        if (this.onSuccess && typeof this.onSuccess === 'function') {
+          this.onSuccess(res, file, fileList)
+        }
       },
       handleError (error, file, fileList) {
         if (error) {
@@ -146,6 +127,7 @@
         this.loading = false
       },
       beforeUpload (file) {
+        this.loading = true
         if (this.fileSelectSize === 0) {
           this.$message.error('请选择上传文件')
           this.loading = false
@@ -155,28 +137,41 @@
       handleChange (file, fileList) {
         this.fileSelectSize = fileList.length
       },
+      handleRemove (file, fileList) {
+        this.fileSelectSize = fileList.length
+        if (this.onDelete && typeof this.onDelete === 'function') {
+          this.onDelete(file, fileList)
+        }
+      },
       onExceed () {
+        this.loading = false
         this.$message.error('文件超出限制个数')
       },
       clearFiles () {
         this.$refs.upload.clearFiles()
+      },
+      hideOrShowTriggerParent (size, limit) {
+        if (this.listType === 'picture-card') {
+          let $trigger = $(this.$refs.cardTrigger)
+          // 不显示
+          if (this.fileSelectSize >= this.limit) {
+            $trigger.parent().css('display', 'none')
+          } else {
+            // 不显示
+            $trigger.parent().css('display', 'inline-block')
+          }
+        }
       }
     },
     watch: {
-      data (d) {
-        this.options.data = d
+      fileList (list) {
+        this.fileSelectSize = list.length
       },
-      accept (d) {
-        this.options.accept = d
+      fileSelectSize () {
+        this.hideOrShowTriggerParent()
       },
-      limit (d) {
-        this.options.limit = d
-      },
-      onSuccess (d) {
-        this.options.onSuccess = d
-      },
-      title (d) {
-        this.options.title = d
+      limit () {
+        this.hideOrShowTriggerParent()
       }
     }
   }

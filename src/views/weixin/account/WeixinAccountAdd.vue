@@ -52,7 +52,6 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
@@ -132,7 +131,7 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.post('/weixinaccount/account', self.form, {'dataType': 'json'})
+              self.$http.postJson('/weixinaccount/account', self.form)
                 .then(function (response) {
                   self.$message.info('微信公众账号添加成功')
                   self.addLoading = false
@@ -157,10 +156,10 @@
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'WeixinAccountAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     },

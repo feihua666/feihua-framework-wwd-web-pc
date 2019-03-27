@@ -35,7 +35,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SiteSelect from '@/views/cms/site/SiteSelect.vue'
   import SiteSelectDialog from '@/views/cms/site/SiteSelectDialog'
   import ContentCategoryInputSelect from '@/views/cms/content/category/ContentCategoryInputSelect'
@@ -186,7 +185,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'ContentCategoryAddLoadData=true')
+        this.$utils.loadDataControl.add('ContentCategoryAddLoadData=true')
         let url = '/Main/Cms/ContentCategoryAdd?siteId=' + this.searchFormModel.siteId
         this.$router.push(url)
       },

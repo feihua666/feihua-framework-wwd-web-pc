@@ -27,7 +27,6 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
@@ -44,7 +43,7 @@
         columns: [
           {
             name: 'status',
-            width: '50',
+            width: '100',
             dict: 'yes_no',
             label: '启用状态'
           },
@@ -55,10 +54,6 @@
           {
             name: 'description',
             label: '配置说明'
-          },
-          {
-            name: 'configValue',
-            label: 'VALUE'
           },
           {
             sortable: 'custom',
@@ -79,7 +74,7 @@
                 click: this.deleteTableRowClick
               },
               {
-                label: '配置',
+                label: '可视化编辑',
                 click: this.updateConfigClick
               }
             ]
@@ -151,7 +146,7 @@
         this.loadTableData(val)
       },
       addConfig () {
-        loadDataControl.add(this.$store, 'BaseConfigAddAddLoadData=true')
+        this.$utils.loadDataControl.add('BaseConfigAddAddLoadData=true')
         this.$router.push('/Main/BaseConfig/BaseConfigAdd')
       },
       editConfigClick (index, row) {

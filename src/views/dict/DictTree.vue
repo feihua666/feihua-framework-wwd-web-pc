@@ -16,7 +16,6 @@
 </template>
 
 <script>
-  import { arrayToTree } from '@/utils/treeUtils.js'
   export default {
     name: 'DictTree',
     props: {
@@ -82,7 +81,7 @@
       },
       treeData (data) {
         // 数据转树结构
-        let treeData = arrayToTree(data)
+        let treeData = this.$utils.arrayToTree(data)
         return treeData
       }
     }

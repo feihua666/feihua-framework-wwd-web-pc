@@ -51,7 +51,7 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import ContentCategoryInputSelect from '@/views/cms/content/category/ContentCategoryInputSelect.vue'
   import SiteSelect from '@/views/cms/site/SiteSelect.vue'
-  import FileUpload from '@/components/FileUpload.vue'
+  import FileUpload from '@/components/FileUploadDialog.vue'
   import ChannelInputSelect from '@/views/cms/channel/ChannelInputSelect.vue'
 
   export default {

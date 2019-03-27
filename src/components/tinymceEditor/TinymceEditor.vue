@@ -47,7 +47,7 @@
   import 'tinymce/plugins/visualchars'
   import 'tinymce/plugins/wordcount'
   import 'tinymce/skins/lightgray/skin.min.css'
-  import FileUpload from '@/components/FileUpload.vue'
+  import FileUpload from '@/components/FileUploadDialog.vue'
 
   const plugins = ['advlist anchor autolink autosave code codesample colorpicker contextmenu directionality emoticons fullscreen hr image imagetools importcss insertdatetime link lists media nonbreaking noneditable pagebreak paste preview print save searchreplace spellchecker tabfocus table template textcolor textpattern visualblocks visualchars wordcount']
   const toolbar = ['bold italic underline strikethrough alignleft aligncenter alignright outdent indent  blockquote undo redo removeformat subscript superscript code codesample', 'hr bullist numlist link image charmap preview anchor pagebreak insertdatetime media table emoticons forecolor backcolor fullscreen mybutton']

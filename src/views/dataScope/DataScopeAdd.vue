@@ -19,8 +19,6 @@
 </template>
 
 <script>
-  import { mapGetters } from 'vuex'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
   export default {
@@ -49,6 +47,11 @@
       }
     },
     mounted () {
+      let self = this
+      self.$http.getCurrentUserinfo().then(function (loginUser) {
+        self.form.dataOfficeId = loginUser.additionalAttr.office.id
+        self.$refs.officeinput.setLabelName(loginUser.additionalAttr.office.name)
+      })
     },
     methods: {
       addBtnClick () {
@@ -77,30 +80,25 @@
       },
       resetForm () {
         this.$refs['form'].resetFields()
-        this.form.dataOfficeId = this.loginUser.additionalAttr.office.id
-        this.$refs.officeinput.setLabelName(this.loginUser.additionalAttr.office.name)
+        let self = this
+        self.$http.getCurrentUserinfo().then(function (loginUser) {
+          self.form.dataOfficeId = loginUser.additionalAttr.office.id
+          self.$refs.officeinput.setLabelName(loginUser.additionalAttr.office.name)
+        })
       }
     },
     computed: {
-      ...mapGetters([
-        'loginUser'
-      ])
     },
     watch: {
-      // 防止刷新的时候没有数据
-      loginUser () {
-        this.form.dataOfficeId = this.loginUser.additionalAttr.office.id
-        this.$refs.officeinput.setLabelName(this.loginUser.additionalAttr.office.name)
-      }
     },
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'DataScopeAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

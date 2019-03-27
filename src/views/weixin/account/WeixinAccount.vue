@@ -38,7 +38,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
@@ -212,7 +211,7 @@
         this.$router.push('/Main/Weixin/Account/Templtes/' + row.id)
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'WeixinAccountAddLoadData=true')
+        this.$utils.loadDataControl.add('WeixinAccountAddLoadData=true')
         this.$router.push('/Main/Weixin/Account/WeixinAccountAdd')
       }
     },

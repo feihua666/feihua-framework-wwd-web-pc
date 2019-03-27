@@ -32,7 +32,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     name: 'Message',
@@ -201,7 +200,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'MessageAddLoadData=true')
+        this.$utils.loadDataControl.add('MessageAddLoadData=true')
         this.$router.push('/Main/MessageAdd')
       },
       // 发送消息
@@ -209,7 +208,7 @@
         if (row.msgState !== 'to_be_sended') {
           this.$message.error('消息状态不符合发送要求，请刷新数据再试')
         } else {
-          loadDataControl.add(this.$store, 'MessageSendLoadData=true')
+          this.$utils.loadDataControl.add('MessageSendLoadData=true')
           this.$router.push('/Main/MessageSend/' + row.id)
         }
       },

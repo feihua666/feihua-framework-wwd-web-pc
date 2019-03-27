@@ -10,11 +10,13 @@ import Element from 'element-ui'
 // import 'normalize.css/normalize.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'element-ui/lib/theme-chalk/index.css'
-import config from '@/utils/config.js'
+import config from '@/config/config.js'
+import utils from '@/utils/utils.js'
 Vue.use(Element)
 
 Vue.prototype.$http = http
 Vue.prototype.$config = config
+Vue.prototype.$utils = utils
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
