@@ -23,6 +23,8 @@ const config = {
       return ''
     }
   },
+  // 这里后端会加客户端配置
+  loginClient: 'pc',
   // 页面向导配置
   guideDriver: {
     doneBtnText: '完成',

@@ -109,9 +109,9 @@ export function postJson (url, data = {}) {
  * @returns {Promise}
  */
 
-export function put (url, data = {}, dataType) {
+export function put (url, data = {}) {
   return new Promise((resolve, reject) => {
-    Axios.put(url, data, dataType)
+    Axios.put(url, data)
       .then(response => {
         resolve(response)
       }, err => {
@@ -257,6 +257,24 @@ export function getCurrentUserinfo () {
     })
   })
 }
+/**
+ * 是否已登录
+ * @returns {Promise<any>}
+ */
+export function hasLogin () {
+  return new Promise((resolve, reject) => {
+    getCurrentUserinfo.then(response => {
+      resolve()
+    }).catch(err => {
+      let statusCode = err.statusCode
+      if (statusCode === 401) {
+        reject(err)
+      } else {
+        resolve()
+      }
+    })
+  })
+}
 const http = {
   get: get,
   post: post,
@@ -268,6 +286,7 @@ const http = {
   getDictByValue: getDictByValue,
   getRegExps: getRegExps,
   getRegExpByType: getRegExpByType,
-  getCurrentUserinfo: getCurrentUserinfo
+  getCurrentUserinfo: getCurrentUserinfo,
+  hasLogin: hasLogin
 }
 export default http
