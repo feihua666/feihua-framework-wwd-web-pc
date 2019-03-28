@@ -43,6 +43,11 @@
            <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
          </template>
        </el-table-column>
+       <el-table-column v-else-if="item.image" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
+         <template slot-scope="scope">
+           <div v-if="item.image" v-html="getImage(scope.row,item)"></div>
+         </template>
+       </el-table-column>
        <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
        </el-table-column>
      </template>
@@ -128,7 +133,7 @@
       setDictLabel (index, row, colItem) {
         let self = this
         let attr = colItem.dict + '' + index
-        let value = row[colItem.name]
+        let value = self.$utils.dGetValue(row, colItem.name)
         row[attr] = value
         self.$http.getDictByValue(colItem.dict, value)
           .then(function (dict) {
@@ -148,6 +153,17 @@
         } else {
           return disabled
         }
+      },
+      getImage (row, item) {
+        let url = null
+        if (row[item.name]) {
+          url = this.$config.file.getDownloadUrl(row[item.name])
+        } else {
+          url = require('@/assets/index/headPic.jpg')
+        }
+        // eslint-disable-next-line
+        let image = '<img width="30px" height="30px" src="' + url + '"/>'
+        return image
       }
     }
   }
