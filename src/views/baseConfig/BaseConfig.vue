@@ -7,31 +7,32 @@
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
               <el-form-item label="关键字" prop="keyword">
-                <el-input v-model="searchFormModel.keyword"></el-input>
+                <el-input  v-model="searchFormModel.keyword"></el-input>
+              </el-form-item>
+              <el-form-item label="启用状态" prop="status">
+                <self-dict-select v-model="searchFormModel.status" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button @click="resetFormClick">重置</el-button>
+                <el-button type="danger" @click="addConfig">添加配置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
         </el-collapse>
-        <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading"
-                    v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
-        </self-table>
+        <self-table  @sortChange="sortChange" :default-sort="defaultSort" :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
     </el-container>
-
   </div>
 </template>
 
 <script>
+  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-
   export default {
-    name: 'WwdActivityOrder',
+    name: 'BaseConfig',
     components: {
       SelfDictSelect,
       SelfTable,
@@ -39,64 +40,48 @@
     },
     data () {
       return {
+        defaultSort: {prop: 'updateAt', order: 'descending'},
         columns: [
-
           {
-            name: 'activityUrl',
+            name: 'status',
             width: '100',
-            image: true,
-            label: '标题图'
+            dict: 'yes_no',
+            label: '启用状态'
           },
           {
-            name: 'activityTitle',
-            label: '标题'
+            name: 'configKey',
+            label: 'KEY'
           },
           {
-            name: 'orderNo',
-            label: '订单编号'
+            name: 'description',
+            label: '配置说明'
           },
           {
-            name: 'baseUserDto.photo',
-            width: '100',
-            image: true,
-            label: '用户头像'
+            sortable: 'custom',
+            sortBy: 'update_at',
+            name: 'updateAt',
+            label: '创建时间'
           },
-          {
-            name: 'baseUserDto.nickname',
-            label: '用户名'
-          },
-          {
-            name: 'baseUserDto.gender',
-            dict: 'gender',
-            label: '性别'
-          },
-          {
-            name: 'payType',
-            label: '支付方式'
-          },
-          {
-            name: 'payStatus',
-            dict: 'wwd_pay_status',
-            label: '订单状态'
-          },
-          {
-            name: 'remarks',
-            label: '订单备注'
-          }/*,
           {
             label: '操作',
-            fixed: 'right',
             width: '200',
             buttons: [
               {
+                label: '编辑',
+                click: this.editConfigClick
+              },
+              {
                 label: '删除',
                 click: this.deleteTableRowClick
+              },
+              {
+                label: '可视化编辑',
+                click: this.updateConfigClick
               }
             ]
-          } */
+          }
         ],
         page: {
-          pageNo: 1,
           dataNum: 0
         },
         // 表格数据
@@ -104,43 +89,39 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
-          keyword: '',
-          type: '',
           status: '',
+          keyword: '',
+          orderable: true,
+          orderby: 'update_at-desc',
           pageable: true,
           pageNo: 1,
           pageSize: 10
-        },
-        dialogVisible: false,
-        synToWeixinLoading: false,
-        dialogValue: null
+        }
       }
     },
     mounted () {
       this.loadTableData(1)
     },
     methods: {
+      sortChange (val) {
+        this.searchFormModel.orderby = val.sortBy
+        this.searchBtnClick()
+      },
+      // 查询按钮点击事件
       searchBtnClick () {
         this.loadTableData(1)
       },
       resetFormClick () {
         this.$refs['searchForm'].resetFields()
       },
-      // 加载表 格数据
-      loadTableData (pageNo, pageNoChange) {
+      // 加载表格数据
+      loadTableData (pageNo) {
         let self = this
-        if (pageNo > 0) {
-          if (pageNoChange) {
-            self.searchFormModel.pageNo = pageNo
-          } else {
-            if (self.page.pageNo !== pageNo) {
-              self.page.pageNo = pageNo
-              return
-            }
-          }
+        if (pageNo) {
+          self.searchFormModel.pageNo = pageNo
         }
         self.tableLoading = true
-        this.$http.get('/wwd/activity/orders', self.searchFormModel)
+        this.$http.get('/base/configs', self.searchFormModel)
           .then(function (response) {
             let content = response.data.data.content
             self.tableData = content
@@ -151,6 +132,7 @@
             if (error.response.status === 404) {
               self.tableData = []
               self.page.dataNum = 0
+              self.tableOffice = {}
             }
             self.tableLoading = false
           })
@@ -162,12 +144,25 @@
       },
       // 页码改变加载对应页码数据
       pageNoChange (val) {
-        this.page.pageNo = val
-        this.loadTableData(val, true)
+        this.loadTableData(val)
       },
-      // tablb 表格编辑行
-      editTableRowClick (index, row) {
-        //
+      addConfig () {
+        loadDataControl.add(this.$store, 'BaseConfigAddAddLoadData=true')
+        this.$router.push('/Main/BaseConfig/BaseConfigAdd')
+      },
+      editConfigClick (index, row) {
+        this.$router.push('/Main/BaseConfig/BaseConfigEdit/' + row.id)
+      },
+      updateConfigClick (index, row) {
+        var self = this
+        if (row.configKey === 'OSS_CLOUD_STORAGE_CONFIG_KEY') {
+          self.$router.push('/Main/BaseConfig/OssConfig/' + row.id)
+        } else {
+          this.$confirm('没有可配置项', '提示', {
+            type: 'warning'
+          }).then(() => {
+          })
+        }
       },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
@@ -175,7 +170,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/wwd/activity/order/' + row.id)
+          this.$http.delete('/base/config/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -183,37 +178,36 @@
             })
             .catch(function (error) {
               if (error.response.status === 404) {
-                self.$message.success('删除失败，请刷新数据再试')
+                self.$message.error('删除失败，请刷新数据再试')
               }
             })
         })
       }
     },
-    watch: {}
+    watch: {
+    }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse {
+  .wrapper .el-collapse{
     padding: 0 10px;
   }
+.el-main{
+  padding:0;
+}
+.el-aside{
+  border-right: 1px solid #e6ebf5;
+}
+.wrapper,.el-container{
+  height:100%;
+}
 
-  .el-main {
-    padding: 0;
-  }
-
-  .el-aside {
-    border-right: 1px solid #e6ebf5;
-  }
-
-  .wrapper, .el-container {
-    height: 100%;
-  }
 </style>
 <style>
-  .el-collapse-item__arrow {
-    /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-    margin-right: 20px;
-  }
+.el-collapse-item__arrow {
+  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
+  margin-right: 20px;
+}
 </style>

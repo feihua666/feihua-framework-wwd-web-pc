@@ -105,7 +105,7 @@
           addr: null,
           content: null,
           type: '户外',
-          status: '0',
+          status: 'editing',
           headcount: 0,
           headcountDesc: null,
           payRule: '1',

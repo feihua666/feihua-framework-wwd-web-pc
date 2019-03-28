@@ -64,7 +64,8 @@
           {
             name: 'headcount',
             html: this.headcountFormatter,
-            label: '总人数'
+            label: '' +
+              '已支付/总人数'
           },
           {
             name: 'payRule',

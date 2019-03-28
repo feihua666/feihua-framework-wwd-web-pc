@@ -70,10 +70,10 @@
       </el-form-item>
       <el-form-item label="活动状态" prop="status" required>
         <el-radio-group v-model="form.status">
-          <el-radio-button label="0">编辑中</el-radio-button>
-          <el-radio-button label="1">报名中</el-radio-button>
-          <el-radio-button label="2">名额满</el-radio-button>
-          <el-radio-button label="3">已结束</el-radio-button>
+          <el-radio-button label="editing">编辑中</el-radio-button>
+          <el-radio-button label="signing">报名中</el-radio-button>
+          <el-radio-button label="signfull">名额满</el-radio-button>
+          <el-radio-button label="finished">已结束</el-radio-button>
         </el-radio-group>
       </el-form-item>
       <el-form-item>
@@ -112,7 +112,7 @@
           addr: null,
           content: null,
           type: '户外',
-          status: '0',
+          status: 'editing',
           headcount: 0,
           headcountDesc: null,
           payRule: '1',

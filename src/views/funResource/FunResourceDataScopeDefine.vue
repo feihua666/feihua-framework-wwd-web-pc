@@ -1,4 +1,5 @@
 <template>
+  <div class="wrapper">
   <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="120px" v-loading="formDataLoading">
     <el-form-item label="功能数据范围" prop="type">
       <self-dict-select v-model="form.type" type="functionResource_dataScope" :show-none="false"></self-dict-select>
@@ -10,6 +11,7 @@
       <el-button type="primary" @click="submitBtnClick" :loading="addLoading">提交</el-button>
     </el-form-item>
   </el-form>
+  </div>
 </template>
 
 <script>
@@ -121,5 +123,10 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .wrapper,.el-form{
+    height:100%;
+  }
+  .wrapper{
+    overflow-y: auto;
+  }
 </style>

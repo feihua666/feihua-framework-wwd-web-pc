@@ -79,7 +79,7 @@
                 })
                 .catch(function (response) {
                   if (response.response.status === 409) {
-                    self.$message.error('字典修改失败，编码已存在')
+                    self.$message.error('角色添加失败，编码已存在')
                   } else {
                     self.$message.error('角色添加失败，请稍后再试')
                   }

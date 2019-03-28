@@ -2,8 +2,8 @@
   <el-container>
     <el-aside :width="leftAsideWidth" style="background-color:#304156;overflow-x: hidden;transition: width 500ms;">
       <el-container>
-        <el-header style="padding: 0.4rem;color: #fff">
-          <profile :is-collapse="isCollapse"></profile>
+        <el-header style="padding: 0;color: #fff">
+          <profile style="height: 100%" :is-collapse="isCollapse"></profile>
         </el-header>
         <el-main>
           <el-scrollbar class="self-scroll-bar-view" wrapStyle="overflow:auto;">

@@ -1,6 +1,6 @@
 <template>
   <el-row>
-    <el-col :class="isCollapse ? 'hidden': ''" :span="8">
+    <el-col style="height: 100%" :class="isCollapse ? 'hidden': ''" :span="8">
       <img class="head-pic" @click="showFileUpload" :src="headPic"/>
     </el-col>
     <el-col :span="16" :class="isCollapse ? 'widthfull': ''">
@@ -191,10 +191,10 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .head-pic{
-    width: 100%;
-    height: 100%;
+    width: 60px;
+    height: 60px;
     border: none;
-    border-radius: 10%;
+    border-radius: 50%;
   }
   .head-pic:hover{
     cursor: pointer;

@@ -13,10 +13,10 @@
           <div  class="text item">
             <label>活动状态：</label>
             <el-radio-group  v-model="activity.status" disabled size="small">
-              <el-radio-button label="0">编辑中</el-radio-button>
-              <el-radio-button label="1">报名中</el-radio-button>
-              <el-radio-button label="2">名额满</el-radio-button>
-              <el-radio-button label="3">已结束</el-radio-button>
+              <el-radio-button label="editing">编辑中</el-radio-button>
+              <el-radio-button label="signing">报名中</el-radio-button>
+              <el-radio-button label="signfull">名额满</el-radio-button>
+              <el-radio-button label="finished">已结束</el-radio-button>
             </el-radio-group>
           </div>
         </el-card>
@@ -25,6 +25,9 @@
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
               <el-form-item label="关键字" prop="keyword">
                 <el-input  v-model="searchFormModel.keyword"></el-input>
+              </el-form-item>
+              <el-form-item>
+                <self-dict-select v-model="searchFormModel.payStatus" type="wwd_pay_status"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
@@ -82,9 +85,9 @@
         addLoading: false,
         form: {
           remarks: null,
-          payStatus: '0',
+          payStatus: '',
           type: 'N',
-          status: '0'
+          status: ''
         },
         formRules: {
           payStatus: [
@@ -94,7 +97,7 @@
         activity: {
           title: null,
           introduced: null,
-          status: '0'
+          status: ''
         },
         columns: [
           {
@@ -105,10 +108,6 @@
           {
             name: 'wwdUserDto.name',
             label: '用户名'
-          },
-          {
-            name: 'wwdUserDto.nickname',
-            label: '用户昵称'
           },
           {
             name: 'wwdUserDto.gender',
@@ -138,6 +137,15 @@
             name: 'updateAt',
             label: '修改时间'
           },
+
+          {
+            name: 'name',
+            label: '报名姓名'
+          },
+          {
+            name: 'mobile',
+            label: '报名手机号'
+          },
           {
             label: '操作',
             width: '200',
@@ -145,11 +153,11 @@
               {
                 label: '修改',
                 click: this.editTableRowClick
-              },
+              }/*,
               {
                 label: '删除',
                 click: this.deleteTableRowClick
-              }
+              } */
             ]
           }
         ],
@@ -163,6 +171,7 @@
         searchFormModel: {
           wwdActivityId: null,
           keyword: '',
+          payStatus: 'paid',
           pageable: true,
           orderable: true,
           orderby: 'update_at-desc',
