@@ -133,7 +133,11 @@
       setDictLabel (index, row, colItem) {
         let self = this
         let attr = colItem.dict + '' + index
-        let value = row[colItem.name]
+        let key = colItem.name.split('.')
+        let value = row
+        for (let i = 0; i < key.length; i++) {
+          value = value[key[i]]
+        }
         row[attr] = value
         self.$http.getDictByValue(colItem.dict, value)
           .then(function (dict) {
