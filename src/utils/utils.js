@@ -49,6 +49,15 @@ const removeLoadDataControl = function (value) {
   let index = loadDataControl.indexOf(value)
   loadDataControl.splice(index, 1)
 }
+// 深度获取对象属性，attr支持点，如：a.b.c
+const dGetValue = function (obj, attr) {
+  let value = obj
+  let key = attr.split('.')
+  for (let i = 0; i < key.length; i++) {
+    value = value[key[i]]
+  }
+  return value
+}
 const utils = {
   isArray: isArray,
   arrayToTree: arrayToTree,
@@ -56,6 +65,7 @@ const utils = {
     add: addLoadDataControl,
     has: existLoadDataControl,
     remove: removeLoadDataControl
-  }
+  },
+  dGetValue: dGetValue
 }
 export default utils
