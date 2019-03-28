@@ -39,7 +39,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import ChannelInputSelect from '@/views/cms/channel/ChannelInputSelect.vue'
   import SiteSelect from '@/views/cms/site/SiteSelect.vue'
@@ -207,7 +206,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'ContentAddLoadData=true')
+        this.$utils.loadDataControl.add('ContentAddLoadData=true')
         let url = '/Main/Cms/ContentAdd?siteId=' + (this.searchFormModel.siteId || '')
         if (this.searchFormModel.channelId) {
           url = url + '&channelId=' + this.searchFormModel.channelId

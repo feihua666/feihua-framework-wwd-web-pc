@@ -37,7 +37,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     name: 'Question',
@@ -189,7 +188,7 @@
       },
       addTableRowClick () {
         let self = this
-        loadDataControl.add(self.$store, 'QuestionAddLoadData=true')
+        this.$utils.loadDataControl.add('QuestionAddLoadData=true')
         self.$router.push('/Main/Cms/QuestionAdd/' + self.searchFormModel.surveyId)
       },
       // tablb 表格删除行

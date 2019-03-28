@@ -18,7 +18,6 @@
 </template>
 
 <script>
-  import { arrayToTree } from '@/utils/treeUtils.js'
   export default {
     name: 'OfficeTree',
     props: {
@@ -110,7 +109,7 @@
       },
       treeData (data) {
         // 数据转树结构
-        let treeData = arrayToTree(data)
+        let treeData = this.$utils.arrayToTree(data)
         // 默认展开不多于5个的根节点
         this.defaultExpandedKeys = []
         for (let i = 0; i < treeData.length; i++) {

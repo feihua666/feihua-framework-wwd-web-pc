@@ -48,9 +48,7 @@
   import WeixinMenuTree from './WeixinMenuTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   import WeixinMenuInputSelect from '@/views/weixin/menu/WeixinMenuInputSelect.vue'
   import WeixinAccountSelect from '@/views/weixin/account/WeixinAccountSelect'
   import WeixinAccountSelectDialog from '@/views/weixin/account/WeixinAccountSelectDialog.vue'
@@ -77,7 +75,7 @@
           {
             name: 'type',
             label: '类型',
-            formatter: this.typeFormatter
+            dict: 'weixin_menu_type'
           },
           {
             name: 'sequence',
@@ -225,7 +223,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'WeixinMenuAddLoadData=true')
+        this.$utils.loadDataControl.add('WeixinMenuAddLoadData=true')
         this.$router.push('/Main/Weixin/Menu/WeixinMenuAdd?which=' + this.searchFormModel.which)
       },
       previewClick () {
@@ -256,10 +254,6 @@
               self.$message.error('同步失败，请确认添加的菜单规则正确')
             }
           })
-      },
-      typeFormatter (row) {
-        let dict = getDictByValueSync(this, 'weixin_menu_type', row.type)
-        return dict ? dict.name : null
       },
       accountSelectSuccess (which) {
         this.searchFormModel.which = which

@@ -1,11 +1,11 @@
 <template>
  <div>
-   <el-table v-loading="tableLoading"
+   <el-table v-loading="tableLoading" :default-sort="defaultSort" @sort-change="sortChange"
              border stripe
      size="mini"
-     style="width: 100%" :data="tableData">
+     style="width: 100%" :data="mytableData">
      <template  v-for="item in columns">
-       <el-table-column v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
+       <el-table-column  v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
          <template slot-scope="scope">
            <el-button v-for="btn in item.buttons"  :key="scope.$index"
                       @click.native.prevent="btn.click(scope.$index, scope.row)"
@@ -24,9 +24,9 @@
                <div v-else v-html="btn.html"></div>
              </template>
              <template v-else>
-               <div v-if="item.html" v-html="item.html(scope.row)"></div>
+               <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
                <template v-else>
-                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? getDictLabel(item.dict, scope.row[item.name]) : scope.row[item.name],scope.row,item.name)}}
+                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item) : scope.row[item.name])}}
                </template>
              </template>
            </el-button>
@@ -35,20 +35,20 @@
        </el-table-column>
        <el-table-column v-else-if="item.dict" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
          <template slot-scope="scope">
-         {{getDictLabel(item.dict, scope.row[item.name],item.dictValue,scope.row,item.name)}}
+         {{scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item)}}
          </template>
        </el-table-column>
        <el-table-column v-else-if="item.html" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
          <template slot-scope="scope">
-           <div v-if="item.html" v-html="item.html(scope.row)"></div>
+           <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
          </template>
        </el-table-column>
        <el-table-column v-else-if="item.image" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
          <template slot-scope="scope">
-           <div v-if="item.image" v-html="getImage(scope.row,scope.row[item.name],item.name)"></div>
+           <div v-if="item.image" v-html="getImage(scope.row,item)"></div>
          </template>
        </el-table-column>
-       <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
+       <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
        </el-table-column>
      </template>
 
@@ -60,7 +60,6 @@
 
 <script>
   import SelfPage from '@/components/SelfPage.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   export default {
     name: 'SelfTable',
     components: {
@@ -69,6 +68,11 @@
     props: {
       showPage: {
         default: true
+      },
+      defaultSort: {
+        default: function () {
+          return {}
+        }
       },
       columns: {
         default: function () {
@@ -93,11 +97,31 @@
     },
     data () {
       return {
+        mytableData: []
       }
     },
     mounted () {
     },
+    watch: {
+      tableData (val) {
+        this.mytableData = val
+      }
+    },
     methods: {
+      // 排序
+      sortChange (val) {
+        if (val && val.column.sortable != null) {
+          // 加了sortBy字段才返回
+          if (val.column.sortBy) {
+            if (val.order === 'descending') {
+              val.sortBy = val.column.sortBy + '-desc'
+            } else {
+              val.sortBy = val.column.sortBy + '-asc'
+            }
+            this.$emit('sortChange', val)
+          }
+        }
+      },
       // 页面大小改变重新查询数据
       pageSizeChange (val) {
         this.$emit('pageSizeChange', val)
@@ -106,46 +130,22 @@
       pageNoChange (val) {
         this.$emit('pageNoChange', val)
       },
-      getImage (row, value, name) {
-        // 字典对象 xx.xx.xx 取值不到 所以有了下面的。。。
-        // eslint-disable-next-line
-        let names =  name.split('.')
-        if (names.length === 2) {
-          value = row[names[0]][names[1]]
-        } else if (names.length === 3) {
-          value = row[names[0]][names[1]][names[2]]
-          // 应该不会超过四个，超过在加吧，如有优雅的方式改下
-        } else if (names.length === 4) {
-          value = row[names[0]][names[1]][names[2]][names[3]]
-        }
-        let url = null
-        if (value) {
-          url = this.$config.file.getDownloadUrl(value)
-        } else {
-          url = require('@/assets/index/headPic.jpg')
-        }
-        // eslint-disable-next-line
-        let image = '<img width="75px" height="75px" src="' + url + '"/>'
-        return image
-      },
-      getDictLabel (type, value, dictValue, row, name) {
-        // 字典对象 xx.xx.xx 取值不到 所以有了下面的。。。
-        // eslint-disable-next-line
-        let names =  name.split('.')
-        if (names.length === 2) {
-          value = row[names[0]][names[1]]
-        } else if (names.length === 3) {
-          value = row[names[0]][names[1]][names[2]]
-          // 应该不会超过四个，超过在加吧，如有优雅的方式改下
-        } else if (names.length === 4) {
-          value = row[names[0]][names[1]][names[2]][names[3]]
-        }
-        let dict = getDictByValueSync(this, type, value)
-        let str = dict ? dict.name : null
-        if (str && dictValue) {
-          str = str + '(' + value + ')'
-        }
-        return str
+      setDictLabel (index, row, colItem) {
+        let self = this
+        let attr = colItem.dict + '' + index
+        let value = row[colItem.name]
+        row[attr] = value
+        self.$http.getDictByValue(colItem.dict, value)
+          .then(function (dict) {
+            let str = dict.name
+            if (str && colItem.dictValue) {
+              str = str + '(' + value + ')'
+            }
+            row[attr] = str
+            self.mytableData.splice(index, 1, row)
+          }).catch(function () {
+            self.mytableData.splice(index, 1, row)
+          })
       },
       btnDisabled (disabled, index, row) {
         if (typeof disabled === 'function') {
@@ -153,6 +153,17 @@
         } else {
           return disabled
         }
+      },
+      getImage (row, item) {
+        let url = null
+        if (row[item.name]) {
+          url = this.$config.file.getDownloadUrl(row[item.name])
+        } else {
+          url = require('@/assets/index/headPic.jpg')
+        }
+        // eslint-disable-next-line
+        let image = '<img width="30px" height="30px" src="' + url + '"/>'
+        return image
       }
     }
   }

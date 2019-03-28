@@ -26,7 +26,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     name: 'Leave',
@@ -165,7 +164,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'LeaveAddLoadData=true')
+        this.$utils.loadDataControl.add('LeaveAddLoadData=true')
         this.$router.push('/Main/Oa/LeaveAdd')
       },
       apply (index, row) {

@@ -226,7 +226,7 @@
                 activity.startTime = self.form.myDateRange[0]
                 activity.endTime = self.form.myDateRange[1]
               }
-              self.$http.put('/wwd/activity/' + self.id, activity, {'dataType': 'json'})
+              self.$http.putJson('/wwd/activity/' + self.id, activity)
                 .then(function (response) {
                   self.$message.info('活动修改成功')
                   self.addLoading = false

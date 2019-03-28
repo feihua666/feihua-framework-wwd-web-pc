@@ -382,7 +382,7 @@
   import ChannelInputSelect from '@/views/cms/channel/ChannelInputSelect.vue'
   import TinymceEditor from '@/components/tinymceEditor/TinymceEditor.vue'
   import TemplateSelect from '@/views/cms/TemplateSelect'
-  import FileUpload from '@/components/FileUpload.vue'
+  import FileUpload from '@/components/FileUploadDialog.vue'
   import ContentCategoryCheckboxGroup from '@/views/cms/content/category/ContentCategoryCheckboxGroup'
 
   export default {

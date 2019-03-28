@@ -27,7 +27,6 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
@@ -147,7 +146,7 @@
         this.loadTableData(val)
       },
       addConfig () {
-        loadDataControl.add(this.$store, 'BaseConfigAddAddLoadData=true')
+        this.$utils.loadDataControl.add('BaseConfigAddAddLoadData=true')
         this.$router.push('/Main/BaseConfig/BaseConfigAdd')
       },
       editConfigClick (index, row) {

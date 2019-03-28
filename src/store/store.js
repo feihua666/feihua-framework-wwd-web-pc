@@ -12,44 +12,20 @@ let defaultLoginUser = {
 */
 export default new Vuex.Store({
   state: {
-    // 用户登录信息
-    loginUser: null,
-    // 字典
-    dict: {},
-    // regexp 正则表达式 是一个对象
-    regExp: null,
-    // 用户登录token
-    token: null,
-    // 语言
+    // 语言,暂时没有用到
     lang: Cookies.get('lang') || 'zh',
     // 首页菜单与tabs相关
     indexView: {
       // 访问的标签页数据
-      visitedViews: [],
-      // 这个属性是一个控制属性，暂时遇到的问题是点击列表中编辑的时候，不是用的弹窗形式，是新加的tab页形式，点击列表中的编辑会由于参数不同但vue重用组件的问题导致数据刷新不对，
-      // 所以用户控制一下
-      loadDataControl: []
+      visitedViews: []
     }
   },
   getters: {
     dataControl: state => state.indexView.loadDataControl,
     visitedViews: state => state.indexView.visitedViews,
-    regExp: state => state.regExp,
     loginUser: state => state.loginUser
   },
   mutations: {
-    // 设置用户登录token
-    setToken: (state, token) => {
-      state.token = token
-    },
-    // 设置登录用户信息
-    setLoginUser: (state, loginUser) => {
-      state.loginUser = loginUser
-    },
-    // 设置登录用户信息
-    setLoginUserPhoto: (state, photo) => {
-      state.loginUser.photo = photo
-    },
     // 设置语言
     setLang: (state, lang) => {
       state.lang = lang
@@ -95,20 +71,6 @@ export default new Vuex.Store({
         state.indexView.visitedViews.splice(0, index)
         state.indexView.visitedViews.splice(1, state.indexView.visitedViews.length - 1)
       }
-    },
-    addDataControl: (state, value) => {
-      state.indexView.loadDataControl.push(value)
-    },
-    delDataControl: (state, value) => {
-      let index = state.indexView.loadDataControl.indexOf(value)
-      state.indexView.loadDataControl.splice(index, 1)
-    },
-    addDict: (state, dict) => {
-      state.dict[dict.type] = dict.dicts
-    },
-    // 设置正则表达诫列表
-    setRegExp: (state, regExp) => {
-      state.regExp = regExp
     }
   }
 })

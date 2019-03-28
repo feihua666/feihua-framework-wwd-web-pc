@@ -162,7 +162,7 @@
               // 请求添加
               self.addLoading = true
               self.form.id = self.id
-              self.$http.put('/weixinaccount/account', self.form, {'dataType': 'json'})
+              self.$http.putJson('/weixinaccount/account', self.form)
                 .then(function (response) {
                   self.$message.info('微信公众账号修改成功')
                   self.addLoading = false

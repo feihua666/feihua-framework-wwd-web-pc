@@ -96,8 +96,6 @@
             // 进行登录
             self.$http.post('/login', self.form)
               .then(function (response) {
-                // 设置token
-                self.$store.commit('setToken', response.data.token)
                 // 跳转到主页面
                 self.$router.push({name: 'Main'})
                 self.loading = false
@@ -124,7 +122,7 @@
       // 加载新的验证码
       changeCaptcha () {
         // baseurl 也可以这么取 this.$config.httpBaseURL
-        this.captchaUrl = this.$http.getBaseUrl() + '/captcha?t=' + new Date().getTime()
+        this.captchaUrl = this.$config.hostApi + '/captcha?t=' + new Date().getTime()
       }
     }
   }

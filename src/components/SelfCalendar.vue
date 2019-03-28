@@ -44,7 +44,7 @@
 
                 <template v-if="days[row * 7-(8-week)]" v-for="item in [days[row * 7-(8-week)]]">
                   <div style="height: 100%;">
-                    <div class="calendar-extend-work-or-rest-box" v-html="workOrRestDict(item.year,item.month,item.day)">
+                    <div class="calendar-extend-work-or-rest-box" v-html="item.workOrRestDict ?item.workOrRestDict:workOrRestDict(row * 7-(8-week), item)">
                     </div>
                     <div :class="'day ' + (week > 5 ? 'red' : '')">{{item.day}}</div>
                     <div class="lunar-day" v-html="lunarDay(item)"></div>
@@ -62,7 +62,6 @@
 </template>
 
 <script>
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   export default {
     name: 'SelfCalendar',
     props: {
@@ -207,12 +206,17 @@
       refresh () {
         this.loadData(this.date)
       },
-      workOrRestDict (year, month, day) {
+      workOrRestDict (index, dayItem) {
+        let year = dayItem.year
+        let month = dayItem.month
+        let day = dayItem.day
+        dayItem.workOrRestDict = '<div></div>'
+        this.days.splice(index, 1, dayItem)
+
         if (this.calendarExtends && this.calendarExtends.length > 0) {
           for (let i = 0; i < this.calendarExtends.length; i++) {
             let item = this.calendarExtends[i]
             if (item.year === year && item.month === month && item.day === day) {
-              let dict = getDictByValueSync(this, 'work_or_rest', item.workOrRest)
               let _class = 'calendar-extend-'
               if (item.workOrRest === 'work') {
                 _class += 'work'
@@ -221,11 +225,16 @@
               } else {
                 _class += 'other'
               }
-              return dict ? '<div class="' + _class + '">' + dict.name + '</div>' : null
+              let self = this
+              self.$http.getDictByValue('work_or_rest', item.workOrRest)
+                .then(function (dict) {
+                  dayItem.workOrRestDict = '<div class="' + _class + '">' + dict.name + '</div>'
+                  self.days.splice(index, 1, dayItem)
+                }).catch(function () {
+                  self.days.splice(index, 1, dayItem)
+                })
             }
           }
-        } else {
-          return null
         }
       }
     },

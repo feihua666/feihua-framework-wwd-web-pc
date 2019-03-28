@@ -39,7 +39,7 @@
       <el-form-item label="内容" prop="content" >
         <TinymceEditor ref="tinymceeditor" v-model="form.content"></TinymceEditor>
       </el-form-item>
-      
+
       <el-form-item label="封面图片">
         <el-switch
           v-model="enableCoverImage"
@@ -378,13 +378,12 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import SiteSelect from '@/views/cms/site/SiteSelect.vue'
   import ChannelInputSelect from '@/views/cms/channel/ChannelInputSelect.vue'
   import TinymceEditor from '@/components/tinymceEditor/TinymceEditor.vue'
   import TemplateSelect from '@/views/cms/TemplateSelect'
-  import FileUpload from '@/components/FileUpload.vue'
+  import FileUpload from '@/components/FileUploadDialog.vue'
   import ContentCategoryCheckboxGroup from '@/views/cms/content/category/ContentCategoryCheckboxGroup'
   import SingleWebSpider from '@/views/spider/SingleWebSpider'
 
@@ -805,10 +804,10 @@
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'ContentAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
 
         if (vm.form.siteId !== vm.$route.query.siteId && vm.$route.query.siteId) {

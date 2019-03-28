@@ -29,7 +29,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
@@ -233,7 +232,7 @@
         this.$router.push('/Main/Wwd/Activity/WwdParticipate/' + row.id)
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'WwdActivityAddLoadData=true')
+        this.$utils.loadDataControl.add('WwdActivityAddLoadData=true')
         this.$router.push('/Main/Wwd/Activity/WwdActivityAdd')
       }
     },

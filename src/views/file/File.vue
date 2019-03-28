@@ -6,24 +6,25 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="名称">
-                <el-input  v-model="searchFormModel.name"></el-input>
+              <el-form-item label="名称" prop="keyword">
+                <el-input  v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
-              <el-form-item label="类型">
-                <self-dict-select v-model="searchFormModel.type" type="file_type"></self-dict-select>
+              <el-form-item label="类型" prop="type">
+                <self-dict-select v-model="searchFormModel.type" type="upload_download_type"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="addTableRowClick">上传</el-button>
+                <el-button @click="resetFormClick">重置</el-button>
+                <file-upload style="display: inline-block" ref="fileupload" trigger-btn-text="上传" :limit="1" :upload-btn-show="false" :show-file-list="false" :auto-upload="true" list-type="text" :on-success="fileUploadSucess"></file-upload>
               </el-form-item>
             </el-form>
           </el-collapse-item>
         </el-collapse>
-        <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
+        <self-table  @sortChange="sortChange" :default-sort="defaultSort" :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
     </el-container>
 
-    <file-upload ref="fileupload" :onSuccess="fileUploadSucess"></file-upload>
+
     <file-download-dialog ref="filedownload"></file-download-dialog>
   </div>
 </template>
@@ -42,6 +43,7 @@
       SelfTable},
     data () {
       return {
+        defaultSort: {prop: 'createAt', order: 'descending'},
         columns: [
           {
             name: 'name',
@@ -54,7 +56,7 @@
           {
             name: 'type',
             label: '分类',
-            dict: 'file_type'
+            dict: 'upload_download_type'
           },
           {
             name: 'downloadNum',
@@ -69,6 +71,8 @@
             label: '路径'
           },
           {
+            sortable: 'custom',
+            sortBy: 'create_at',
             name: 'createAt',
             label: '创建时间'
           },
@@ -98,7 +102,10 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
+          orderable: true,
+          orderby: 'update_at-desc',
           name: '',
+          keyword: '',
           type: '',
           pageable: true,
           pageNo: 1,
@@ -110,6 +117,13 @@
       this.loadTableData(1)
     },
     methods: {
+      sortChange (val) {
+        this.searchFormModel.orderby = val.sortBy
+        this.searchBtnClick()
+      },
+      resetFormClick () {
+        this.$refs['searchForm'].resetFields()
+      },
       // 查询按钮点击事件
       searchBtnClick () {
         this.loadTableData(1)
@@ -117,6 +131,9 @@
       // 加载表格数据
       loadTableData (pageNo) {
         let self = this
+        if (self.tableLoading) {
+          return
+        }
         if (pageNo) {
           self.searchFormModel.pageNo = pageNo
         }
@@ -195,13 +212,8 @@
             })
         })
       },
-      // 上传
-      addTableRowClick () {
-        this.$refs.fileupload.show()
-      },
       fileUploadSucess () {
         this.searchBtnClick()
-        this.$refs.fileupload.hide()
       }
     },
     watch: {

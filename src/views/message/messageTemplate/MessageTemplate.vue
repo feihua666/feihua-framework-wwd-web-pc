@@ -29,7 +29,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   export default {
     name: 'MessageTemplate',
@@ -147,7 +146,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'MessageTemplateAddLoadData=true')
+        this.$utils.loadDataControl.add('MessageTemplateAddLoadData=true')
         this.$router.push('/Main/MessageTemplateAdd')
       }
     },

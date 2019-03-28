@@ -29,7 +29,6 @@
   import UrlCollect from '@/views/home/UrlCollect'
   import * as Driver from 'driver.js' // import driver.js
   import 'driver.js/dist/driver.min.css' // import driver.js css
-  import driverConfig from '@/utils/guideDriverConfig.js'
   import $ from 'jquery'
   export default {
     components: {
@@ -43,7 +42,7 @@
       }
     },
     mounted () {
-      this.guideDriver = new Driver(driverConfig)
+      this.guideDriver = new Driver(this.$config.guideDriver)
     },
     methods: {
       guideUrlCollect () {

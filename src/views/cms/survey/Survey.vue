@@ -87,7 +87,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
@@ -314,7 +313,7 @@
       },
       // 添加调查
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'SurveyAddLoadData=true')
+        this.$utils.loadDataControl.add('SurveyAddLoadData=true')
         this.$router.push('/Main/Cms/SurveyAdd')
       },
       // tablb 表格删除行

@@ -13,7 +13,7 @@
         <el-upload
           ref="upload"
           class="avatar-uploader"
-          :action="$config.httpBaseURL + '/activity/processDefinition/deploy'"
+          :action="$config.hostApi + '/activity/processDefinition/deploy'"
           :data="data"
           accept="application/zip,image/png,text/xml"
           :limit="1"

@@ -77,7 +77,6 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import TinymceEditor from '@/components/tinymceEditor/TinymceEditor.vue'
   import FileUpload from '@/components/FileUpload'
@@ -180,7 +179,7 @@
                 activity.endTime = self.form.myDateRange[1]
               }
               console.log(self.form)
-              self.$http.post('/wwd/activity', activity, {'dataType': 'json'})
+              self.$http.postJson('/wwd/activity', activity)
                 .then(function (response) {
                   self.$message.info('活动添加成功')
                   self.addLoading = false
@@ -217,10 +216,10 @@
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'WwdActivityAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     },

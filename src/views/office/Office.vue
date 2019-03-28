@@ -44,9 +44,7 @@
   import OfficeTree from './OfficeTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
   import AreaInputSelect from '@/views/area/AreaInputSelect.vue'
   export default {
@@ -69,7 +67,7 @@
           {
             name: 'type',
             label: '类型',
-            formatter: this.typeFormatter
+            dict: 'office_type'
           },
           {
             name: 'parentId',
@@ -207,12 +205,8 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'OfficeAddLoadData=true')
+        this.$utils.loadDataControl.add('OfficeAddLoadData=true')
         this.$router.push('/Main/OfficeAdd')
-      },
-      typeFormatter (row) {
-        let dict = getDictByValueSync(this, 'office_type', row.type)
-        return dict ? dict.name : null
       },
       dataAreaFormatter (row) {
         let name = null

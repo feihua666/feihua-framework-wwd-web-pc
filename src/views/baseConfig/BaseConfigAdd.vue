@@ -26,7 +26,6 @@
 </template>
 
 <script>
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   export default {
     name: 'BaseConfigAdd',
     data () {
@@ -58,7 +57,7 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.post('/base/config', self.form, {'dataType': 'json'})
+              self.$http.postJson('/base/config', self.form)
                 .then(function (response) {
                   self.$message.info('系统配置添加成功')
                   self.addLoading = false
@@ -83,10 +82,10 @@
       next(vm => {
         // 通过 `vm` 访问组件实例
         let dataControl = 'BaseConfigAddAddLoadData=true'
-        if (loadDataControl.has(vm.$store, dataControl)) {
+        if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
-          loadDataControl.remove(vm.$store, dataControl)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     },

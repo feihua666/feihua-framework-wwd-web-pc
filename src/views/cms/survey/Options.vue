@@ -55,7 +55,6 @@
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   export default {
     name: 'Question',
     components: {
@@ -154,8 +153,9 @@
             self.question.surveyId = content.surveyId
             self.question.name = content.name
             self.question.description = content.description
-            let d = getDictByValueSync(self, 'question_type', content.type)
-            self.question.type = (d ? d.name : null)
+            self.$http.getDictByValue('question_type', content.type).then(function (dict) {
+              self.question.type = dict.name
+            })
             self.loadSurvey(content.surveyId)
           })
       },

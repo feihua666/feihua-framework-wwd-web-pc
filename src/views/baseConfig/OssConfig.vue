@@ -233,7 +233,7 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.put('/base/config/saveOssConfig/' + self.id, self.form, {'dataType': 'json'})
+              self.$http.putJson('/base/config/saveOssConfig/' + self.id, self.form)
                 .then(function (response) {
                   self.$message.info('配置保存成功')
                   self.addLoading = false

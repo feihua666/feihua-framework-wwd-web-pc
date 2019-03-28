@@ -41,9 +41,7 @@
   import AreaTree from './AreaTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   import AreaInputSelect from '@/views/area/AreaInputSelect.vue'
   export default {
     name: 'Area',
@@ -64,7 +62,7 @@
           {
             name: 'type',
             label: '类型',
-            formatter: this.typeFormatter
+            dict: 'area_type'
           },
           {
             name: 'parentId',
@@ -192,12 +190,8 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'AreaAddLoadData=true')
+        this.$utils.loadDataControl.add('AreaAddLoadData=true')
         this.$router.push('/Main/AreaAdd')
-      },
-      typeFormatter (row) {
-        let dict = getDictByValueSync(this, 'area_type', row.type)
-        return dict ? dict.name : null
       },
       dataParentFormatter (row) {
         let name = null

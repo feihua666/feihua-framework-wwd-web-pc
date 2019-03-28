@@ -3,7 +3,7 @@
     <el-aside :width="leftAsideWidth" style="background-color:#304156;overflow-x: hidden;transition: width 500ms;">
       <el-container>
         <el-header style="padding: 0;color: #fff">
-          <profile style="height: 100%" :is-collapse="isCollapse"></profile>
+          <profile :is-collapse="isCollapse"></profile>
         </el-header>
         <el-main>
           <el-scrollbar class="self-scroll-bar-view" wrapStyle="overflow:auto;">
@@ -35,7 +35,6 @@
   </el-container>
 </template>
 <script>
-  import { arrayToTree } from '@/utils/treeUtils.js'
   import MenuItems from './MenuItem.vue'
   import Profile from './Profile.vue'
   import VisitedViews from './VisitedViews.vue'
@@ -54,6 +53,7 @@
       }
     },
     created () {
+      // 尝试加载用户信息，以确定用户登录状态
       this.loadUserInfo()
       this.loadMenus()
     },
@@ -84,7 +84,7 @@
                 content[obj].path = content[obj].url
                 menus.push(content[obj])
               }
-              self.menus = arrayToTree(menus)
+              self.menus = self.$utils.arrayToTree(menus)
               // 默认展开
               for (let item in self.menus) {
                 if (self.menus[item].level === 1) {
@@ -101,15 +101,8 @@
       },
       loadUserInfo () {
         let self = this
-        self.$http.get('/base/user/current')
-          .then(response => {
-            let content = response.data.data.content
-            if (content) {
-              self.$store.commit('setLoginUser', content)
-            } else {
-              self.$router.push({name: 'Login'})
-            }
-          }).catch(function (response) {
+        self.$http.getCurrentUserinfo()
+          .catch(function (response) {
             if (response.response.status === 401) {
               self.$router.push({name: 'Login'})
             } else {

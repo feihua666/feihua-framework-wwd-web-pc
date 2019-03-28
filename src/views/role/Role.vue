@@ -47,9 +47,7 @@
   import RoleTree from './RoleTree.vue'
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
-  import { getDictByValueSync } from '@/utils/dictUtils.js'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
   import RoleInputSelect from '@/views/role/RoleInputSelect.vue'
   export default {
@@ -76,12 +74,12 @@
           {
             name: 'type',
             label: '类型',
-            formatter: this.typeFormatter
+            dict: 'role_type'
           },
           {
             name: 'disabled',
             label: '是否禁用',
-            formatter: this.disabledFormatter
+            dict: 'yes_no'
           },
           {
             name: 'parentId',
@@ -235,16 +233,8 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'RoleAddLoadData=true')
+        this.$utils.loadDataControl.add('RoleAddLoadData=true')
         this.$router.push('/Main/RoleAdd')
-      },
-      typeFormatter (row) {
-        let dict = getDictByValueSync(this, 'role_type', row.type)
-        return dict ? dict.name : null
-      },
-      disabledFormatter (row) {
-        let dict = getDictByValueSync(this, 'yes_no', row.disabled)
-        return dict ? dict.name : null
       },
       dataOfficeFormatter (row) {
         let dataOfficeName = null

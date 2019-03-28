@@ -40,7 +40,6 @@
 <script>
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
-  import loadDataControl from '@/utils/storeLoadDataControlUtils.js'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import OfficeTree from '@/views/office/OfficeTree.vue'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
@@ -217,7 +216,7 @@
         })
       },
       addTableRowClick () {
-        loadDataControl.add(this.$store, 'UserAddLoadData=true')
+        this.$utils.loadDataControl.add('UserAddLoadData=true')
         this.$router.push('/Main/UserAdd')
       },
       // 用户绑定角色
