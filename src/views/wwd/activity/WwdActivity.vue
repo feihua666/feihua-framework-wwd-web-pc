@@ -132,7 +132,7 @@
       this.loadTableData(1)
     },
     methods: {
-      headcountFormatter (row) {
+      headcountFormatter (index, row) {
         let html
         if (row.headcount === 0) {
           html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / 不限'
