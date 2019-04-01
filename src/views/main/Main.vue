@@ -24,9 +24,9 @@
       </el-header>
       <el-main style="overflow: hidden;">
         <transition name="slide-left">
-        <router-view style=" transition: all .3s ease;" v-if="$route.meta.keepAlive === false"></router-view>
+        <router-view style=" transition: all .05s ease;" v-if="$route.meta.keepAlive === false"></router-view>
         <keep-alive>
-          <router-view style=" transition: all .3s ease;"  v-if="$route.meta.keepAlive === true || $route.meta.keepAlive === undefined"></router-view>
+          <router-view style=" transition: all .05s ease;"  v-if="$route.meta.keepAlive === true || $route.meta.keepAlive === undefined"></router-view>
         </keep-alive>
         </transition>
       </el-main>
