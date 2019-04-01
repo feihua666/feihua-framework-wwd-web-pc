@@ -154,6 +154,27 @@ export function del (url, params = {}) {
   })
 }
 
+const uploadFile = function (file, data = {}) {
+  return new Promise((resolve, reject) => {
+    let param = new FormData()
+    // 通过append向form对象添加数据
+    param.append('file', file, file.name)
+    for (let key in data) {
+      param.append(key, data[key])
+    }
+    let headers = {
+      headers: {'Content-Type': 'multipart/form-data'},
+      baseURL: null,
+      dataType: 'json'
+    }
+    Axios.post(config.file.uploadUrl + '?t=' + (new Date().getTime() + Math.random()), param, headers)
+      .then(response => {
+        resolve(response)
+      }, err => {
+        reject(err)
+      })
+  })
+}
 /**
  * 根据类型获取字典数据，返回结果应该是一个数组，如果type是以逗号分隔的字符串字典类型，则返回的结果是一个对象key为类型字符串本身
  * @param type
@@ -282,6 +303,7 @@ const http = {
   delete: del,
   put: put,
   putJson: putJson,
+  uploadFile: uploadFile,
   getDictsByType: getDictsByType,
   getDictByValue: getDictByValue,
   getRegExps: getRegExps,
