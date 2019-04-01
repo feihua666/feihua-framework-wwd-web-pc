@@ -58,6 +58,50 @@ const dGetValue = function (obj, attr) {
   }
   return value
 }
+// 文件相关操作
+const file = {
+  // 将图片转换为Base64
+  imageToDataUrl (url) {
+    return new Promise((resolve, reject) => {
+      let canvas = document.createElement('canvas')
+      let ctx = canvas.getContext('2d')
+      let img = new Image()
+      img.onload = function () {
+        canvas.height = img.height
+        canvas.width = img.width
+        ctx.drawImage(img, 0, 0)
+        let dataURL = canvas.toDataURL('image/png')
+        resolve(dataURL)
+        canvas = null
+      }
+      img.src = url
+    })
+  },
+  // 将base64转换为文件
+  dataUrltoFile (dataUrl) {
+    let arr = dataUrl.split(',')
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+    let fileExt = mime.replace('image/', '')
+    return new File([u8arr], 'file_' + Date.parse(new Date()) + '.' + fileExt, {type: mime})
+  },
+  dataUrltoBlob (dataUrl) {
+    let arr = dataUrl.split(',')
+    let mime = arr[0].match(/:(.*?);/)[1]
+    let bstr = atob(arr[1])
+    let n = bstr.length
+    let u8arr = new Uint8Array(n)
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+    return new Blob([u8arr], {type: mime})
+  }
+}
 const utils = {
   isArray: isArray,
   arrayToTree: arrayToTree,
@@ -66,6 +110,7 @@ const utils = {
     has: existLoadDataControl,
     remove: removeLoadDataControl
   },
+  file: file,
   dGetValue: dGetValue
 }
 export default utils
