@@ -17,7 +17,7 @@
             </el-form>
           </el-collapse-item>
         </el-collapse>
-        <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading"
+        <self-table @sortChange="sortChange" :default-sort="defaultSort"  :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading"
                     v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
         </self-table>
       </el-main>
@@ -40,6 +40,7 @@
     },
     data () {
       return {
+        defaultSort: {prop: 'updateAt', order: 'descending'},
         columns: [
           {
             name: 'titleUrl',
@@ -84,6 +85,13 @@
             label: '地址'
           },
           {
+            sortable: 'custom',
+            sortBy: 'update_at',
+            name: 'updateAt',
+            width: '150',
+            label: '更新时间'
+          },
+          {
             label: '操作',
             fixed: 'right',
             width: '200',
@@ -116,6 +124,8 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
+          orderable: true,
+          orderby: 'update_at-desc',
           title: '',
           type: '',
           status: '',
@@ -132,6 +142,10 @@
       this.loadTableData(1)
     },
     methods: {
+      sortChange (val) {
+        this.searchFormModel.orderby = val.sortBy
+        this.searchBtnClick()
+      },
       headcountFormatter (index, row) {
         let html
         if (row.headcount === 0) {
