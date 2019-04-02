@@ -22,7 +22,12 @@
           <el-radio-button label="室内">室内</el-radio-button>
         </el-radio-group>
       </el-form-item>
-
+      <el-form-item label="身份证" prop="requireIdCard">
+        <el-radio-group v-model="form.requireIdCard">
+          <el-radio-button label="Y">需要</el-radio-button>
+          <el-radio-button label="N">不需要</el-radio-button>
+        </el-radio-group>
+      </el-form-item>
       <el-form-item label="作者" prop="author">
         <el-input v-model="form.author" style="width: 50%"></el-input>
       </el-form-item>
@@ -104,6 +109,7 @@
           addr: null,
           content: null,
           type: '户外',
+          requireIdCard: 'N',
           status: 'editing',
           headcount: 0,
           headcountDesc: null,
@@ -160,6 +166,7 @@
               activity.addr = self.form.addr
               activity.content = self.form.content
               activity.type = self.form.type
+              activity.requireIdCard = self.form.requireIdCard
               activity.status = self.form.status
               activity.headcount = self.form.headcount
               activity.headcountDesc = self.form.headcountDesc
