@@ -44,14 +44,15 @@
       <el-form-item label="活动地点" prop="addr" required>
         <el-input v-model="form.addr" style="width: 50%"></el-input>
       </el-form-item>
-      <el-form-item label="活动人数" prop="headcount" required>
-        <el-input-number :min="0" v-model="form.headcount"></el-input-number>默认0为不限人数
-      </el-form-item>
+
       <el-form-item label="人数规则" prop="headcountRule" required>
         <el-radio-group v-model="form.headcountRule">
           <el-radio-button label="unlimited">不限制</el-radio-button>
           <el-radio-button label="custom">自定义</el-radio-button>
         </el-radio-group> 活动人数男女比例规则
+      </el-form-item>
+      <el-form-item  v-if="!typeLimit.custHeadcountRule" label="活动人数" prop="headcount" required>
+        <el-input-number :min="0" v-model="form.headcount"></el-input-number>默认0为不限人数
       </el-form-item>
       <el-form-item v-if="typeLimit.custHeadcountRule" label="自定义男" prop="headcountMale" required>
         <el-input-number :min="0" v-model="form.headcountMale"></el-input-number> 人
