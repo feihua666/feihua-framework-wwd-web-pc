@@ -59,12 +59,7 @@
             name: 'photo',
             label: '头像',
             width: '50',
-            html: this.photoFormatter,
-            buttons: [
-              {
-                click: this.imageHeaderClick
-              }
-            ]
+            image: true
           },
           {
             name: 'nickname',
@@ -225,21 +220,6 @@
       },
       bindDataScope (index, row) {
         this.$router.push('/Main/UserBindDataScope/' + row.id)
-      },
-      photoFormatter (row) {
-        let url = null
-        if (row.photo) {
-          if (row.photo.indexOf('http') === 0) {
-            url = row.photo
-          } else {
-            url = this.$config.file.getDownloadUrl(row.photo)
-          }
-        } else {
-          url = require('@/assets/index/headPic.jpg')
-        }
-        return '<img width="30px" src="' + url + '"/>'
-      },
-      imageHeaderClick (index, row) {
       }
     },
     watch: {

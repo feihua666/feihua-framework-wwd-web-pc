@@ -1,5 +1,3 @@
-import {getRegExps} from "./httpUtils";
-
 const isArray = function (obj) {
   if (Array.isArray) {
     return Array.isArray(obj)

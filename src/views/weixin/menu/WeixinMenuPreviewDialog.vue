@@ -83,6 +83,7 @@
           self.treeData = []
           return
         }
+        this.param.which = this.which
         self.treeLoading = true
         this.$http.get('/weixinmenu/menus', this.param)
           .then(function (response) {
