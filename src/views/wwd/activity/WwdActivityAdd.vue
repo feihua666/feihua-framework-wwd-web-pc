@@ -47,23 +47,26 @@
       <el-form-item label="活动人数" prop="headcount" required>
         <el-input-number :min="0" v-model="form.headcount"></el-input-number>默认0为不限人数
       </el-form-item>
+      <el-form-item label="人数规则" prop="headcountRule" required>
+        <el-radio-group v-model="form.headcountRule">
+          <el-radio-button label="unlimited">不限制</el-radio-button>
+          <el-radio-button label="custom">自定义</el-radio-button>
+        </el-radio-group> 活动人数男女比例规则
+      </el-form-item>
+      <el-form-item v-if="typeLimit.custHeadcountRule" label="自定义男" prop="headcountMale" required>
+        <el-input-number :min="0" v-model="form.headcountMale"></el-input-number> 人
+      </el-form-item>
+      <el-form-item v-if="typeLimit.custHeadcountRule" label="自定义女" prop="headcountFemale" required>
+        <el-input-number :min="0" v-model="form.headcountFemale"></el-input-number> 人
+      </el-form-item>
       <el-form-item label="人数说明" prop="headcountDesc">
         <el-input v-model="form.headcountDesc" style="width: 50%"></el-input>
       </el-form-item>
-      <el-form-item label="支付规则" prop="payRule" required>
-        <el-radio-group v-model="form.payRule">
-          <el-radio-button label="1">人均</el-radio-button>
-          <el-radio-button label="2">自定义</el-radio-button>
-        </el-radio-group>
+      <el-form-item  label="价格男" prop="malePrice" required>
+        <el-input-number :min="1" v-model="form.malePrice"></el-input-number> 元
       </el-form-item>
-      <el-form-item v-if="!typeLimit.custPayRule" label="人均价格" prop="price" required>
-        <el-input-number :min="1" v-model="form.price"></el-input-number>
-      </el-form-item>
-      <el-form-item v-if="typeLimit.custPayRule" label="自定义男" prop="malePrice" required>
-        <el-input-number :min="1" v-model="form.malePrice"></el-input-number>
-      </el-form-item>
-      <el-form-item v-if="typeLimit.custPayRule" label="自定义女" prop="femalePrice" required>
-        <el-input-number :min="1" v-model="form.femalePrice"></el-input-number>
+      <el-form-item label="价格女" prop="femalePrice" required>
+        <el-input-number :min="1" v-model="form.femalePrice"></el-input-number> 元
       </el-form-item>
       <el-form-item label="活动内容" prop="content" required>
         <tinymce-editor v-model="form.content"></tinymce-editor>
@@ -112,9 +115,10 @@
           requireIdCard: 'N',
           status: 'editing',
           headcount: 0,
+          headcountRule: 'unlimited',
+          headcountMale: 0,
+          headcountFemale: 0,
           headcountDesc: null,
-          payRule: '1',
-          price: '1',
           malePrice: null,
           femalePrice: null,
           introduced: null,
@@ -122,7 +126,7 @@
         },
         addLoading: false,
         typeLimit: {
-          custPayRule: false
+          custHeadcountRule: false
         },
         formRules: {
           title: [
@@ -132,9 +136,6 @@
             {required: true, message: '必填', trigger: 'blur'}
           ],
           addr: [
-            {required: true, message: '必填', trigger: 'blur'}
-          ],
-          price: [
             {required: true, message: '必填', trigger: 'blur'}
           ],
           malePrice: [
@@ -169,16 +170,12 @@
               activity.requireIdCard = self.form.requireIdCard
               activity.status = self.form.status
               activity.headcount = self.form.headcount
+              activity.headcountMale = self.form.headcountMale
+              activity.headcountFemale = self.form.headcountFemale
               activity.headcountDesc = self.form.headcountDesc
-              activity.payRule = self.form.payRule
-              activity.price = self.form.price
-              if (self.form.payRule === '1') {
-                activity.malePrice = self.form.price
-                activity.femalePrice = self.form.price
-              } else {
-                activity.malePrice = self.form.malePrice
-                activity.femalePrice = self.form.femalePrice
-              }
+              activity.headcountRule = self.form.headcountRule
+              activity.malePrice = self.form.malePrice
+              activity.femalePrice = self.form.femalePrice
               activity.introduced = self.form.introduced
               activity.activityStatement = self.form.activityStatement
               if (self.form.myDateRange.length === 2) {
@@ -231,14 +228,14 @@
       })
     },
     watch: {
-      'form.payRule' (value) {
+      'form.headcountRule' (value) {
         let self = this
         let _typeLimit = {
-          custPayRule: false
+          custHeadcountRule: false
         }
         switch (value) {
-          case '2':
-            _typeLimit.custPayRule = true
+          case 'custom':
+            _typeLimit.custHeadcountRule = true
             break
         }
 

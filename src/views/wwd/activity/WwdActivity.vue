@@ -62,23 +62,36 @@
             label: '状态'
           },
           {
+            name: 'requireIdCard',
+            dict: 'yes_no',
+            label: '是否需要身份证'
+          },
+          {
+            name: 'headcountRule',
+            dict: 'wwd_headcount_rule',
+            label: '人数规则'
+          },
+          {
+            name: 'headcountMale',
+            label: '男人数'
+          },
+          {
+            name: 'headcountFemale',
+            label: '女人数'
+          },
+          {
             name: 'headcount',
             html: this.headcountFormatter,
             label: '' +
               '已支付/总人数'
           },
           {
-            name: 'payRule',
-            dict: 'wwd_pay_rule',
-            label: '支付规则'
-          },
-          {
             name: 'malePrice',
-            label: '人均男'
+            label: '人均男（元）'
           },
           {
             name: 'femalePrice',
-            label: '人均女'
+            label: '人均女（元）'
           },
           {
             name: 'addr',
