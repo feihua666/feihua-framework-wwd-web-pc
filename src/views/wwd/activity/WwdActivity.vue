@@ -21,8 +21,26 @@
                     v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
         </self-table>
       </el-main>
+      <el-dialog
+        :title="statusForm.title"
+        :visible.sync="rowDialogVisible"
+        width="375px"
+        @before-close="rowDialogVisible = false">
+        <el-form ref="statusForm" :model="statusForm">
+          <el-form-item label="" prop="status" required>
+            <el-radio-group v-model="statusForm.status">
+              <el-radio-button label="editing">编辑中</el-radio-button>
+              <el-radio-button label="signing">报名中</el-radio-button>
+              <el-radio-button label="signfull">名额满</el-radio-button>
+              <el-radio-button label="finished">已结束</el-radio-button>
+            </el-radio-group>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="editStatusSaveClick"  style="width: 100%" :loading="addLoading">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </el-container>
-
   </div>
 </template>
 
@@ -62,9 +80,18 @@
             label: '状态'
           },
           {
-            name: 'requireIdCard',
-            dict: 'yes_no',
-            label: '是否需要身份证'
+            sortable: 'custom',
+            sortBy: 'start_time',
+            name: 'startTime',
+            width: '150',
+            label: '开始时间'
+          },
+          {
+            sortable: 'custom',
+            sortBy: 'end_time',
+            name: 'endTime',
+            width: '150',
+            label: '结束时间'
           },
           {
             name: 'headcountRule',
@@ -92,6 +119,11 @@
           {
             name: 'femalePrice',
             label: '人均女（元）'
+          },
+          {
+            name: 'requireIdCard',
+            dict: 'yes_no',
+            label: '是否需要身份证'
           },
           {
             name: 'addr',
@@ -122,6 +154,10 @@
                 click: this.copyTableRowClick
               },
               {
+                label: '发布状态',
+                click: this.editStatusClick
+              },
+              {
                 label: '查看活动人员',
                 click: this.participateRowClick
               }
@@ -146,9 +182,13 @@
           pageNo: 1,
           pageSize: 10
         },
-        dialogVisible: false,
-        synToWeixinLoading: false,
-        dialogValue: null
+        rowDialogVisible: false,
+        addLoading: false,
+        statusForm: {
+          title: '',
+          id: null,
+          status: 'editing'
+        }
       }
     },
     mounted () {
@@ -217,6 +257,42 @@
       editTableRowClick (index, row) {
         this.$router.push('/Main/Wwd/Activity/WwdActivityEdit/' + row.id)
       },
+      editStatusClick (index, row) {
+        let self = this
+        let rowObj = row
+        self.rowDialogVisible = true
+        self.statusForm.title = rowObj.title
+        self.statusForm.id = rowObj.id
+        self.statusForm.status = rowObj.status
+      },
+      // 修改活动状态
+      editStatusSaveClick () {
+        let self = this
+        if (self.addLoading === false) {
+          this.$refs['statusForm'].validate((valid) => {
+            if (valid) {
+              // 请求添加
+              self.addLoading = true
+              self.$http.put('/wwd/activity/' + self.statusForm.id + '/edit/' + self.statusForm.status)
+                .then(function (response) {
+                  self.$message.info('修改成功')
+                  self.addLoading = false
+                  self.searchBtnClick()
+                })
+                .catch(function (response) {
+                  if (response.response.status === 404) {
+                    self.$message.error('修改失败，数据不存在或已被他人修改，请刷新列表后再试')
+                  }
+                  self.addLoading = false
+                })
+            } else {
+              return false
+            }
+          })
+        } else {
+          self.$message.info('正在请求中，请耐心等待')
+        }
+      },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
         let self = this
@@ -283,6 +359,12 @@
 
   .wrapper, .el-container {
     height: 100%;
+  }
+  .el-dialog__header{
+    overflow: hidden;
+    width: 300px;
+    height: 44px;
+    text-overflow: ellipsis;
   }
 </style>
 <style>
