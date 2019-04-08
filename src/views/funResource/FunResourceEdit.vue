@@ -142,7 +142,7 @@
               self.addLoading = true
               self.$http.put('/base/functionResource/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('功能资源修改成功')
+                  self.$message.success('功能资源修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

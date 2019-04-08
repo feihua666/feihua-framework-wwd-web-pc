@@ -16,7 +16,7 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
-    name: 'Account',
+    name: 'WeixinAccountTemplates',
     components: {
       SelfDictSelect,
       SelfTable

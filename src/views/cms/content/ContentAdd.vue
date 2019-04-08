@@ -526,7 +526,7 @@
               self.addLoading = true
               self.$http.post('/cms/content', self.form)
                 .then(function (response) {
-                  self.$message.info('内容添加成功')
+                  self.$message.success('内容添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

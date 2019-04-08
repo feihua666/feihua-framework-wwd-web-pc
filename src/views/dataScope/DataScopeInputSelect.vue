@@ -5,7 +5,7 @@
       placement="right"
       trigger="click">
       <el-scrollbar wrapStyle="max-height:500px;">
-        <DataScopeTree v-on:nodeClick="treeNodeClick" :loadData="false"></DataScopeTree>
+        <DataScopeTree v-on:nodeClick="treeNodeClick"></DataScopeTree>
       </el-scrollbar>
     </el-popover>
     <el-input style="display: none;" value="" v-model="model">

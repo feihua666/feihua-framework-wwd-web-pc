@@ -131,7 +131,7 @@
               self.addLoading = true
               self.$http.put('/cms/site/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('站点修改成功')
+                  self.$message.success('站点修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

@@ -55,7 +55,7 @@
         self.submitLoading = true
         self.$http.post('/base/user/' + self.userId + '/roles/rel', {roleIds: self.$refs.roletree.getCheckedKeys()})
           .then(response => {
-            self.$message.info('用户绑定角色成功')
+            self.$message.success('用户绑定角色成功')
             self.submitLoading = false
           }).catch(() => {
             self.submitLoading = false

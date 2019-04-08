@@ -507,6 +507,29 @@ const router = new Router({
           name: 'OssConfig',
           component: _import('baseConfig/OssConfig'),
           meta: { menu: {name: 'OSS配置'}, keepAlive: true }
+        },
+        {
+          path: 'LoginClient',
+          name: 'LoginClient',
+          component: _import('loginclient/LoginClient')
+        },
+        {
+          path: 'LoginClientAdd',
+          name: 'LoginClientAdd',
+          component: _import('loginclient/LoginClientAdd'),
+          meta: { menu: {name: '添加客户端'}, keepAlive: true }
+        },
+        {
+          path: 'LoginClientEdit/:id',
+          name: 'LoginClientEdit',
+          component: _import('loginclient/LoginClientEdit'),
+          meta: { menu: {name: '编辑客户端'}, keepAlive: true }
+        },
+        {
+          path: 'LoginClientChannelBind/:id',
+          name: 'LoginClientChannelBind',
+          component: _import('loginclient/LoginClientChannelBind'),
+          meta: { menu: {name: '设置渠道'}, keepAlive: true }
         }
       ]
     }

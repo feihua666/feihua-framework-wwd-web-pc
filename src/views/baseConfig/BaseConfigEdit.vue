@@ -77,7 +77,7 @@
               self.form.id = self.id
               self.$http.putJson('/base/config/' + self.form.id, self.form)
                 .then(function (response) {
-                  self.$message.info('系统配置修改成功')
+                  self.$message.success('系统配置修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

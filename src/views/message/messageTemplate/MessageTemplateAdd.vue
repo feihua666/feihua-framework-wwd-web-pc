@@ -57,7 +57,7 @@
               self.addLoading = true
               self.$http.post('/base/message/template', self.form)
                 .then(function (response) {
-                  self.$message.info('消息模板添加成功')
+                  self.$message.success('消息模板添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

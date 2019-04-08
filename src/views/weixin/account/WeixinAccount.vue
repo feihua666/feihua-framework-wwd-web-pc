@@ -12,11 +12,11 @@
               <el-form-item label="类型" prop="type">
                 <self-dict-select v-model="searchFormModel.type" type="weixin_account_type"></self-dict-select>
               </el-form-item>
-              <el-form-item label="状态" prop="status">
-                <self-dict-select v-model="searchFormModel.status" type="weixin_account_status"></self-dict-select>
+              <el-form-item label="是否有效" prop="status">
+                <self-dict-select v-model="searchFormModel.status" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item label="认证" prop="auth">
-                <self-dict-select v-model="searchFormModel.auth" type="weixin_account_auth"></self-dict-select>
+                <self-dict-select v-model="searchFormModel.auth" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
@@ -86,12 +86,12 @@
           {
             name: 'status',
             label: '状态',
-            dict: 'weixin_account_status'
+            dict: 'yes_no'
           },
           {
             name: 'auth',
             label: '认证',
-            dict: 'weixin_account_auth'
+            dict: 'yes_no'
           },
           {
             label: '操作',

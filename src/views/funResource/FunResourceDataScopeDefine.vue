@@ -91,7 +91,7 @@
         }
         this.$http.post('/base/role/' + this.roleId + '/functionResource/define', this.form)
           .then(reponse => {
-            self.$message.info('功能数据范围定义设置成功')
+            self.$message.success('功能数据范围定义设置成功')
             self.addLoading = false
           }).catch(function (response) {
             self.$message.error('功能数据范围定义设置失败，请稍后再试')

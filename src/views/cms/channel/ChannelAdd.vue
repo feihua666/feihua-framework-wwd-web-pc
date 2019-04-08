@@ -78,7 +78,7 @@
               self.addLoading = true
               self.$http.post('/cms/channel', self.form)
                 .then(function (response) {
-                  self.$message.info('栏目添加成功')
+                  self.$message.success('栏目添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

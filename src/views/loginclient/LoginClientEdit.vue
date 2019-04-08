@@ -1,0 +1,125 @@
+<template>
+    <div class="wrapper">
+        <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
+          <el-form-item label="编码" prop="clientCode">
+            <el-input disabled  v-model="form.clientCode"></el-input>
+          </el-form-item>
+          <el-form-item label="名称" prop="clientName">
+            <el-input  v-model="form.clientName"></el-input>
+          </el-form-item>
+          <el-form-item label="类型" prop="clientType">
+            <self-dict-select v-model="form.clientType" type="login_client" ></self-dict-select>
+          </el-form-item>
+          <el-form-item label="描述" prop="description">
+            <el-input  v-model="form.description"></el-input>
+          </el-form-item>
+            <el-form-item>
+                <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
+            </el-form-item>
+        </el-form>
+    </div>
+</template>
+
+<script>
+    import SelfDictSelect from '@/components/SelfDictSelect.vue'
+    export default {
+      name: 'LoginClientEdit',
+      components: {
+        SelfDictSelect},
+      data () {
+        return {
+          // 编辑的id
+          id: null,
+          form: {
+            clientCode: '',
+            clientName: '',
+            clientType: '',
+            description: '',
+            updateTime: null
+          },
+          formDataLoading: false,
+          addLoading: false,
+          formRules: {
+            clientCode: [
+              {required: true, message: '必填', trigger: 'blur'}
+            ],
+            clientName: [
+              {required: true, message: '必填', trigger: 'blur'}
+            ]
+          }
+        }
+      },
+      mounted () {
+        this.id = this.$route.params.id
+        this.loadEditData(this.id)
+      },
+      methods: {
+        loadEditData (id) {
+          this.resetForm()
+          let self = this
+          self.formDataLoading = true
+          self.$http.get('/base/client/loginclient/' + self.id)
+            .then(function (response) {
+              let content = response.data.data.content
+              self.form.clientCode = content.clientCode
+              self.form.clientName = content.clientName
+              self.form.clientType = content.clientType
+              self.form.description = content.description
+              self.form.updateTime = content.updateAt
+              self.formDataLoading = false
+            })
+            .catch(function (response) {
+              self.formDataLoading = false
+            })
+        },
+        updateBtnClick () {
+          let self = this
+          if (self.addLoading === false) {
+            this.$refs['form'].validate((valid) => {
+              if (valid) {
+                // 请求添加
+                self.addLoading = true
+                self.$http.put('/base/client/loginclient/' + self.id, self.form)
+                  .then(function (response) {
+                    self.$message.success('客户端修改成功')
+                    self.addLoading = false
+                  })
+                  .catch(function (response) {
+                    if (response.response.status === 404) {
+                      self.$message.error('客户端改失败，数据不存在或已被他人修改，请刷新列表后再试')
+                    }
+                    self.addLoading = false
+                  })
+              } else {
+                return false
+              }
+            })
+          } else {
+            self.$message.info('正在请求中，请耐心等待')
+          }
+        },
+        resetForm () {
+          this.$refs['form'].resetFields()
+        }
+      },
+      watch: {
+      },
+      // tab切换如果参数不一样，重新加载数据
+      beforeRouteEnter  (to, from, next) {
+        next(vm => {
+          // 通过 `vm` 访问组件实例
+          if (vm.id !== vm.$route.params.id) {
+            vm.id = vm.$route.params.id
+            vm.loadEditData(vm.id)
+          }
+        })
+      }
+    }
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+    .wrapper{
+        padding:1.5rem;
+    }
+</style>

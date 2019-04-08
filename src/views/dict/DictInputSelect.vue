@@ -5,7 +5,7 @@
       placement="right"
       trigger="click">
       <el-scrollbar wrapStyle="max-height:500px;">
-        <DictTree v-on:nodeClick="treeNodeClick" :loadData="false"></DictTree>
+        <DictTree v-on:nodeClick="treeNodeClick"></DictTree>
       </el-scrollbar>
     </el-popover>
     <el-input style="display: none;" value="" v-model="model">

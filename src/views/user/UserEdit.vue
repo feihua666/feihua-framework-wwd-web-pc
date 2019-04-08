@@ -110,7 +110,7 @@
               self.addLoading = true
               self.$http.put('/base/user/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('用户修改成功')
+                  self.$message.success('用户修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

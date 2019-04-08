@@ -81,7 +81,7 @@
               self.addLoading = true
               self.$http.put('/cms/question/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('调查修改成功')
+                  self.$message.success('调查修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

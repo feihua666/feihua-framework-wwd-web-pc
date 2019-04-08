@@ -116,7 +116,7 @@
             }
             self.$http.post('/oa/workattendance/leave/' + self.id + '/aduit', data)
               .then(function (response) {
-                self.$message.info('请假单审核成功')
+                self.$message.success('请假单审核成功')
                 if (flag === '1') {
                   self.addLoading = false
                 }

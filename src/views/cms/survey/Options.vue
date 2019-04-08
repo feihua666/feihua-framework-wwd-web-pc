@@ -229,7 +229,7 @@
               if (self.optionsFormSave === 'update') {
                 self.$http.put('/cms/question/options/' + self.optionsForm.id, self.optionsForm)
                   .then(function (response) {
-                    self.$message.info('选项修改成功')
+                    self.$message.success('选项修改成功')
                     self.addLoading = false
                     self.rowDialogVisible = false
                     self.searchBtnClick()
@@ -243,7 +243,7 @@
               } else {
                 self.$http.post('/cms/question/options', self.optionsForm)
                   .then(function (response) {
-                    self.$message.info('选项添加成功')
+                    self.$message.success('选项添加成功')
                     self.addLoading = false
                     self.rowDialogVisible = false
                     self.searchBtnClick()

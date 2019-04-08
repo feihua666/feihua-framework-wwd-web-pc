@@ -71,7 +71,7 @@
               self.addLoading = true
               self.$http.post('/base/message', self.form)
                 .then(function (response) {
-                  self.$message.info('消息添加成功')
+                  self.$message.success('消息添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

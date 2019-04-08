@@ -59,7 +59,7 @@
               self.addLoading = true
               self.$http.postJson('/base/config', self.form)
                 .then(function (response) {
-                  self.$message.info('系统配置添加成功')
+                  self.$message.success('系统配置添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

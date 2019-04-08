@@ -125,7 +125,7 @@
               self.addLoading = true
               self.$http.put('/cms/content/category/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('内容分类修改成功')
+                  self.$message.success('内容分类修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

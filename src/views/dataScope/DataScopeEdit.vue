@@ -85,7 +85,7 @@
               self.addLoading = true
               self.$http.put('/base/dataScope/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('数据范围修改成功')
+                  self.$message.success('数据范围修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

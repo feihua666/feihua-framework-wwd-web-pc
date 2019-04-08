@@ -274,7 +274,7 @@
               self.addLoading = true
               self.$http.put('/cms/survey/publish', self.surveyForm)
                 .then(function (response) {
-                  self.$message.info('调查发布状态修改成功')
+                  self.$message.success('调查发布状态修改成功')
                   self.addLoading = false
                   self.rowDialogVisible = false
                   self.searchBtnClick()

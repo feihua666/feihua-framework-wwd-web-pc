@@ -5,14 +5,7 @@
         <self-dict-select v-model="form.targets" type="message_targets"></self-dict-select>
       </el-form-item>
       <el-form-item label="发送客户端" prop="targetClients">
-        <self-dict-checkbox-group  v-model="form.targetClients" type="login_client"></self-dict-checkbox-group>
-      </el-form-item>
-      <el-form-item v-if="showPublicPlatform" label="公众平台" prop="publicPlatform">
-        <weixin-account-checkbox-group v-model="form.publicPlatform"></weixin-account-checkbox-group>
-      </el-form-item>
-      <el-form-item v-if="showMiniProgram" label="小程序" prop="miniprogram">
-        <weixin-account-checkbox-group  v-model="form.miniprogram" :miniprogram="true"></weixin-account-checkbox-group>
-
+        <LoginClientCheckboxGroup  v-model="form.targetClients"></LoginClientCheckboxGroup>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="sendBtnClick" :loading="addLoading">发送</el-button>
@@ -24,40 +17,22 @@
 <script>
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import SelfDictCheckboxGroup from '@/components/SelfDictCheckboxGroup'
-  import WeixinAccountSelect from '@/views/weixin/account/WeixinAccountSelect'
-  import WeixinAccountCheckboxGroup from '@/views/weixin/account/WeixinAccountCheckboxGroup'
+  import LoginClientCheckboxGroup from '@/views/loginclient/LoginClientCheckboxGroup'
 
   export default {
     components: {
-      WeixinAccountCheckboxGroup,
+      LoginClientCheckboxGroup,
       SelfDictCheckboxGroup,
-      SelfDictSelect,
-      WeixinAccountSelect
+      SelfDictSelect
     },
     name: 'MessageSend',
     data () {
-      let validatePublicPlatform = (rule, value, callback) => {
-        if ((value === '' || value === null || value.length === 0) && this.showPublicPlatform) {
-          callback(new Error('请选择公众号'))
-        } else {
-          callback()
-        }
-      }
-      let validateMiniprogram = (rule, value, callback) => {
-        if ((value === '' || value === null || value.length === 0) && this.showMiniProgram) {
-          callback(new Error('请选择小程序'))
-        } else {
-          callback()
-        }
-      }
       return {
         // 发送的消息id
         id: null,
         form: {
           targets: null,
-          targetClients: null,
-          publicPlatform: null,
-          miniprogram: null
+          targetClients: null
         },
         addLoading: false,
         formRules: {
@@ -66,12 +41,6 @@
           ],
           targetClients: [
             {required: true, message: '必填', trigger: 'blur'}
-          ],
-          publicPlatform: [
-            {validator: validatePublicPlatform, trigger: 'blur'}
-          ],
-          miniprogram: [
-            {validator: validateMiniprogram, trigger: 'blur'}
           ]
         }
       }
@@ -93,21 +62,11 @@
               ]
               for (let i = 0; i < self.form.targetClients.length; i++) {
                 let client = self.form.targetClients[i]
-                if (client === 'wx_platform') {
-                  for (let n = 0; n < self.form.publicPlatform.length; n++) {
-                    _form.targetClients.push({targetClient: client, subTargetClient: self.form.publicPlatform[n]})
-                  }
-                } else if (client === 'wx_miniprogram') {
-                  for (let n = 0; n < self.form.miniprogram.length; n++) {
-                    _form.targetClients.push({targetClient: client, subTargetClient: self.form.miniprogram[n]})
-                  }
-                } else {
-                  _form.targetClients.push({targetClient: client})
-                }
+                _form.targetClients.push({targetClient: client})
               }
               self.$http.post('/base/message/' + self.id + '/send', _form)
                 .then(function (response) {
-                  self.$message.info('消息发送成功')
+                  self.$message.success('消息发送成功')
                   self.addLoading = false
                 })
                 .catch(function (error) {
@@ -131,26 +90,6 @@
       }
     },
     computed: {
-      showPublicPlatform () {
-        if (this.form.targetClients && this.form.targetClients.length > 0) {
-          for (let i = 0; i < this.form.targetClients.length; i++) {
-            if (this.form.targetClients[i] === 'wx_platform') {
-              return true
-            }
-          }
-        }
-        return false
-      },
-      showMiniProgram () {
-        if (this.form.targetClients && this.form.targetClients.length > 0) {
-          for (let i = 0; i < this.form.targetClients.length; i++) {
-            if (this.form.targetClients[i] === 'wx_miniprogram') {
-              return true
-            }
-          }
-        }
-        return false
-      }
     },
     watch: {
     },

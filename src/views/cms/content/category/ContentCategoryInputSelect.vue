@@ -6,7 +6,7 @@
       v-on:show="popoverShow"
       trigger="click">
       <el-scrollbar wrapStyle="max-height:500px;">
-        <ContentCategoryTree ref="refsTree" v-on:nodeClick="treeNodeClick" :site-id="siteId" :loadData="false" :watch-site-id="false"></ContentCategoryTree>
+        <ContentCategoryTree ref="refsTree" v-on:nodeClick="treeNodeClick" :site-id="siteId" :watch-site-id="false"></ContentCategoryTree>
       </el-scrollbar>
     </el-popover>
     <el-input style="display: none;" value="" v-model="model">

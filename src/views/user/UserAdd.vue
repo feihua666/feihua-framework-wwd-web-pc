@@ -80,7 +80,7 @@
               self.addLoading = true
               self.$http.post('/base/user', self.form)
                 .then(function (response) {
-                  self.$message.info('用户添加成功')
+                  self.$message.success('用户添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

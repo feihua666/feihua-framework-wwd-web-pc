@@ -48,7 +48,7 @@
         self.submitLoading = true
         self.$http.post('/base/user/' + self.userId + '/dataScopes/rel', {dataScopeIds: self.$refs.datascopetree.getCheckedKeys()})
           .then(response => {
-            self.$message.info('用户绑定数据范围成功')
+            self.$message.success('用户绑定数据范围成功')
             self.submitLoading = false
           }).catch(() => {
             self.submitLoading = false

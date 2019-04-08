@@ -6,7 +6,7 @@
       v-on:show="popoverShow"
       trigger="click">
       <el-scrollbar wrapStyle="max-height:500px;">
-        <WeixinMenuTree ref="weimenuTree" v-on:nodeClick="treeNodeClick" :loadData="false" :which="which" :watch-which="false"></WeixinMenuTree>
+        <WeixinMenuTree ref="weimenuTree" v-on:nodeClick="treeNodeClick" :which="which" :watch-which="false"></WeixinMenuTree>
       </el-scrollbar>
     </el-popover>
     <el-input style="display: none;" value="" v-model="model">

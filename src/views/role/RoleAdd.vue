@@ -73,7 +73,7 @@
               self.addLoading = true
               self.$http.post('/base/role', self.form)
                 .then(function (response) {
-                  self.$message.info('角色添加成功')
+                  self.$message.success('角色添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
