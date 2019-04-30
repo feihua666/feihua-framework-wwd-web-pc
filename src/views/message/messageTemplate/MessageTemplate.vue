@@ -63,6 +63,10 @@
               {
                 label: '删除',
                 click: this.deleteTableRowClick
+              },
+              {
+                label: '绑定三方模板',
+                click: this.bindThirdTemplate
               }
             ]
           }
@@ -132,7 +136,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/message/template/' + row.id)
+          self.$http.delete('/base/message/template/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -148,6 +152,9 @@
       addTableRowClick () {
         this.$utils.loadDataControl.add('MessageTemplateAddLoadData=true')
         this.$router.push('/Main/MessageTemplateAdd')
+      },
+      bindThirdTemplate (index, row) {
+        this.$router.push('/Main/MessageTemplateThirdBind/' + row.id)
       }
     },
     watch: {

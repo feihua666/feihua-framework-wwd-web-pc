@@ -54,7 +54,7 @@
         loading: false,
         form: {
           loginType: 'ACCOUNT',
-          loginClient: 'pc',
+          client: 'pc',
           principal: null,
           password: null,
           captcha: null,

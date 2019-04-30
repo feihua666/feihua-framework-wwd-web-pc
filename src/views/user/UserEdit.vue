@@ -18,6 +18,10 @@
         <OfficeInputSelect ref="officeinput"  v-model="form.dataOfficeId">
         </OfficeInputSelect>
       </el-form-item>
+      <el-form-item label="区域">
+        <AreaInputSelect ref="areainput"  v-model="form.dataAreaId">
+        </AreaInputSelect>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
       </el-form-item>
@@ -29,12 +33,16 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import OfficeTree from '@/views/office/OfficeTree.vue'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
+  import AreaInputSelect from '@/views/area/AreaInputSelect.vue'
+
   export default {
     name: 'UserEdit',
     components: {
       OfficeTree,
       SelfDictSelect,
-      OfficeInputSelect},
+      OfficeInputSelect,
+      AreaInputSelect
+    },
     data () {
       return {
         // 编辑的id
@@ -45,6 +53,7 @@
           locked: '',
           gender: '',
           dataOfficeId: null,
+          dataAreaId: null,
           userAccountUpdateAt: null,
           userMobileId: null,
           userMobileUpdateAt: null,
@@ -86,6 +95,7 @@
             self.form.mobile = content.mobile
             self.form.locked = content.locked
             self.form.dataOfficeId = content.dataOfficeId
+            self.form.dataAreaId = content.dataAreaId
             self.form.gender = content.gender
             self.form.userAccountUpdateAt = content.userAccountUpdateAt
             self.form.userMobileUpdateAt = content.userMobileUpdateAt
@@ -93,10 +103,11 @@
             self.form.userInfoUpdateAt = content.userInfoUpdateAt
             self.form.userInfoId = content.userInfoId
             self.formDataLoading = false
-            return Promise.resolve({dataOfficeId: content.dataOfficeId})
+            return Promise.resolve({dataOfficeId: content.dataOfficeId, dataAreaId: content.dataAreaId})
           }).then(p => {
             // 机构回显
             self.$refs.officeinput.initLabelName(p.dataOfficeId)
+            self.$refs.areainput.initLabelName(p.dataAreaId)
           }).catch(function (response) {
             self.formDataLoading = false
           })
@@ -130,6 +141,7 @@
       resetForm () {
         this.$refs['form'].resetFields()
         this.$refs['officeinput'].setLabelName(null)
+        this.$refs.areainput.setLabelName(null)
       }
     },
     // tab切换如果参数不一样，重新加载数据

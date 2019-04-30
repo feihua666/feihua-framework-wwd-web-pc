@@ -10,6 +10,8 @@
            :filter-node-method="treeFilterNode"
            ref="tree"
            node-key="id"
+           :show-checkbox="showCheckbox"
+           :check-strictly="checkStrictly"
            :expand-on-click-node="false" :default-expanded-keys="defaultExpandedKeys">
 
   </el-tree>
@@ -20,8 +22,15 @@
   export default {
     name: 'AreaTree',
     props: {
+      // 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false
+      checkStrictly: {
+        default: false
+      },
       loadData: {
         default: true
+      },
+      showCheckbox: {
+        default: false
       }
     },
     data () {
@@ -74,6 +83,28 @@
             }
             self.treeLoading = false
           })
+      },
+      getCheckedNodes () {
+        return this.$refs.tree.getCheckedNodes()
+      },
+      getCheckedKeys () {
+        return this.$refs.tree.getCheckedKeys()
+      },
+      setCheckedNodes (nodes) {
+        this.$refs.tree.setCheckedNodes(nodes)
+      },
+      setCheckedKeys (keys) {
+        this.$refs.tree.setCheckedKeys(keys)
+      },
+      // 半选中
+      getHalfCheckedKeys () {
+        return this.$refs.tree.getHalfCheckedKeys()
+      },
+      getAllCheckedKeys () {
+        let checkedKeys = this.getCheckedKeys()
+        let halfCheckedKeys = this.getHalfCheckedKeys()
+        checkedKeys.unshift.apply(checkedKeys, halfCheckedKeys)
+        return checkedKeys
       }
     },
     watch: {

@@ -1,7 +1,7 @@
 <template>
 
   <el-checkbox-group value="" :disabled="disabled" v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput">
-    <el-checkbox  v-for="item in options" :label="item.clientCode" :key="item.id">{{item.clientName}}</el-checkbox>
+    <el-checkbox  v-for="item in options" :label="item.id" :key="item.id">{{item.clientName}}</el-checkbox>
   </el-checkbox-group>
 </template>
 

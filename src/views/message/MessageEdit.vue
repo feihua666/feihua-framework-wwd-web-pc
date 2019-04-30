@@ -8,13 +8,16 @@
         <el-input  v-model="form.profile"></el-input>
       </el-form-item>
       <el-form-item label="消息内容" prop="content" required>
-        <el-input type="textarea" v-model="form.content"></el-input>
+        <el-input autosize type="textarea" v-model="form.content"></el-input>
       </el-form-item>
       <el-form-item label="消息分类" prop="msgType">
         <self-dict-select v-model="form.msgType" type="message_type"></self-dict-select>
       </el-form-item>
       <el-form-item label="消息紧急性" prop="msgLevel">
         <self-dict-select v-model="form.msgLevel" type="message_level"></self-dict-select>
+      </el-form-item>
+      <el-form-item label="消息模板" prop="messageTemplateId">
+        <MessageTemplateSelect v-model="form.messageTemplateId" type="message_level"></MessageTemplateSelect>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
@@ -25,10 +28,13 @@
 
 <script>
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
+  import MessageTemplateSelect from '@/views/message/messageTemplate/MessageTemplateSelect'
+
   export default {
     name: 'MessageEdit',
     components: {
-      SelfDictSelect
+      SelfDictSelect,
+      MessageTemplateSelect
     },
     data () {
       return {
@@ -39,7 +45,9 @@
           profile: null,
           content: null,
           msgType: null,
-          msgLevel: null
+          msgLevel: null,
+          messageTemplateId: null,
+          updateTime: null
         },
         formDataLoading: false,
         addLoading: false,

@@ -3,6 +3,15 @@
   <div class="wrapper">
     <el-container>
       <el-main>
+        <el-collapse value="1">
+          <el-collapse-item title="查询条件" name="1">
+            <el-form ref="searchForm" :inline="true" size="small">
+              <el-form-item>
+                <el-button type="primary" @click="searchBtnClick">查询</el-button>
+              </el-form-item>
+            </el-form>
+          </el-collapse-item>
+        </el-collapse>
         <self-table :columns="columns" :tableData="tableData" :table-loading="tableLoading">
         </self-table>
       </el-main>
@@ -54,6 +63,7 @@
             label: '模板示例'
           }
         ],
+        accountId: '',
         // 表格数据
         tableData: [],
         tableLoading: false,
@@ -63,14 +73,12 @@
       }
     },
     mounted () {
-      this.loadTableData()
+      this.accountId = this.$route.params.id
+      this.loadTableData(this.accountId)
     },
     methods: {
       searchBtnClick () {
-        this.loadTableData()
-      },
-      resetFormClick () {
-        this.$refs['searchForm'].resetFields()
+        this.loadTableData(this.accountId)
       },
       // 加载表 格数据
       loadTableData (id) {
@@ -95,9 +103,9 @@
     beforeRouteEnter (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
-          vm.id = vm.$route.params.id
-          vm.loadTableData(vm.id)
+        if (vm.accountId !== vm.$route.params.id) {
+          vm.accountId = vm.$route.params.id
+          vm.loadTableData(vm.accountId)
         }
       })
     }

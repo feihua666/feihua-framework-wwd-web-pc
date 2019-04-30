@@ -8,7 +8,19 @@
         <el-input  v-model="form.code"></el-input>
       </el-form-item>
       <el-form-item label="模板内容" prop="content" required>
-        <el-input type="textarea" v-model="form.content"></el-input>
+        <el-input autosize type="textarea" v-model="form.content"></el-input>
+      </el-form-item>
+      <el-form-item label="标题" prop="title" required>
+        <el-input  v-model="form.title"></el-input>
+      </el-form-item>
+      <el-form-item label="简介" prop="profile" required>
+        <el-input  v-model="form.profile"></el-input>
+      </el-form-item>
+      <el-form-item label="消息分类" prop="msgType">
+        <self-dict-select v-model="form.msgType" type="message_type"></self-dict-select>
+      </el-form-item>
+      <el-form-item label="消息紧急性" prop="msgLevel">
+        <self-dict-select v-model="form.msgLevel" type="message_level"></self-dict-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
@@ -31,7 +43,12 @@
         form: {
           name: null,
           code: null,
-          content: null
+          content: null,
+          title: null,
+          profile: null,
+          msgType: null,
+          msgLevel: null,
+          updateTime: null
         },
         formDataLoading: false,
         addLoading: false,
@@ -43,6 +60,15 @@
             {required: true, message: '必填', trigger: 'blur'}
           ],
           content: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          title: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          msgType: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          msgLevel: [
             {required: true, message: '必填', trigger: 'blur'}
           ]
         }
@@ -63,6 +89,10 @@
             self.form.name = content.name
             self.form.code = content.code
             self.form.content = content.content
+            self.form.title = content.title
+            self.form.profile = content.profile
+            self.form.msgType = content.msgType
+            self.form.msgLevel = content.msgLevel
             self.form.updateTime = content.updateAt
             self.formDataLoading = false
           })
