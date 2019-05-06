@@ -9,6 +9,12 @@
               <el-form-item label="关键字" prop="keyword">
                 <el-input v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
+              <el-form-item label="支付方式" prop="payType">
+                <self-dict-select v-model="searchFormModel.payType" type="wwd_pay_type"></self-dict-select>
+              </el-form-item>
+              <el-form-item label="订单状态" prop="payStatus">
+                <self-dict-select v-model="searchFormModel.payStatus" type="wwd_pay_status"></self-dict-select>
+              </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button @click="resetFormClick">重置</el-button>
@@ -16,10 +22,24 @@
             </el-form>
           </el-collapse-item>
         </el-collapse>
-        <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading"
+        <self-table @sortChange="sortChange" :default-sort="defaultSort"  :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading"
                     v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
         </self-table>
       </el-main>
+      <el-dialog
+        :title="statusForm.title"
+        :visible.sync="rowDialogVisible"
+        width="375px"
+        @before-close="rowDialogVisible = false">
+        <el-form ref="statusForm" :model="statusForm">
+          <el-form-item label="" prop="payStatus" required>
+            <self-dict-select v-model="statusForm.payStatus" type="wwd_pay_status"></self-dict-select>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="editStatusSaveClick"  style="width: 100%" :loading="addLoading">保存</el-button>
+          </el-form-item>
+        </el-form>
+      </el-dialog>
     </el-container>
 
   </div>
@@ -39,6 +59,14 @@
     },
     data () {
       return {
+        defaultSort: {prop: 'updateAt', order: 'descending'},
+        addLoading: false,
+        rowDialogVisible: false,
+        statusForm: {
+          title: '',
+          id: null,
+          payStatus: 'no_pay'
+        },
         columns: [
 
           {
@@ -72,6 +100,7 @@
           },
           {
             name: 'payType',
+            dict: 'wwd_pay_type',
             label: '支付方式'
           },
           {
@@ -80,20 +109,36 @@
             label: '订单状态'
           },
           {
+            name: 'price',
+            label: '订单价格'
+          },
+          {
             name: 'remarks',
             label: '订单备注'
-          }/*,
+          },
+          {
+            sortable: 'custom',
+            sortBy: 'create_at',
+            name: 'createAt',
+            label: '创建时间'
+          },
+          {
+            sortable: 'custom',
+            sortBy: 'update_at',
+            name: 'updateAt',
+            label: '更新时间'
+          },
           {
             label: '操作',
             fixed: 'right',
             width: '200',
             buttons: [
               {
-                label: '删除',
-                click: this.deleteTableRowClick
+                label: '修改支付状态',
+                click: this.editStatusClick
               }
             ]
-          } */
+          }
         ],
         page: {
           pageNo: 1,
@@ -104,9 +149,11 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
+          orderable: true,
+          orderby: 'update_at-desc',
           keyword: '',
-          type: '',
-          status: '',
+          payType: '',
+          payStatus: '',
           pageable: true,
           pageNo: 1,
           pageSize: 10
@@ -120,6 +167,10 @@
       this.loadTableData(1)
     },
     methods: {
+      sortChange (val) {
+        this.searchFormModel.orderby = val.sortBy
+        this.searchBtnClick()
+      },
       searchBtnClick () {
         this.loadTableData(1)
       },
@@ -169,6 +220,42 @@
       editTableRowClick (index, row) {
         //
       },
+      editStatusClick (index, row) {
+        let self = this
+        let rowObj = row
+        self.rowDialogVisible = true
+        self.statusForm.title = ['[', rowObj.baseUserDto.nickname, ']', rowObj.activityTitle].join('')
+        self.statusForm.id = rowObj.id
+        self.statusForm.payStatus = rowObj.payStatus
+      },
+      // 修改活动状态
+      editStatusSaveClick () {
+        let self = this
+        if (self.addLoading === false) {
+          this.$refs['statusForm'].validate((valid) => {
+            if (valid) {
+              // 请求添加
+              self.addLoading = true
+              self.$http.put('/wwd/activity/order/' + self.statusForm.id + '/edit/' + self.statusForm.payStatus)
+                .then(function (response) {
+                  self.$message.info('修改成功')
+                  self.addLoading = false
+                  self.searchBtnClick()
+                })
+                .catch(function (response) {
+                  if (response.response.status === 404) {
+                    self.$message.error('修改失败，数据不存在或已被他人修改，请刷新列表后再试')
+                  }
+                  self.addLoading = false
+                })
+            } else {
+              return false
+            }
+          })
+        } else {
+          self.$message.info('正在请求中，请耐心等待')
+        }
+      },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
         let self = this
@@ -209,6 +296,13 @@
 
   .wrapper, .el-container {
     height: 100%;
+  }
+
+  .el-dialog__header{
+    overflow: hidden;
+    width: 300px;
+    height: 44px;
+    text-overflow: ellipsis;
   }
 </style>
 <style>

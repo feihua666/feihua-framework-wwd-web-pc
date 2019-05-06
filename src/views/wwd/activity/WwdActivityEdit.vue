@@ -43,6 +43,12 @@
       <el-form-item label="活动地点" prop="addr" required>
         <el-input v-model="form.addr" style="width: 50%"></el-input>
       </el-form-item>
+      <el-form-item label="支付类型" prop="payType" required>
+        <el-radio-group v-model="form.payType">
+          <el-radio-button label="online_pay">线上支付</el-radio-button>
+          <el-radio-button label="offline_pay">线下支付</el-radio-button>
+        </el-radio-group> 线上：微信支付，线下：自行组织支付
+      </el-form-item>
       <el-form-item label="人数规则" prop="headcountRule" required>
         <el-radio-group v-model="form.headcountRule">
           <el-radio-button label="unlimited">不限制</el-radio-button>
@@ -130,6 +136,7 @@
           malePrice: null,
           femalePrice: null,
           introduced: null,
+          payType: 'online_pay',
           activityStatement: null
         },
         addLoading: false,
@@ -189,6 +196,7 @@
             self.form.femalePrice = content.femalePrice
             self.form.activityStatement = content.activityStatement
             self.form.introduced = content.introduced
+            self.form.payType = content.payType
             self.form.updateTime = content.updateAt
             if (content.startTime && content.endTime) {
               self.form.myDateRange = [content.startTime, content.endTime]
@@ -227,6 +235,7 @@
               activity.malePrice = self.form.malePrice
               activity.femalePrice = self.form.femalePrice
               activity.introduced = self.form.introduced
+              activity.payType = self.form.payType
               activity.activityStatement = self.form.activityStatement
               if (self.form.myDateRange.length === 2) {
                 activity.startTime = self.form.myDateRange[0]

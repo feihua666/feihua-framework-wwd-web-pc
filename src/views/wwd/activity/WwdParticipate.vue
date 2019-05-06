@@ -26,7 +26,7 @@
               <el-form-item label="关键字" prop="keyword">
                 <el-input  v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
-              <el-form-item>
+              <el-form-item label="支付状态" prop="payStatus">
                 <self-dict-select v-model="searchFormModel.payStatus" type="wwd_pay_status"></self-dict-select>
               </el-form-item>
               <el-form-item>

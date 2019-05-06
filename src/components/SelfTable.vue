@@ -155,9 +155,10 @@
         }
       },
       getImage (row, item) {
-        let url = null
-        if (row[item.name]) {
-          url = this.$config.file.getDownloadUrl(row[item.name])
+        let self = this
+        let url = self.$utils.dGetValue(row, item.name)
+        if (url) {
+          url = this.$config.file.getDownloadUrl(url)
         } else {
           url = require('@/assets/index/headPic.jpg')
         }

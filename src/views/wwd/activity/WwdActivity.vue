@@ -9,6 +9,12 @@
               <el-form-item label="名称" prop="title">
                 <el-input v-model="searchFormModel.title"></el-input>
               </el-form-item>
+              <el-form-item label="活动状态" prop="status">
+                <self-dict-select v-model="searchFormModel.status" type="activity_status"></self-dict-select>
+              </el-form-item>
+              <el-form-item label="人数规则" prop="headcountRule">
+                <self-dict-select v-model="searchFormModel.headcountRule" type="wwd_headcount_rule"></self-dict-select>
+              </el-form-item>
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" @click="addTableRowClick">添加</el-button>
@@ -176,7 +182,7 @@
           orderable: true,
           orderby: 'update_at-desc',
           title: '',
-          type: '',
+          headcountRule: '',
           status: '',
           pageable: true,
           pageNo: 1,
@@ -201,10 +207,10 @@
       },
       headcountFormatter (index, row) {
         let html
-        if (row.headcount === 0) {
+        if (row.headcount === 0 || (row.headcountMale + row.headcountFemale) === 0) {
           html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / 不限'
         } else {
-          html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / ' + row.headcount
+          html = (row.wwdParticipateDtos ? row.wwdParticipateDtos.length : 0) + ' / ' + (row.headcountRule === 'unlimited' ? row.headcount : (row.headcountMale + row.headcountFemale))
         }
         return html
       },
