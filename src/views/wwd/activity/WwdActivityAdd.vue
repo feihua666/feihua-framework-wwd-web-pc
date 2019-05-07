@@ -214,7 +214,7 @@
       handleAvatarSuccess (res, file) {
         let titleUrl = res.data.content.path
         this.form.titleUrl = titleUrl
-        this.imgUrl = self.$config.file.getDownloadUrl(titleUrl)
+        this.imgUrl = this.$config.file.getDownloadUrl(titleUrl)
       },
       beforeAvatarUpload (file) {
         const isJPG = file.type === 'image/jpeg'
