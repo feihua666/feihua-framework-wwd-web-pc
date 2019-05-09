@@ -152,12 +152,16 @@ export default function () {
         data: [],
         symbolSize: function (val) {
           let base = 5
+          let r = 0
           if (val[2] > 0 && val[2] < 10) {
-            return base
+            r = base
           } else if (val[2] === 0) {
-            return 0
+            r = 0
+          } else {
+            r = (val[2] / 10) + base
           }
-          return (val[2] / 10) + base
+          console.log(val)
+          return r
         },
         label: {
           normal: {

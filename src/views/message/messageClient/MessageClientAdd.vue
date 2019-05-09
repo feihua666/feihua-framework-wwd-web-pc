@@ -1,23 +1,15 @@
 <template>
   <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" label-width="150px">
-      <el-form-item label="是否启用配置" prop="status">
-        <el-switch v-model="form.status"
-                   active-value="Y"
-                   inactive-value="N">
-        </el-switch>
+    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
+
+      <el-form-item label="客户端" prop="clientId">
+        <LoginClientSelect  v-model="form.clientId"></LoginClientSelect>
       </el-form-item>
-      <el-form-item label="CONFIG_KEY" prop="configKey" required>
-        <el-input v-model="form.configKey" autocomplete="off"
-                  placeholder="key"></el-input>
+      <el-form-item label="消息类型" prop="messageType">
+        <SelfDictSelect  v-model="form.messageType" type="message_client_type"></SelfDictSelect>
       </el-form-item>
-      <el-form-item label="CONFIG_VALUE" prop="configValue" required>
-        <el-input type="textarea" :autosize="{ minRows: 10}" v-model="form.configValue"></el-input>
-        <div>注意：如果配置内容为json,请严格按json双引号标准填写</div>
-      </el-form-item>
-      <el-form-item label="配置说明" prop="description">
-        <el-input v-model="form.description" autocomplete="off"
-                  placeholder="配置说明"></el-input>
+      <el-form-item label="是否启用" prop="isEnable">
+        <SelfDictSelect  v-model="form.isEnable" type="yes_no"></SelfDictSelect>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addBtnClick" :loading="addLoading">添加</el-button>
@@ -27,22 +19,31 @@
 </template>
 
 <script>
+  import SelfDictSelect from '@/components/SelfDictSelect.vue'
+  import LoginClientSelect from '@/views/loginclient/LoginClientSelect.vue'
+
   export default {
-    name: 'BaseConfigAdd',
+    components: {
+      SelfDictSelect,
+      LoginClientSelect
+    },
+    name: 'messageClientAdd',
     data () {
       return {
         form: {
-          status: 'Y',
-          description: null,
-          configKey: null,
-          configValue: null
+          clientId: '',
+          messageType: '',
+          isEnable: ''
         },
         addLoading: false,
         formRules: {
-          configKey: [
+          clientId: [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          configValue: [
+          messageType: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          isEnable: [
             {required: true, message: '必填', trigger: 'blur'}
           ]
         }
@@ -58,13 +59,13 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.postJson('/base/config', self.form)
+              self.$http.post('/base/message/client', self.form)
                 .then(function (response) {
-                  self.$message.success('系统配置添加成功')
+                  self.$message.info('消息客户端添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
-                  self.$message.error('系统配置添加失败，请稍后再试')
+                  self.$message.error('消息客户端添加失败，请稍后再试')
                   self.addLoading = false
                 })
             } else {
@@ -79,26 +80,27 @@
         this.$refs['form'].resetFields()
       }
     },
-    beforeRouteEnter (to, from, next) {
+    computed: {
+    },
+    watch: {
+    },
+    beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        let dataControl = 'BaseConfigAddAddLoadData=true'
+        let dataControl = 'messageClientAddLoadData=true'
         if (vm.$utils.loadDataControl.has(dataControl)) {
           // 重置表单
           vm.resetForm()
           vm.$utils.loadDataControl.remove(dataControl)
         }
       })
-    },
-    watch: {}
+    }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper {
-    padding: 1.5rem;
-    overflow: auto;
-    height: 100%;
-  }
+    .wrapper{
+        padding:1.5rem;
+    }
 </style>

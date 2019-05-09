@@ -38,7 +38,14 @@
         this.$emit('blur', event)
       },
       emitChange (val) {
-        this.$emit('change', val)
+        let item = null
+        for (let i = 0; i < this.options.length; i++) {
+          if (this.options[i].id === val) {
+            item = this.options[i]
+            break
+          }
+        }
+        this.$emit('change', val, item)
       },
       emitInput (val) {
         this.$emit('input', val)

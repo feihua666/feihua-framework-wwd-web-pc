@@ -1,26 +1,37 @@
 <template>
     <div class="wrapper">
-        <el-form ref="form" :model="form" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
-          <el-form-item label="微信公众平台">
-            <WeixinAccountSelect v-model="form.weixinPublicplatformAccoutId" ></WeixinAccountSelect>
-          </el-form-item>
-          <el-form-item label="模板id">
-            <el-input v-model="form.weixinPublicplatformMsgTemplateId"></el-input>
-          </el-form-item>
-          <el-form-item label="模板内容">
-              <el-input autosize type="textarea" v-model="form.weixinPublicplatformMsgTemplateContent"></el-input>
-          </el-form-item>
-          <el-form-item label="微信小程序">
-            <WeixinAccountSelect v-model="form.weixinMiniprogramAccoutId" :miniprogram="true"></WeixinAccountSelect>
-          </el-form-item>
-          <el-form-item label="模板id">
-            <el-input v-model="form.weixinMiniprogramMsgTemplateId"></el-input>
-          </el-form-item>
-          <el-form-item label="模板内容">
-            <el-input autosize type="textarea" v-model="form.weixinMiniprogramMsgTemplateContent"></el-input>
-          </el-form-item>
+        <el-form ref="form" :model="form" style="width: 660px;" label-width="200px" v-loading="formDataLoading">
+          <template v-for="(item, index) in form.weixinPublicPlatforms">
+            <el-form-item :label="'微信公众号' + index">
+              <WeixinAccountSelect v-model="item.weixinPublicplatformAccoutId" ></WeixinAccountSelect>
+              <el-button @click="removeWeixinPublicplatform(item, index)">删除</el-button>
+            </el-form-item>
+            <el-form-item :label="'微信公众号模板id' + index">
+              <el-input v-model="item.weixinPublicplatformMsgTemplateId"></el-input>
+            </el-form-item>
+            <el-form-item :label="'微信公众号模板内容' + index">
+              <el-input autosize type="textarea" v-model="item.weixinPublicplatformMsgTemplateContent"></el-input>
+            </el-form-item>
+          </template>
+          <template v-for="(item, index) in form.weixinMiniPrograms">
+            <el-form-item :label="'微信小程序' + index">
+              <WeixinAccountSelect v-model="item.weixinMiniprogramAccoutId" :miniprogram="true"></WeixinAccountSelect>
+              <el-button @click="removeWeixinMiniprogram(item, index)">删除</el-button>
+            </el-form-item>
+            <el-form-item :label="'微信小程序模板id' + index">
+              <el-input v-model="item.weixinMiniprogramMsgTemplateId"></el-input>
+            </el-form-item>
+            <el-form-item :label="'微信小程序模板内容' + index">
+              <el-input autosize type="textarea" v-model="item.weixinMiniprogramMsgTemplateContent"></el-input>
+            </el-form-item>
+          </template>
+
             <el-form-item>
-                <el-button type="primary" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
+              <el-button type="primary" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
+              <el-button @click="addWeixinPublicplatform">新增微信公众号</el-button>
+              <el-button @click="addWeixinMiniprogram">新增微信小程序</el-button>
+              <div>如果不选择三方模板，视为删除先前绑定的三方模板，只填写模板内容无效，请谨慎操作</div>
+              <div>特：同一种类型请不要重复添加，否则可能会消息重复或其它不可预知错误</div>
             </el-form-item>
         </el-form>
     </div>
@@ -29,27 +40,38 @@
 <script>
     import SelfDictSelect from '@/components/SelfDictSelect.vue'
     import WeixinAccountSelect from '@/views/weixin/account/WeixinAccountSelect.vue'
+    let weixinPublicPlatformItem = function (accountId, templateId, content) {
+      return {
+        weixinPublicplatformAccoutId: accountId || '',
+        weixinPublicplatformMsgTemplateId: templateId || '',
+        weixinPublicplatformMsgTemplateContent: content || ''
+      }
+    }
+    let weixinMiniProgramItem = function (accountId, templateId, content) {
+      return {
+        weixinMiniprogramAccoutId: accountId || '',
+        weixinMiniprogramMsgTemplateId: templateId || '',
+        weixinMiniprogramMsgTemplateContent: content || ''
+      }
+    }
     export default {
       name: 'MessageTemplateThirdBind',
       components: {
-        SelfDictSelect, WeixinAccountSelect},
+        SelfDictSelect,
+        WeixinAccountSelect
+      },
       data () {
         return {
           // 消息模板id的id
           id: null,
           form: {
             // 微信公众平台
-            weixinPublicplatformAccoutId: '',
-            weixinPublicplatformMsgTemplateId: '',
-            weixinPublicplatformMsgTemplateContent: '',
+            weixinPublicPlatforms: [],
             // 微信小程序
-            weixinMiniprogramAccoutId: '',
-            weixinMiniprogramMsgTemplateId: '',
-            weixinMiniprogramMsgTemplateContent: ''
+            weixinMiniPrograms: []
           },
           formDataLoading: false,
-          addLoading: false,
-          bindData: []
+          addLoading: false
         }
       },
       mounted () {
@@ -63,12 +85,29 @@
           self.$http.get('/base/message/template/' + id + '/third')
             .then(function (response) {
               let content = response.data.data.content
-              self.bindData = content
+              self.bindData(content)
               self.formDataLoading = false
             })
             .catch(function (response) {
+              // 清空
+              self.bindData()
               self.formDataLoading = false
             })
+        },
+        bindData (val) {
+          if (val) {
+            for (let i = 0; i < val.length; i++) {
+              let item = val[i]
+              if (item.thirdType === 'weixin_publicplatform') {
+                this.form.weixinPublicPlatforms.push(weixinPublicPlatformItem(item.thirdId, item.thirdTemplateId, item.thirdTemplateContent))
+              } else if (item.thirdType === 'weixin_miniprogram') {
+                this.form.weixinMiniPrograms.push(weixinMiniProgramItem(item.thirdId, item.thirdTemplateId, item.thirdTemplateContent))
+              }
+            }
+          } else {
+            this.form.weixinPublicPlatforms = []
+            this.form.weixinMiniPrograms = []
+          }
         },
         updateBtnClick () {
           let self = this
@@ -85,25 +124,21 @@
           } else {
             self.$message.info('正在请求中，请耐心等待')
           }
+        },
+        addWeixinPublicplatform () {
+          this.form.weixinPublicPlatforms.push(weixinPublicPlatformItem())
+        },
+        removeWeixinPublicplatform (item, index) {
+          this.form.weixinPublicPlatforms.splice(index, 1)
+        },
+        addWeixinMiniprogram () {
+          this.form.weixinMiniPrograms.push(weixinMiniProgramItem())
+        },
+        removeWeixinMiniprogram (item, index) {
+          this.form.weixinMiniPrograms.splice(index, 1)
         }
       },
       watch: {
-        bindData (val) {
-          if (val) {
-            for (let i = 0; i < val.length; i++) {
-              let item = val[i]
-              if (item.thirdType === 'weixin_publicplatform') {
-                this.form.weixinPublicplatformAccoutId = item.thirdId
-                this.form.weixinPublicplatformMsgTemplateId = item.thirdTemplateId
-                this.form.weixinPublicplatformMsgTemplateContent = item.thirdTemplateContent
-              } else if (item.thirdType === 'weixin_miniprogram') {
-                this.form.weixinMiniprogramAccoutId = item.thirdId
-                this.form.weixinMiniprogramMsgTemplateId = item.thirdTemplateId
-                this.form.weixinMiniprogramMsgTemplateContent = item.thirdTemplateContent
-              }
-            }
-          }
-        }
       },
       // tab切换如果参数不一样，重新加载数据
       beforeRouteEnter  (to, from, next) {

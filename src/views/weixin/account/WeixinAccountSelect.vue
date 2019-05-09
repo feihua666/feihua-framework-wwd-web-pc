@@ -35,6 +35,7 @@
       }
     },
     mounted () {
+      this.model = this.value
       this.loadData()
     },
     methods: {

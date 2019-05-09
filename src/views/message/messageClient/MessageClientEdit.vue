@@ -1,28 +1,14 @@
 <template>
   <div class="wrapper">
     <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
-      <el-form-item label="模板名称" prop="name">
-        <el-input  v-model="form.name"></el-input>
+      <el-form-item label="客户端" prop="clientId">
+        <LoginClientSelect  v-model="form.clientId"></LoginClientSelect>
       </el-form-item>
-      <el-form-item label="模板编码" prop="code">
-        <el-input  v-model="form.code"></el-input>
+      <el-form-item label="消息类型" prop="messageType">
+        <SelfDictSelect  v-model="form.messageType" type="message_client_type"></SelfDictSelect>
       </el-form-item>
-      <el-form-item label="模板内容" prop="content">
-        <el-input :placeholder="'可指定参数,如：您好，{{userName}}先生，您此次摇号已中签'" autosize type="textarea" v-model="form.content"></el-input>
-      </el-form-item>
-      <el-form-item label="消息标题" prop="title">
-        <el-input :placeholder="'可指定参数,如：尊敬的{{userName}}'"  v-model="form.title"></el-input>
-      </el-form-item>
-      <el-form-item label="消息简介" prop="profile">
-        <el-input :placeholder="'可指定参数,如：这是一条{{userName}}的简介'"  v-model="form.profile"></el-input>
-      </el-form-item>
-      <el-form-item label="消息分类" prop="msgType">
-        <self-dict-select v-model="form.msgType" type="message_type"></self-dict-select>
-        只对非虚拟客户端有效，如果绑定了三方模板，且三方支持则三方也有效
-      </el-form-item>
-      <el-form-item label="消息紧急性" prop="msgLevel">
-        <self-dict-select v-model="form.msgLevel" type="message_level"></self-dict-select>
-        只对非虚拟客户端有效，如果绑定了三方模板，且三方支持则三方也有效
+      <el-form-item label="是否启用" prop="isEnable">
+        <SelfDictSelect  v-model="form.isEnable" type="yes_no"></SelfDictSelect>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
@@ -33,44 +19,34 @@
 
 <script>
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
+  import LoginClientSelect from '@/views/loginclient/LoginClientSelect.vue'
+
   export default {
-    name: 'MessageTemplateEdit',
     components: {
-      SelfDictSelect
+      SelfDictSelect,
+      LoginClientSelect
     },
+    name: 'messageClientEdit',
     data () {
       return {
         // 编辑的id
         id: null,
         form: {
-          name: null,
-          code: null,
-          content: null,
-          title: null,
-          profile: null,
-          msgType: null,
-          msgLevel: null,
+          clientId: '',
+          messageType: '',
+          isEnable: '',
           updateTime: null
         },
         formDataLoading: false,
         addLoading: false,
         formRules: {
-          name: [
+          clientId: [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          code: [
+          messageType: [
             {required: true, message: '必填', trigger: 'blur'}
           ],
-          content: [
-            {required: true, message: '必填', trigger: 'blur'}
-          ],
-          title: [
-            {required: true, message: '必填', trigger: 'blur'}
-          ],
-          msgType: [
-            {required: true, message: '必填', trigger: 'blur'}
-          ],
-          msgLevel: [
+          isEnable: [
             {required: true, message: '必填', trigger: 'blur'}
           ]
         }
@@ -85,18 +61,15 @@
         this.resetForm()
         let self = this
         self.formDataLoading = true
-        self.$http.get('/base/message/template/' + self.id)
+        self.$http.get('/base/message/client/' + self.id)
           .then(function (response) {
             let content = response.data.data.content
-            self.form.name = content.name
-            self.form.code = content.code
-            self.form.content = content.content
-            self.form.title = content.title
-            self.form.profile = content.profile
-            self.form.msgType = content.msgType
-            self.form.msgLevel = content.msgLevel
+            self.form.clientId = content.clientId
+            self.form.messageType = content.messageType
+            self.form.isEnable = content.isEnable
             self.form.updateTime = content.updateAt
             self.formDataLoading = false
+            return Promise.resolve(content)
           })
           .catch(function (response) {
             self.formDataLoading = false
@@ -109,14 +82,14 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.put('/base/message/template/' + self.id, self.form)
+              self.$http.put('/base/message/client/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.success('消息模板修改成功')
+                  self.$message.info('消息客户端修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
                   if (response.response.status === 404) {
-                    self.$message.error('消息模板修改失败，数据不存在或已被他人修改，请刷新列表后再试')
+                    self.$message.error('消息客户端改失败，数据不存在或已被他人修改，请刷新列表后再试')
                   }
                   self.addLoading = false
                 })
@@ -149,7 +122,7 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    padding:1.5rem;
-  }
+    .wrapper{
+        padding:1.5rem;
+    }
 </style>

@@ -1,7 +1,7 @@
 <template>
 
   <el-checkbox-group value="" :disabled="disabled" v-model="model" v-on:focus="handleFocus($event)" v-on:handleBlur="handleBlur($event)" v-on:change="emitChange" v-on:input="emitInput">
-    <el-checkbox  v-for="item in options" :label="item.id" :key="item.id">{{item.clientName}}</el-checkbox>
+    <el-checkbox  v-for="item in options" :label="item.id" :key="item.id">{{item.name}}</el-checkbox>
   </el-checkbox-group>
 </template>
 
@@ -46,7 +46,18 @@
         this.$emit('blur', event)
       },
       emitChange (val) {
-        this.$emit('change', val)
+        let items = []
+        if (val && val.length > 0) {
+          for (let j = 0; j < this.options.length; j++) {
+            for (let i = 0; i < val.length; i++) {
+              if (this.options[j].id === val[i]) {
+                items.push(this.options[j])
+                break
+              }
+            }
+          }
+        }
+        this.$emit('change', val, items)
       },
       emitInput (val) {
         this.$emit('input', val)

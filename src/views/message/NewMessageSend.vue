@@ -4,8 +4,15 @@
       <el-form-item label="消息模板" prop="messageTemplateId">
         <MessageTemplateSelect v-model="form.messageTemplateId" type="message_level"></MessageTemplateSelect>
       </el-form-item>
+
+      <el-form-item label="发送参数" prop="templateParams">
+        <el-input autosize type="textarea"  v-model="form.templateParams"></el-input>
+      </el-form-item>
+      <el-form-item label="发送客户端" prop="clientIds">
+        <LoginClientCheckboxGroup  v-model="form.clientIds" v-on:change="changeClient" ></LoginClientCheckboxGroup>
+      </el-form-item>
       <el-form-item label="发送目标人员" prop="targetType">
-        <self-dict-select v-model="form.targetType" type="message_targets"></self-dict-select>
+        <self-dict-select v-model="form.targetType" :disabled="clientTargetDisable" type="message_targets"></self-dict-select>
       </el-form-item>
       <el-form-item label="人员" prop="targetValues"  v-if="form.targetType == 'multi_people'">
         <UserTransfer v-model="targetValuesPeople"></UserTransfer>
@@ -19,11 +26,11 @@
       <el-form-item ref="areatree" prop="targetValues" label="区域" v-if="form.targetType == 'multi_area'">
         <AreaTree :check-strictly="true" :show-checkbox="true"></AreaTree>
       </el-form-item>
-      <el-form-item label="发送客户端" prop="clientIds">
-        <LoginClientCheckboxGroup  v-model="form.clientIds"></LoginClientCheckboxGroup>
-      </el-form-item>
-      <el-form-item label="发送参数" prop="templateParams">
-        <el-input autosize type="textarea"  v-model="form.templateParams"></el-input>
+      <!-- 虚拟客户端参数 -->
+      <el-form-item v-for="(item, index) in form.vSendFormDtos" :key="index" :label="item.name + '发送目标标识'" :prop="'vSendFormDtos.' + index + '.vTargetValues'" :rules="[
+      { required: true, message: '必填', trigger: 'blur' }
+    ]">
+        <el-input v-model="item.vTargetValues"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="sendBtnClick" :loading="addLoading">发送</el-button>
@@ -55,6 +62,17 @@
     },
     name: 'NewMessageSend',
     data () {
+      let targetTypeValidator = (rule, value, callback) => {
+        if (this.clientTargetDisable) {
+          callback()
+        } else {
+          if (!this.form.targetType) {
+            callback(new Error('必填'))
+          } else {
+            callback()
+          }
+        }
+      }
       let targetValuesValidator = (rule, value, callback) => {
         if (this.form.targetType === 'all') {
           callback()
@@ -73,15 +91,20 @@
           targetType: 'all',
           targetValues: null,
           clientIds: null,
-          templateParams: null
+          templateParams: null,
+          // 虚拟客户端参数
+          vSendFormDtos: []
         },
+        // 真正要提交的非虚拟客户端id
+        clientIds: [],
         addLoading: false,
+        clientSelectedItems: [],
         formRules: {
           messageTemplateId: [
             {required: true, message: '必填', trigger: 'blur'}
           ],
           targetType: [
-            {required: true, message: '必填', trigger: 'blur'}
+            {validator: targetTypeValidator, trigger: 'blur'}
           ],
           targetValues: [
             {validator: targetValuesValidator, trigger: 'blur'}
@@ -95,6 +118,35 @@
     mounted () {
     },
     methods: {
+      changeClient (val, items) {
+        this.clientSelectedItems = items
+        let temp = []
+        let clientIds = []
+        if (this.clientSelectedItems) {
+          for (let i = 0; i < this.clientSelectedItems.length; i++) {
+            if (this.clientSelectedItems[i].isVirtual === 'Y') {
+              temp.push({
+                clientId: this.clientSelectedItems[i].id,
+                vTargetType: '',
+                name: this.clientSelectedItems[i].name,
+                vTargetValues: ''
+              })
+            }
+            if (this.clientSelectedItems[i].isVirtual === 'N') {
+              clientIds.push(this.clientSelectedItems[i].id)
+            }
+          }
+        }
+        for (let i = 0; i < temp.length; i++) {
+          for (let j = 0; j < this.form.vSendFormDtos.length; j++) {
+            if (temp[i].clientId === this.form.vSendFormDtos[j].clientId) {
+              temp[i] = this.form.vSendFormDtos[j]
+            }
+          }
+        }
+        this.$set(this.form, 'vSendFormDtos', temp)
+        this.clientIds = clientIds
+      },
       loadSendParams (templateId) {
         let self = this
         if (!templateId) {
@@ -126,11 +178,20 @@
           } else {
             this.form.targetValues = null
           }
+          let _form = {
+            messageTemplateId: this.form.messageTemplateId,
+            targetType: this.form.targetType,
+            targetValues: this.form.targetValues,
+            clientIds: this.clientIds,
+            templateParams: this.form.templateParams,
+            // 虚拟客户端参数
+            vSendFormDtos: this.form.vSendFormDtos
+          }
           this.$refs['form'].validate((valid) => {
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.post('/base/message/newsend/' + self.form.messageTemplateId, self.form)
+              self.$http.post('/base/message/newsend/' + self.form.messageTemplateId, _form)
                 .then(function (response) {
                   self.$message.success('消息发送成功')
                   self.addLoading = false
@@ -157,6 +218,18 @@
       }
     },
     computed: {
+      clientTargetDisable () {
+        if (this.clientSelectedItems) {
+          for (let i = 0; i < this.clientSelectedItems.length; i++) {
+            if (this.clientSelectedItems[i].isVirtual === 'N') {
+              return false
+            }
+          }
+        }
+        this.form.targetType = null
+        this.form.targetValues = null
+        return true
+      }
     },
     watch: {
       'form.targetType' () {

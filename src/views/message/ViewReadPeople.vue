@@ -40,7 +40,7 @@
         columns: [
           {
             name: 'nickname',
-            label: '名称'
+            label: '用户名'
           },
           {
             name: 'isRead',

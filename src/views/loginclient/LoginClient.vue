@@ -6,10 +6,10 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="编码" prop="clientCode">
+              <el-form-item label="编码" prop="code">
                 <el-input  v-model="searchFormModel.clientCode"></el-input>
               </el-form-item>
-              <el-form-item label="名称" prop="clientName">
+              <el-form-item label="名称" prop="name">
                 <el-input  v-model="searchFormModel.clientName"></el-input>
               </el-form-item>
 
@@ -40,15 +40,15 @@
         return {
           columns: [
             {
-              name: 'clientCode',
+              name: 'code',
               label: '编码'
             },
             {
-              name: 'clientName',
+              name: 'name',
               label: '名称'
             },
             {
-              name: 'clientType',
+              name: 'type',
               label: '类型',
               dict: 'login_client'
             },
@@ -80,8 +80,8 @@
           tableLoading: false,
           // 搜索的查询条件
           searchFormModel: {
-            clientCode: '',
-            clientName: '',
+            code: '',
+            name: '',
             pageable: true,
             pageNo: 1,
             pageSize: 10
@@ -166,7 +166,7 @@
           this.$router.push('/Main/LoginClientChannelBind/' + row.id)
         },
         bindTableRowClickBtn (indwx, row) {
-          return !(row.clientType === 'h5')
+          return !(row.type === 'wx_publicplatform' || row.type === 'wx_miniprogram' || row.type === 'virtual_wx_publicplatform' || row.type === 'virtual_wx_miniprogram')
         }
       },
       watch: {

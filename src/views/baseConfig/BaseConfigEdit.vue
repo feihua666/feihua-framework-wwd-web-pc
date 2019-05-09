@@ -13,6 +13,7 @@
       </el-form-item>
       <el-form-item label="CONFIG_VALUE" prop="configValue" required>
         <el-input type="textarea" :autosize="{ minRows: 10}" v-model="form.configValue"></el-input>
+        <div>注意：如果配置内容为json,请严格按json双引号标准填写</div>
       </el-form-item>
       <el-form-item label="配置说明" prop="description">
         <el-input v-model="form.description" autocomplete="off"

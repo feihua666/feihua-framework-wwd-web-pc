@@ -2,14 +2,17 @@
   <div class="wrapper">
     <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
 
-      <el-form-item label="编码" prop="clientCode">
-        <el-input  v-model="form.clientCode"></el-input>
+      <el-form-item label="编码" prop="code">
+        <el-input  v-model="form.code"></el-input>
       </el-form-item>
-      <el-form-item label="名称" prop="clientName">
-        <el-input  v-model="form.clientName"></el-input>
+      <el-form-item label="名称" prop="name">
+        <el-input  v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="类型" prop="clientType">
-        <self-dict-select v-model="form.clientType" type="login_client" ></self-dict-select>
+      <el-form-item label="类型" prop="type">
+        <self-dict-select v-model="form.type" type="login_client" ></self-dict-select>
+      </el-form-item>
+      <el-form-item label="是否虚拟客户端" prop="isVirtual">
+        <self-dict-select v-model="form.isVirtual" type="yes_no" ></self-dict-select>
       </el-form-item>
       <el-form-item label="描述" prop="description">
         <el-input  v-model="form.description"></el-input>
@@ -30,17 +33,21 @@
       data () {
         return {
           form: {
-            clientCode: '',
-            clientName: '',
-            clientType: '',
+            code: '',
+            name: '',
+            type: '',
+            isVirtual: '',
             description: ''
           },
           addLoading: false,
           formRules: {
-            clientCode: [
+            code: [
               {required: true, message: '必填', trigger: 'blur'}
             ],
-            clientName: [
+            name: [
+              {required: true, message: '必填', trigger: 'blur'}
+            ],
+            isVirtual: [
               {required: true, message: '必填', trigger: 'blur'}
             ]
           }

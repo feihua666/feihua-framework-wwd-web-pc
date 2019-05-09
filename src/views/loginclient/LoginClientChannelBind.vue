@@ -9,6 +9,7 @@
           </el-form-item>
             <el-form-item>
                 <el-button type="primary" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
+              <div>渠道只能绑定一个，渠道的意思是该客户端是通过什么三方访问的，比如是微信公众号里用微信授权登录</div>
             </el-form-item>
         </el-form>
     </div>
@@ -56,6 +57,10 @@
         },
         updateBtnClick () {
           let self = this
+          if (this.form.weixinPublicplatformAccoutId && this.form.weixinMiniprogramAccoutId) {
+            self.$message.error('只能绑定一个，或不绑定')
+            return
+          }
           if (self.addLoading === false) {
             self.addLoading = true
             self.$http.post('/base/client/loginclient/' + self.id + '/channel', self.form)

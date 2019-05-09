@@ -6,12 +6,16 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="模板名称">
-                <el-input  v-model="searchFormModel.name"></el-input>
+              <el-form-item label="客户端" prop="clientId">
+                <LoginClientSelect  v-model="searchFormModel.clientId"></LoginClientSelect>
               </el-form-item>
-              <el-form-item label="模板编码">
-                <el-input  v-model="searchFormModel.code"></el-input>
+              <el-form-item label="消息类型" prop="messageType">
+                <SelfDictSelect  v-model="searchFormModel.messageType" type="message_client_type"></SelfDictSelect>
               </el-form-item>
+              <el-form-item label="是否启用" prop="isEnable">
+                <SelfDictSelect  v-model="searchFormModel.isEnable" type="yes_no"></SelfDictSelect>
+              </el-form-item>
+
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" @click="addTableRowClick">添加</el-button>
@@ -30,49 +34,35 @@
   import SelfPage from '@/components/SelfPage.vue'
   import SelfTable from '@/components/SelfTable.vue'
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
+  import LoginClientSelect from '@/views/loginclient/LoginClientSelect.vue'
   export default {
-    name: 'MessageTemplate',
+    name: 'messageClient',
     components: {
       SelfDictSelect,
       SelfTable,
+      LoginClientSelect,
       SelfPage
     },
     data () {
       return {
         columns: [
           {
-            name: 'name',
-            label: '模板名称'
+            name: 'clientId',
+            label: '客户端',
+            formatter: this.clientFormatter
           },
           {
-            name: 'code',
-            label: '模板编码'
+            name: 'messageType',
+            label: '消息类型',
+            dict: 'message_client_type'
           },
           {
-            name: 'title',
-            label: '消息标题'
-          },
-          {
-            name: 'profile',
-            label: '消息简介'
-          },
-          {
-            name: 'content',
-            label: '消息内容'
-          },
-          {
-            name: 'msgType',
-            label: '消息分类',
-            dict: 'message_type'
-          },
-          {
-            name: 'msgLevel',
-            label: '消息紧急度',
-            dict: 'message_level'
+            name: 'isEnable',
+            label: '是否启用',
+            dict: 'yes_no'
           },
           {
             label: '操作',
-            width: '200',
             buttons: [
               {
                 label: '编辑',
@@ -81,24 +71,21 @@
               {
                 label: '删除',
                 click: this.deleteTableRowClick
-              },
-              {
-                label: '绑定三方模板',
-                click: this.bindThirdTemplate
               }
             ]
           }
         ],
         page: {
+          pageNo: 1,
           dataNum: 0
         },
         // 表格数据
         tableData: [],
+        clients: [],
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
-          name: '',
-          code: '',
+          leaveType: '',
           pageable: true,
           pageNo: 1,
           pageSize: 10
@@ -114,22 +101,31 @@
         this.loadTableData(1)
       },
       // 加载表格数据
-      loadTableData (pageNo) {
+      loadTableData (pageNo, pageNoChange) {
         let self = this
-        if (pageNo) {
-          self.searchFormModel.pageNo = pageNo
+        if (pageNo > 0) {
+          if (pageNoChange) {
+            self.searchFormModel.pageNo = pageNo
+          } else {
+            if (self.page.pageNo !== pageNo) {
+              self.page.pageNo = pageNo
+              return
+            }
+          }
         }
         self.tableLoading = true
-        this.$http.get('/base/message/templates', self.searchFormModel)
+        this.$http.get('/base/message/clients', self.searchFormModel)
           .then(function (response) {
             let content = response.data.data.content
             self.tableData = content
+            self.clients = response.data.data.clients
             self.page.dataNum = response.data.data.page.dataNum
             self.tableLoading = false
           })
           .catch(function (error) {
             if (error.response.status === 404) {
               self.tableData = []
+              self.clients = []
               self.page.dataNum = 0
             }
             self.tableLoading = false
@@ -142,11 +138,12 @@
       },
       // 页码改变加载对应页码数据
       pageNoChange (val) {
-        this.loadTableData(val)
+        this.page.pageNo = val
+        this.loadTableData(val, true)
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
-        this.$router.push('/Main/MessageTemplateEdit/' + row.id)
+        this.$router.push('/Main/MessageClientEdit/' + row.id)
       },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
@@ -154,7 +151,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          self.$http.delete('/base/message/template/' + row.id)
+          this.$http.delete('/base/message/client/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -168,11 +165,16 @@
         })
       },
       addTableRowClick () {
-        this.$utils.loadDataControl.add('MessageTemplateAddLoadData=true')
-        this.$router.push('/Main/MessageTemplateAdd')
+        this.$utils.loadDataControl.add('messageClientAddLoadData=true')
+        this.$router.push('/Main/MessageClientAdd')
       },
-      bindThirdTemplate (index, row) {
-        this.$router.push('/Main/MessageTemplateThirdBind/' + row.id)
+      clientFormatter (row) {
+        for (let i = 0; i < this.clients.length; i++) {
+          if (row.clientId === this.clients[i].id) {
+            return this.clients[i].name
+          }
+        }
+        return ''
       }
     },
     watch: {
@@ -182,22 +184,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
+    .wrapper .el-collapse{
+        padding: 0 10px;
+    }
+    .el-main{
+        padding:0;
+    }
+    .el-aside{
+        border-right: 1px solid #e6ebf5;
+    }
+    .wrapper,.el-container{
+        height:100%;
+    }
 </style>

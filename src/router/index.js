@@ -369,7 +369,6 @@ const router = new Router({
           component: _import('message/messageTemplate/MessageTemplateEdit'),
           meta: { menu: {name: '消息模板修改'}, keepAlive: true }
         },
-        ,
         {
           path: 'MessageTemplateThirdBind/:id',
           name: 'MessageTemplateThirdBind',
@@ -399,6 +398,23 @@ const router = new Router({
           name: 'MyMessage',
           component: _import('message/MyMessage'),
           meta: { menu: {name: '我的消息'}, keepAlive: true }
+        },
+        {
+          path: 'MessageClient',
+          name: 'MessageClient',
+          component: _import('message/messageClient/MessageClient')
+        },
+        {
+          path: 'MessageClientAdd',
+          name: 'MessageClientAdd',
+          component: _import('message/messageClient/MessageClientAdd'),
+          meta: { menu: {name: '客户端消息配置添加'}, keepAlive: true }
+        },
+        {
+          path: 'MessageClientEdit/:id',
+          name: 'MessageClientEdit',
+          component: _import('message/messageClient/MessageClientEdit'),
+          meta: { menu: {name: '客户端消息配置修改'}, keepAlive: true }
         },
         {
           path: 'Cms/Site',
