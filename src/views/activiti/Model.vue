@@ -239,7 +239,7 @@
             return !!value
           }
         }).then(({value}) => {
-          this.$http.delete('/activity/model/' + row.id, {deleteReason: value})
+          self.$http.delete('/activity/model/' + row.id, {deleteReason: value})
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据

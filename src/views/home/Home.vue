@@ -88,6 +88,9 @@
   background-color: #EDEFF2;
   overflow-y: auto;
 }
+  .el-card{
+    box-shadow: none;
+  }
 </style>
 <style>
   .warpper.home .el-card__body{

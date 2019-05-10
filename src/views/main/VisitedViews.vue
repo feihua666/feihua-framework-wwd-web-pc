@@ -291,7 +291,7 @@
             icon: menu.icon ? menu.icon : null,
             iconType: 'class_icon'
           }).then(res => {
-            self.$message.info('添加收藏成功')
+            self.$message.success('添加收藏成功')
           }).catch(() => {
             self.$message.error('添加收藏失败')
           })

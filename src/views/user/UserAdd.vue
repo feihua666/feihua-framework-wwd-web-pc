@@ -20,6 +20,10 @@
         <OfficeInputSelect ref="officeinput"  v-model="form.dataOfficeId">
         </OfficeInputSelect>
       </el-form-item>
+      <el-form-item label="区域">
+        <AreaInputSelect ref="areainput"  v-model="form.dataAreaId">
+        </AreaInputSelect>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addBtnClick" :loading="addLoading">添加</el-button>
       </el-form-item>
@@ -31,11 +35,15 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import OfficeTree from '@/views/office/OfficeTree.vue'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
+  import AreaInputSelect from '@/views/area/AreaInputSelect.vue'
+
   export default {
     components: {
       OfficeTree,
       SelfDictSelect,
-      OfficeInputSelect},
+      OfficeInputSelect,
+      AreaInputSelect
+    },
     name: 'UserAdd',
     data () {
       return {
@@ -44,7 +52,9 @@
           nickname: '',
           locked: '',
           gender: '',
+          clientCode: this.$config.loginClient,
           dataOfficeId: null,
+          dataAreaId: null,
           password: null
         },
         formDataLoading: false,
@@ -80,7 +90,7 @@
               self.addLoading = true
               self.$http.post('/base/user', self.form)
                 .then(function (response) {
-                  self.$message.info('用户添加成功')
+                  self.$message.success('用户添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
@@ -98,6 +108,7 @@
       resetForm () {
         this.$refs['form'].resetFields()
         this.$refs['officeinput'].setLabelName(null)
+        this.$refs.areainput.setLabelName(null)
       }
     },
     watch: {

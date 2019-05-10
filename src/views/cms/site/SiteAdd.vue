@@ -99,7 +99,7 @@
               self.addLoading = true
               self.$http.post('/cms/site', self.form)
                 .then(function (response) {
-                  self.$message.info('站点添加成功')
+                  self.$message.success('站点添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

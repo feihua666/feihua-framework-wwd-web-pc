@@ -219,7 +219,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/role/' + row.id)
+          self.$http.delete('/base/role/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据

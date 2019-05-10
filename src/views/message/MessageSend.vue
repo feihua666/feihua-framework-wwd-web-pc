@@ -1,21 +1,36 @@
 <template>
   <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 510px;" label-width="150px">
-      <el-form-item label="发送目标人员" prop="targets">
-        <self-dict-select v-model="form.targets" type="message_targets"></self-dict-select>
+    <el-form ref="form" :model="form" :rules="formRules" style="width: 700px;" label-width="150px">
+      <el-form-item label="发送客户端" prop="clientIds">
+        <LoginClientCheckboxGroup v-on:change="changeClient"  v-model="form.clientIds"></LoginClientCheckboxGroup>
       </el-form-item>
-      <el-form-item label="发送客户端" prop="targetClients">
-        <self-dict-checkbox-group  v-model="form.targetClients" type="login_client"></self-dict-checkbox-group>
-      </el-form-item>
-      <el-form-item v-if="showPublicPlatform" label="公众平台" prop="publicPlatform">
-        <weixin-account-checkbox-group v-model="form.publicPlatform"></weixin-account-checkbox-group>
-      </el-form-item>
-      <el-form-item v-if="showMiniProgram" label="小程序" prop="miniprogram">
-        <weixin-account-checkbox-group  v-model="form.miniprogram" :miniprogram="true"></weixin-account-checkbox-group>
 
+      <el-form-item label="发送目标人员" prop="targetType">
+        <self-dict-select v-model="form.targetType" :disabled="clientTargetDisable" type="message_targets"></self-dict-select>
+        <div>该目标人员只对非虚拟客户端有效</div>
+      </el-form-item>
+      <el-form-item label="人员" prop="targetValues"  v-if="form.targetType == 'multi_people'">
+        <UserTransfer v-model="targetValuesPeople"></UserTransfer>
+      </el-form-item>
+      <el-form-item label="角色" prop="targetValues" v-if="form.targetType == 'multi_role'">
+        <RoleTree ref="roletree" :check-strictly="true" :show-checkbox="true"></RoleTree>
+      </el-form-item>
+      <el-form-item label="机构" prop="targetValues" v-if="form.targetType == 'multi_office'">
+        <OfficeTree ref="officetree" :check-strictly="true" :show-checkbox="true"></OfficeTree>
+      </el-form-item>
+      <el-form-item  prop="targetValues" label="区域" v-if="form.targetType == 'multi_area'">
+        <AreaTree ref="areatree" :check-strictly="true" :show-checkbox="true"></AreaTree>
+      </el-form-item>
+
+      <!-- 虚拟客户端参数 -->
+      <el-form-item v-for="(item, index) in form.vSendFormDtos" :key="index" :label="item.name + '发送目标标识'" :prop="'vSendFormDtos.' + index + '.vTargetValues'" :rules="[
+      { required: true, message: '必填', trigger: 'blur' }
+    ]">
+        <el-input v-model="item.vTargetValues"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="sendBtnClick" :loading="addLoading">发送</el-button>
+        <div>虚拟客户端发送目标标识解释：如果是邮件客户端请输入邮件地址，如果是短信请输入手机号，如果是第三方模板请输入消息请输入三方用户标识（如微信输入openid）.以上多个以逗号分隔</div>
       </el-form-item>
     </el-form>
   </div>
@@ -24,90 +39,137 @@
 <script>
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import SelfDictCheckboxGroup from '@/components/SelfDictCheckboxGroup'
-  import WeixinAccountSelect from '@/views/weixin/account/WeixinAccountSelect'
-  import WeixinAccountCheckboxGroup from '@/views/weixin/account/WeixinAccountCheckboxGroup'
+  import LoginClientCheckboxGroup from '@/views/loginclient/LoginClientCheckboxGroup'
+  import UserTransfer from '@/views/user/UserTransfer'
+  import RoleTree from '@/views/role/RoleTree'
+  import OfficeTree from '@/views/office/OfficeTree'
+  import AreaTree from '@/views/area/AreaTree'
 
   export default {
     components: {
-      WeixinAccountCheckboxGroup,
+      LoginClientCheckboxGroup,
       SelfDictCheckboxGroup,
       SelfDictSelect,
-      WeixinAccountSelect
+      RoleTree,
+      OfficeTree,
+      AreaTree,
+      UserTransfer
     },
     name: 'MessageSend',
     data () {
-      let validatePublicPlatform = (rule, value, callback) => {
-        if ((value === '' || value === null || value.length === 0) && this.showPublicPlatform) {
-          callback(new Error('请选择公众号'))
-        } else {
+      let targetTypeValidator = (rule, value, callback) => {
+        if (this.clientTargetDisable) {
           callback()
+        } else {
+          if (!this.form.targetType) {
+            callback(new Error('必填'))
+          } else {
+            callback()
+          }
         }
       }
-      let validateMiniprogram = (rule, value, callback) => {
-        if ((value === '' || value === null || value.length === 0) && this.showMiniProgram) {
-          callback(new Error('请选择小程序'))
-        } else {
+      let targetValuesValidator = (rule, value, callback) => {
+        if (this.form.targetType === 'all') {
           callback()
+        } else {
+          if (value == null || value.length === 0) {
+            callback(new Error('必填'))
+          } else {
+            callback()
+          }
         }
       }
       return {
+        targetValuesPeople: [],
         // 发送的消息id
         id: null,
+        templateId: null,
         form: {
-          targets: null,
-          targetClients: null,
-          publicPlatform: null,
-          miniprogram: null
+          targetType: 'all',
+          targetValues: null,
+          clientIds: null,
+          // 虚拟客户端参数
+          vSendFormDtos: []
         },
+        // 真正要提交的非虚拟客户端id
+        clientIds: [],
         addLoading: false,
+        clientSelectedItems: [],
         formRules: {
-          targets: [
+          targetType: [
+            {validator: targetTypeValidator, trigger: 'blur'}
+          ],
+          targetValues: [
+            {validator: targetValuesValidator, trigger: 'blur'}
+          ],
+          clientIds: [
             {required: true, message: '必填', trigger: 'blur'}
-          ],
-          targetClients: [
-            {required: true, message: '必填', trigger: 'blur'}
-          ],
-          publicPlatform: [
-            {validator: validatePublicPlatform, trigger: 'blur'}
-          ],
-          miniprogram: [
-            {validator: validateMiniprogram, trigger: 'blur'}
           ]
         }
       }
     },
     mounted () {
       this.id = this.$route.params.id
+      this.templateId = this.$route.query.templateId
     },
     methods: {
+      changeClient (val, items) {
+        this.clientSelectedItems = items
+        let temp = []
+        let clientIds = []
+        if (this.clientSelectedItems) {
+          for (let i = 0; i < this.clientSelectedItems.length; i++) {
+            if (this.clientSelectedItems[i].isVirtual === 'Y') {
+              temp.push({
+                clientId: this.clientSelectedItems[i].id,
+                vTargetType: '',
+                name: this.clientSelectedItems[i].name,
+                vTargetValues: ''
+              })
+            }
+            if (this.clientSelectedItems[i].isVirtual === 'N') {
+              clientIds.push(this.clientSelectedItems[i].id)
+            }
+          }
+        }
+        for (let i = 0; i < temp.length; i++) {
+          for (let j = 0; j < this.form.vSendFormDtos.length; j++) {
+            if (temp[i].clientId === this.form.vSendFormDtos[j].clientId) {
+              temp[i] = this.form.vSendFormDtos[j]
+            }
+          }
+        }
+        this.$set(this.form, 'vSendFormDtos', temp)
+        this.clientIds = clientIds
+      },
       sendBtnClick () {
         let self = this
         if (self.addLoading === false) {
+          if (this.form.targetType === 'multi_people') {
+            this.form.targetValues = this.targetValuesPeople
+          } else if (this.form.targetType === 'multi_office') {
+            this.form.targetValues = this.$refs.officetree.getCheckedKeys()
+          } else if (this.form.targetType === 'multi_role') {
+            this.form.targetValues = this.$refs.roletree.getCheckedKeys()
+          } else if (this.form.targetType === 'multi_area') {
+            this.form.targetValues = this.$refs.areatree.getCheckedKeys()
+          } else {
+            this.form.targetValues = null
+          }
+          let _form = {
+            targetType: this.form.targetType,
+            targetValues: this.form.targetValues,
+            clientIds: this.clientIds,
+            // 虚拟客户端参数
+            vSendFormDtos: this.form.vSendFormDtos
+          }
           this.$refs['form'].validate((valid) => {
             if (valid) {
               // 请求添加
               self.addLoading = true
-              let _form = {}
-              _form.targets = self.form.targets
-              _form.targetClients = [
-              ]
-              for (let i = 0; i < self.form.targetClients.length; i++) {
-                let client = self.form.targetClients[i]
-                if (client === 'wx_platform') {
-                  for (let n = 0; n < self.form.publicPlatform.length; n++) {
-                    _form.targetClients.push({targetClient: client, subTargetClient: self.form.publicPlatform[n]})
-                  }
-                } else if (client === 'wx_miniprogram') {
-                  for (let n = 0; n < self.form.miniprogram.length; n++) {
-                    _form.targetClients.push({targetClient: client, subTargetClient: self.form.miniprogram[n]})
-                  }
-                } else {
-                  _form.targetClients.push({targetClient: client})
-                }
-              }
               self.$http.post('/base/message/' + self.id + '/send', _form)
                 .then(function (response) {
-                  self.$message.info('消息发送成功')
+                  self.$message.success('消息发送成功')
                   self.addLoading = false
                 })
                 .catch(function (error) {
@@ -128,37 +190,36 @@
       },
       resetForm () {
         this.$refs['form'].resetFields()
+        this.form.targetValues = null
+        this.$set(this.form, 'vSendFormDtos', [])
       }
     },
     computed: {
-      showPublicPlatform () {
-        if (this.form.targetClients && this.form.targetClients.length > 0) {
-          for (let i = 0; i < this.form.targetClients.length; i++) {
-            if (this.form.targetClients[i] === 'wx_platform') {
-              return true
+      clientTargetDisable () {
+        if (this.clientSelectedItems) {
+          for (let i = 0; i < this.clientSelectedItems.length; i++) {
+            if (this.clientSelectedItems[i].isVirtual === 'N') {
+              return false
             }
           }
         }
-        return false
-      },
-      showMiniProgram () {
-        if (this.form.targetClients && this.form.targetClients.length > 0) {
-          for (let i = 0; i < this.form.targetClients.length; i++) {
-            if (this.form.targetClients[i] === 'wx_miniprogram') {
-              return true
-            }
-          }
-        }
-        return false
+        this.form.targetType = null
+        this.form.targetValues = null
+        return true
       }
     },
     watch: {
+      'form.targetType' () {
+        this.form.targetValues = null
+      }
     },
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
         if (vm.id !== vm.$route.params.id) {
           vm.id = vm.$route.params.id
+          vm.templateId = vm.$route.query.templateId
+          vm.resetForm()
         }
       })
     }
@@ -169,5 +230,7 @@
 <style scoped>
 .wrapper{
   padding:1.5rem;
+  height: 100%;
+  overflow-y: auto;
 }
 </style>

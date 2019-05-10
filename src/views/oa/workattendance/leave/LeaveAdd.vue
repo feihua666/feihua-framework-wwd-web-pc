@@ -74,7 +74,7 @@
               self.addLoading = true
               self.$http.post('/oa/workattendance/leave', self.form)
                 .then(function (response) {
-                  self.$message.info('请假单添加成功')
+                  self.$message.success('请假单添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

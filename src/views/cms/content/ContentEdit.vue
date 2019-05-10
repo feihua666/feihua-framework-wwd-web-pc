@@ -562,7 +562,7 @@
               self.addLoading = true
               self.$http.put('/cms/content/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('内容修改成功')
+                  self.$message.success('内容修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

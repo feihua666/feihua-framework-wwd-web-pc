@@ -54,7 +54,7 @@
         loading: false,
         form: {
           loginType: 'ACCOUNT',
-          loginClient: 'pc',
+          client: this.$config.client,
           principal: null,
           password: null,
           captcha: null,

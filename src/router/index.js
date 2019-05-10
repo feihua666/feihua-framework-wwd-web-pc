@@ -132,6 +132,12 @@ const router = new Router({
           meta: { menu: {name: '用户修改'}, keepAlive: true }
         },
         {
+          path: 'UserDetail/:id',
+          name: 'UserDetail',
+          component: _import('user/UserDetail'),
+          meta: { menu: {name: '用户详情'}, keepAlive: true }
+        },
+        {
           path: 'UserBindDataScope/:userId',
           name: 'UserBindDataScope',
           component: _import('user/UserBindDataScope'),
@@ -317,6 +323,11 @@ const router = new Router({
           name: 'CalendarView',
           component: _import('calendar/CalendarView')
         },
+        {
+          path: 'calendar/Scheduling',
+          name: 'Scheduling',
+          component: _import('calendar/Scheduling')
+        },
         // 消息相关
         {
           path: 'BaseLog',
@@ -359,6 +370,12 @@ const router = new Router({
           meta: { menu: {name: '消息模板修改'}, keepAlive: true }
         },
         {
+          path: 'MessageTemplateThirdBind/:id',
+          name: 'MessageTemplateThirdBind',
+          component: _import('message/messageTemplate/MessageTemplateThirdBind'),
+          meta: { menu: {name: '绑定三方模板'}, keepAlive: true }
+        },
+        {
           path: 'ViewReadPeople/:id',
           name: 'ViewReadPeople',
           component: _import('message/ViewReadPeople'),
@@ -371,10 +388,33 @@ const router = new Router({
           meta: { menu: {name: '消息发送'}, keepAlive: true }
         },
         {
+          path: 'NewMessageSend',
+          name: 'NewMessageSend',
+          component: _import('message/NewMessageSend'),
+          meta: { menu: {name: '新消息发送'}, keepAlive: true }
+        },
+        {
           path: 'MyMessage',
           name: 'MyMessage',
           component: _import('message/MyMessage'),
           meta: { menu: {name: '我的消息'}, keepAlive: true }
+        },
+        {
+          path: 'MessageClient',
+          name: 'MessageClient',
+          component: _import('message/messageClient/MessageClient')
+        },
+        {
+          path: 'MessageClientAdd',
+          name: 'MessageClientAdd',
+          component: _import('message/messageClient/MessageClientAdd'),
+          meta: { menu: {name: '客户端消息配置添加'}, keepAlive: true }
+        },
+        {
+          path: 'MessageClientEdit/:id',
+          name: 'MessageClientEdit',
+          component: _import('message/messageClient/MessageClientEdit'),
+          meta: { menu: {name: '客户端消息配置修改'}, keepAlive: true }
         },
         {
           path: 'Cms/Site',
@@ -536,6 +576,71 @@ const router = new Router({
           path: 'Wwd/ActivityOrder',
           name: 'WwdActivityOrder',
           component: _import('wwd/activity/WwdActivityOrder')
+        },
+        {
+          path: 'LoginClient',
+          name: 'LoginClient',
+          component: _import('loginclient/LoginClient')
+        },
+        {
+          path: 'LoginClientAdd',
+          name: 'LoginClientAdd',
+          component: _import('loginclient/LoginClientAdd'),
+          meta: { menu: {name: '添加客户端'}, keepAlive: true }
+        },
+        {
+          path: 'LoginClientEdit/:id',
+          name: 'LoginClientEdit',
+          component: _import('loginclient/LoginClientEdit'),
+          meta: { menu: {name: '编辑客户端'}, keepAlive: true }
+        },
+        {
+          path: 'LoginClientChannelBind/:id',
+          name: 'LoginClientChannelBind',
+          component: _import('loginclient/LoginClientChannelBind'),
+          meta: { menu: {name: '设置渠道'}, keepAlive: true }
+        },
+        // 以下为统计相关
+        {
+          path: 'Statistic/UserStatistic',
+          name: 'UserStatistic',
+          component: _import('statistic/user/UserStatistic')
+        },
+        // 以下为任务计划
+        {
+          path: 'Scheduler',
+          name: 'Scheduler',
+          component: _import('scheduler/Scheduler')
+        },
+        {
+          path: 'SchedulerAdd',
+          name: 'SchedulerAdd',
+          component: _import('scheduler/SchedulerAdd'),
+          meta: { menu: {name: '计划任务添加'}, keepAlive: true }
+        },
+        {
+          path: 'SchedulerEdit/:id',
+          name: 'SchedulerEdit',
+          component: _import('scheduler/SchedulerEdit'),
+          meta: { menu: {name: '计划任务修改'}, keepAlive: true }
+        },
+        {
+          path: 'SchedulerOrigin',
+          name: 'SchedulerOrigin',
+          component: _import('scheduler/SchedulerOrigin'),
+          meta: { menu: {name: '计划任务脱管管理'}, keepAlive: true }
+        },
+        {
+          path: 'SchedulerEditTriggerTime/:id',
+          name: 'SchedulerEditTriggerTime',
+          component: _import('scheduler/SchedulerEditTriggerTime'),
+          meta: { menu: {name: '修改任务执行时间'}, keepAlive: true }
+        },
+        {
+          path: 'SchedulerExcuteRecord/:id',
+          name: 'SchedulerExcuteRecord',
+          component: _import('scheduler/SchedulerExcuteRecord'),
+          meta: { menu: {name: '任务执行详情'}, keepAlive: true }
         }
       ]
     }

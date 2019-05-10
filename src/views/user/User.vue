@@ -76,6 +76,7 @@
           {
             name: 'gender',
             label: '性别',
+            width: '50',
             dict: 'gender'
           },
           {
@@ -89,7 +90,7 @@
           },
           {
             label: '操作',
-            width: '270',
+            width: '320',
             buttons: [
               {
                 label: '编辑',
@@ -102,6 +103,10 @@
               {
                 label: '绑定数据范围',
                 click: this.bindDataScope
+              },
+              {
+                label: '用户详情',
+                click: this.userDetail
               },
               {
                 label: '删除',
@@ -197,7 +202,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/user/' + row.id)
+          self.$http.delete('/base/user/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -220,6 +225,9 @@
       },
       bindDataScope (index, row) {
         this.$router.push('/Main/UserBindDataScope/' + row.id)
+      },
+      userDetail (index, row) {
+        this.$router.push('/Main/UserDetail/' + row.id)
       }
     },
     watch: {

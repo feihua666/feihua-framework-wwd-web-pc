@@ -96,7 +96,7 @@
               self.addLoading = true
               self.$http.post('/base/dict', self.form)
                 .then(function (response) {
-                  self.$message.info('字典添加成功')
+                  self.$message.success('字典添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

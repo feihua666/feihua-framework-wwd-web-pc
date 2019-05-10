@@ -140,7 +140,7 @@
               survey.updateTime = self.form.updateAt
               self.$http.putJson('/cms/survey/' + self.id, survey)
                 .then(function (response) {
-                  self.$message.info('调查修改成功')
+                  self.$message.success('调查修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

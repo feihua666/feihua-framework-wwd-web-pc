@@ -152,11 +152,12 @@
       myMessageClick () {
         this.$router.push('/Main/MyMessage')
       },
+      // 5分钟拉取一次消息 300000 = 1000 * 60 * 5
       getMessageNumInterval () {
         let self = this
         setInterval(() => {
           self.getMessageNum()
-        }, 60000)
+        }, 300000)
       },
       getMessageNum () {
         let self = this

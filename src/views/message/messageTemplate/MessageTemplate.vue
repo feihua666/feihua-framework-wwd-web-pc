@@ -6,10 +6,10 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="名称">
+              <el-form-item label="模板名称">
                 <el-input  v-model="searchFormModel.name"></el-input>
               </el-form-item>
-              <el-form-item label="编码">
+              <el-form-item label="模板编码">
                 <el-input  v-model="searchFormModel.code"></el-input>
               </el-form-item>
               <el-form-item>
@@ -42,15 +42,33 @@
         columns: [
           {
             name: 'name',
-            label: '名称'
+            label: '模板名称'
           },
           {
             name: 'code',
-            label: '编码'
+            label: '模板编码'
+          },
+          {
+            name: 'title',
+            label: '消息标题'
+          },
+          {
+            name: 'profile',
+            label: '消息简介'
           },
           {
             name: 'content',
-            label: '内容'
+            label: '消息内容'
+          },
+          {
+            name: 'msgType',
+            label: '消息分类',
+            dict: 'message_type'
+          },
+          {
+            name: 'msgLevel',
+            label: '消息紧急度',
+            dict: 'message_level'
           },
           {
             label: '操作',
@@ -63,6 +81,10 @@
               {
                 label: '删除',
                 click: this.deleteTableRowClick
+              },
+              {
+                label: '绑定三方模板',
+                click: this.bindThirdTemplate
               }
             ]
           }
@@ -132,7 +154,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/message/template/' + row.id)
+          self.$http.delete('/base/message/template/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -148,6 +170,9 @@
       addTableRowClick () {
         this.$utils.loadDataControl.add('MessageTemplateAddLoadData=true')
         this.$router.push('/Main/MessageTemplateAdd')
+      },
+      bindThirdTemplate (index, row) {
+        this.$router.push('/Main/MessageTemplateThirdBind/' + row.id)
       }
     },
     watch: {

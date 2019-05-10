@@ -10,6 +10,7 @@
            :filter-node-method="treeFilterNode"
            ref="tree"
            :show-checkbox="showCheckbox"
+           :check-strictly="checkStrictly"
            node-key="id"
            :expand-on-click-node="false" :default-expanded-keys="defaultExpandedKeys">
 
@@ -21,6 +22,10 @@
   export default {
     name: 'OfficeTree',
     props: {
+      // 在显示复选框的情况下，是否严格的遵循父子不互相关联的做法，默认为 false
+      checkStrictly: {
+        default: false
+      },
       loadData: {
         default: true
       },

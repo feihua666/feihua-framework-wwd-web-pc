@@ -1,6 +1,15 @@
 <template>
   <div class="wrapper">
     <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
+      <el-form-item label="消息模板" prop="messageTemplateId">
+        <MessageTemplateSelect v-model="form.messageTemplateId"  v-on:change="templateChange"></MessageTemplateSelect>
+        <div>可以使用模板来快速添加消息，如果要发送三方消息，如：微信公众号模板消息则必须使用绑定三方模板的消息模板</div>
+
+      </el-form-item>
+      <el-form-item v-if="form.templateParams" label="发送参数" prop="clientIds">
+        <el-input autosize type="textarea"  v-model="form.templateParams"></el-input>
+        <div>如果模板中配置了参数，请填写相关参数,发送参数只会在保存时替换，不会保存副本</div>
+      </el-form-item>
       <el-form-item label="标题" prop="title" required>
         <el-input  v-model="form.title"></el-input>
       </el-form-item>
@@ -8,7 +17,7 @@
         <el-input  v-model="form.profile"></el-input>
       </el-form-item>
       <el-form-item label="消息内容" prop="content" required>
-        <el-input type="textarea" v-model="form.content"></el-input>
+        <el-input autosize type="textarea" v-model="form.content"></el-input>
       </el-form-item>
       <el-form-item label="消息分类" prop="msgType">
         <self-dict-select v-model="form.msgType" type="message_type"></self-dict-select>
@@ -16,8 +25,11 @@
       <el-form-item label="消息紧急性" prop="msgLevel">
         <self-dict-select v-model="form.msgLevel" type="message_level"></self-dict-select>
       </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
+        <div>请注意,消息相关字段不支持额外参数(只支持模板中定义过的参数)</div>
+
       </el-form-item>
     </el-form>
   </div>
@@ -25,10 +37,13 @@
 
 <script>
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
+  import MessageTemplateSelect from '@/views/message/messageTemplate/MessageTemplateSelect'
+
   export default {
     name: 'MessageEdit',
     components: {
-      SelfDictSelect
+      SelfDictSelect,
+      MessageTemplateSelect
     },
     data () {
       return {
@@ -39,7 +54,10 @@
           profile: null,
           content: null,
           msgType: null,
-          msgLevel: null
+          msgLevel: null,
+          messageTemplateId: null,
+          templateParams: null,
+          updateTime: null
         },
         formDataLoading: false,
         addLoading: false,
@@ -67,6 +85,44 @@
       this.loadEditData(this.id)
     },
     methods: {
+      templateChange (templateId, templateObj) {
+        let title = ''
+        let profile = ''
+        let content = ''
+        let msgLevel = ''
+        let msgType = ''
+        if (templateObj) {
+          title = templateObj.title
+          profile = templateObj.profile
+          content = templateObj.content
+          msgLevel = templateObj.msgLevel
+          msgType = templateObj.msgType
+        }
+        this.form.title = title
+        this.form.profile = profile
+        this.form.content = content
+        this.form.msgLevel = msgLevel
+        this.form.msgType = msgType
+        // 加载模板参数
+        this.loadSendParams(templateId)
+      },
+      loadSendParams (templateId) {
+        let self = this
+        if (!templateId) {
+          self.form.templateParams = null
+          return
+        }
+
+        this.$http.get('/base/message/template/' + templateId + '/params')
+          .then(function (res) {
+            let content = res.data.data.content
+            let json = {}
+            for (let i = 0; i < content.length; i++) {
+              json[content[i]] = ''
+            }
+            self.form.templateParams = JSON.stringify(json, null, 2)
+          })
+      },
       loadEditData (id) {
         this.resetForm()
         let self = this
@@ -79,7 +135,9 @@
             self.form.content = content.content
             self.form.msgType = content.msgType
             self.form.msgLevel = content.msgLevel
+            self.form.messageTemplateId = content.messageTemplateId
             self.form.updateTime = content.updateAt
+            self.loadSendParams(content.messageTemplateId)
             self.formDataLoading = false
           })
           .catch(function (response) {
@@ -95,7 +153,7 @@
               self.addLoading = true
               self.$http.put('/base/message/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('消息修改成功')
+                  self.$message.success('消息修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

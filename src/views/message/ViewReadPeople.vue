@@ -40,12 +40,20 @@
         columns: [
           {
             name: 'nickname',
-            label: '名称'
+            label: '用户名'
           },
           {
             name: 'isRead',
             label: '是否已读',
             dict: 'yes_no'
+          },
+          {
+            name: 'readTime',
+            label: '读取时间'
+          },
+          {
+            name: 'readClientName',
+            label: '读取客户端'
           }
         ],
         page: {
@@ -54,6 +62,7 @@
         // 表格数据
         tableData: [],
         users: [],
+        clients: [],
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
@@ -75,9 +84,13 @@
           for (let i = 0; i < length; i++) {
             let tableItem = this.tableData[i]
             let userItem = this.uersMap[tableItem.userId]
+            let clientItem = this.clientMap[tableItem.readClientId]
+            console.log(clientItem)
             realTableData.push({
               nickname: userItem ? userItem.nickname : null,
-              isRead: this.tableData[i].isRead
+              isRead: this.tableData[i].isRead,
+              readTime: this.tableData[i].readTime,
+              readClientName: clientItem ? clientItem.clientName : null
             })
           }
         }
@@ -89,6 +102,16 @@
           let length = this.users.length
           for (let i = 0; i < length; i++) {
             r[this.users[i].id] = this.users[i]
+          }
+        }
+        return r
+      },
+      clientMap () {
+        let r = {}
+        if (this.clients) {
+          let length = this.clients.length
+          for (let i = 0; i < length; i++) {
+            r[this.clients[i].id] = this.clients[i]
           }
         }
         return r
@@ -113,8 +136,10 @@
           .then(function (response) {
             let content = response.data.data.content
             let users = response.data.data.users
+            let clients = response.data.data.clients
             self.tableData = content
             self.users = users
+            self.clients = clients
             self.page.dataNum = response.data.data.page.dataNum
             self.tableLoading = false
           })

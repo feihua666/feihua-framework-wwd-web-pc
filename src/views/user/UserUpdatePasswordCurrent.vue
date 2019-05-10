@@ -77,7 +77,7 @@
             self.formDataLoading = true
             self.$http.put('/base/user/password/current', self.form)
               .then(function (response) {
-                self.$message.info('密码修改成功')
+                self.$message.success('密码修改成功')
                 self.formDataLoading = false
                 self.hide()
               })

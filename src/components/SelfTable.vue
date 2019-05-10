@@ -4,7 +4,26 @@
              border stripe
      size="mini"
      style="width: 100%" :data="mytableData">
-     <template  v-for="item in columns">
+     <template  v-for="(item, index) in columns">
+       <el-table-column :type="item.type" v-if="item.type == 'index'" :prop="item.name" :label="item.label" :key="index" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
+       </el-table-column>
+       <el-table-column :type="item.type" v-else-if="item.type == 'selection'" :prop="item.name" :label="item.label" :key="index" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
+       </el-table-column>
+       <el-table-column :type="item.type" v-else-if="item.type == 'expand'" :prop="item.name" :label="item.label" :key="index" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
+         <template slot-scope="scope">
+           <el-form label-position="left" inline class="fh-table-expand">
+             <el-form-item v-for="(iitem, index) in columns" v-if="iitem.type !== 'expand' && iitem.type !== 'index' && iitem.type !== 'selection' && iitem.showInExpand !==false && !iitem.buttons" :label="iitem.label" :key="index">
+               <span v-if="iitem.html" v-html="iitem.html(scope.$index,scope.row)"></span>
+               <template v-else>
+                 <span>{{iitem.formatter ? iitem.formatter(scope.row) : (iitem.dict ? scope.row[iitem.dict + '' + scope.$index] ?scope.row[iitem.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,iitem) : $utils.dGetValue(scope.row, iitem.name))}}</span>
+               </template>
+             </el-form-item>
+           </el-form>
+         </template>
+       </el-table-column>
+       <template v-else>
+
+         <template  v-if="item.showInTable !== false">
        <el-table-column  v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
          <template slot-scope="scope">
            <el-button v-for="btn in item.buttons"  :key="scope.$index"
@@ -50,6 +69,8 @@
        </el-table-column>
        <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
        </el-table-column>
+         </template>
+       </template>
      </template>
 
    </el-table>
@@ -155,10 +176,10 @@
         }
       },
       getImage (row, item) {
-        let self = this
-        let url = self.$utils.dGetValue(row, item.name)
-        if (url) {
-          url = this.$config.file.getDownloadUrl(url)
+        let url = null
+        let value = this.$utils.dGetValue(row, item.name)
+        if (value) {
+          url = this.$config.file.getDownloadUrl(value)
         } else {
           url = require('@/assets/index/headPic.jpg')
         }
@@ -172,5 +193,16 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .fh-table-expand {
+    font-size: 0;
+  }
+  .fh-table-expand label {
+    width: 90px;
+    color: #99a9bf;
+  }
+  .fh-table-expand .el-form-item {
+    margin-right: 0;
+    margin-bottom: 0;
+    width: 50%;
+  }
 </style>

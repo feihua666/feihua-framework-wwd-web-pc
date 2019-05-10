@@ -175,7 +175,7 @@
               self.addLoading = true
               self.$http.put('/weixinmenu/menu/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('微信菜单修改成功')
+                  self.$message.success('微信菜单修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

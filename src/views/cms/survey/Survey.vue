@@ -274,7 +274,7 @@
               self.addLoading = true
               self.$http.put('/cms/survey/publish', self.surveyForm)
                 .then(function (response) {
-                  self.$message.info('调查发布状态修改成功')
+                  self.$message.success('调查发布状态修改成功')
                   self.addLoading = false
                   self.rowDialogVisible = false
                   self.searchBtnClick()
@@ -322,7 +322,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/cms/survey/' + row.id)
+          self.$http.delete('/cms/survey/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据

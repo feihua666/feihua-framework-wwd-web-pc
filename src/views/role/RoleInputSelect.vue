@@ -5,7 +5,7 @@
       placement="right"
       trigger="click">
       <el-scrollbar wrapStyle="max-height:500px;">
-        <RoleTree v-on:nodeClick="treeNodeClick" :loadData="false"></RoleTree>
+        <RoleTree v-on:nodeClick="treeNodeClick"></RoleTree>
       </el-scrollbar>
     </el-popover>
     <el-input style="display: none;" value="" v-model="model">

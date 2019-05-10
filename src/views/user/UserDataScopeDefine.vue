@@ -71,7 +71,7 @@
         self.addLoading = true
         this.$http.post('/base/dataScope/' + this.dataScopeId + '/userDataScope/define', this.form)
           .then(reponse => {
-            self.$message.info('用户数据范围定义设置成功')
+            self.$message.success('用户数据范围定义设置成功')
             self.addLoading = false
           }).catch(function (response) {
             self.$message.error('用户数据范围定义设置失败，请稍后再试')

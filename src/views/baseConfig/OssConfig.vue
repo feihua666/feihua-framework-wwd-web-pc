@@ -235,7 +235,7 @@
               self.addLoading = true
               self.$http.putJson('/base/config/saveOssConfig/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('配置保存成功')
+                  self.$message.success('配置保存成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

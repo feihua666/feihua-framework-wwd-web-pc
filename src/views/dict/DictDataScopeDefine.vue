@@ -71,7 +71,7 @@
         self.addLoading = true
         this.$http.post('/base/dataScope/' + this.dataScopeId + '/dictDataScope/define', this.form)
           .then(reponse => {
-            self.$message.info('字典数据范围定义设置成功')
+            self.$message.success('字典数据范围定义设置成功')
             self.addLoading = false
           }).catch(function (response) {
             self.$message.error('字典数据范围定义设置失败，请稍后再试')

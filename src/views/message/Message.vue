@@ -18,6 +18,7 @@
               <el-form-item>
                 <el-button type="primary" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" @click="addTableRowClick">添加</el-button>
+                <el-button type="primary" @click="sendNewMessage">发送新消息</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -56,10 +57,6 @@
             label: '内容'
           },
           {
-            name: 'predictNum',
-            label: '预计人数'
-          },
-          {
             name: 'msgType',
             label: '消息分类',
             dict: 'message_type'
@@ -78,16 +75,16 @@
                 click: this.viewReadPeopleClick
               },
               {
+                label: '删除',
+                click: this.deleteTableRowClick
+              },
+              {
                 label: '发送消息',
                 click: this.sendMessageClick
               },
               {
                 label: '编辑',
                 click: this.editTableRowClick
-              },
-              {
-                label: '删除',
-                click: this.deleteTableRowClick
               },
               {
                 label: '复制消息',
@@ -167,7 +164,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/message/' + row.id)
+          self.$http.delete('/base/message/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -203,13 +200,13 @@
         this.$utils.loadDataControl.add('MessageAddLoadData=true')
         this.$router.push('/Main/MessageAdd')
       },
-      // 发送消息
+      // 发送已存在的消息
       sendMessageClick (index, row) {
         if (row.msgState !== 'to_be_sended') {
           this.$message.error('消息状态不符合发送要求，请刷新数据再试')
         } else {
           this.$utils.loadDataControl.add('MessageSendLoadData=true')
-          this.$router.push('/Main/MessageSend/' + row.id)
+          this.$router.push('/Main/MessageSend/' + row.id + '?templateId=' + row.messageTemplateId)
         }
       },
       // 查看已读人员
@@ -220,6 +217,9 @@
         } else {
           this.$router.push('/Main/ViewReadPeople/' + row.id)
         }
+      },
+      sendNewMessage () {
+        this.$router.push('/Main/NewMessageSend')
       }
     },
     watch: {

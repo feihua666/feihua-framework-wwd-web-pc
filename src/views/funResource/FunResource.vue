@@ -198,7 +198,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/functionResource/' + row.id)
+          self.$http.delete('/base/functionResource/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
@@ -217,7 +217,7 @@
         this.$confirm('确定要强制删除吗,当前节点及子孙节点都会被删除, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/base/functionResource/' + row.id + '/force')
+          self.$http.delete('/base/functionResource/' + row.id + '/force')
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据

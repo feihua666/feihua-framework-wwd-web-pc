@@ -85,7 +85,7 @@
               self.addLoading = true
               self.$http.post('/base/calendarextend', self.form)
                 .then(function (response) {
-                  self.$message.info('日历扩展添加成功')
+                  self.$message.success('日历扩展添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

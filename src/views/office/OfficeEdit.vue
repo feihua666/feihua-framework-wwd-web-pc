@@ -94,7 +94,7 @@
               self.addLoading = true
               self.$http.put('/base/office/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('机构修改成功')
+                  self.$message.success('机构修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

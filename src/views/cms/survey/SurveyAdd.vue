@@ -110,7 +110,7 @@
 
               self.$http.postJson('/cms/survey', survey)
                 .then(function (response) {
-                  self.$message.info('调查添加成功')
+                  self.$message.success('调查添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
