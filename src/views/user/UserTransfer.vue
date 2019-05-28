@@ -6,6 +6,7 @@
     v-model="valueData"
     :data="leftData"
     v-on:change="change"
+    v-loading="dataloading"
   >
   </el-transfer>
 </template>
@@ -22,6 +23,7 @@
     },
     data () {
       return {
+        dataloading: false,
         leftData: [],
         valueData: []
       }
@@ -34,6 +36,7 @@
     methods: {
       loadUserData () {
         let self = this
+        self.dataloading = true
         this.$http.get('/base/users')
           .then(function (response) {
             let content = response.data.data.content
@@ -45,6 +48,9 @@
               })
             }
             self.leftData = tempLeftData
+            self.dataloading = false
+          }).catch(function () {
+            self.dataloading = false
           })
       },
       change (a, b, c) {
