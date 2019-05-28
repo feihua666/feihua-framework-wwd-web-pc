@@ -24,7 +24,7 @@ const config = {
     }
   },
   // 这里后端会加客户端配置
-  loginClient: 'pc',
+  client: 'pc',
   // 百度地图ak
   bMapAk: '69a5a1e7260cd2cd298c33666e436530',
   // 页面向导配置
