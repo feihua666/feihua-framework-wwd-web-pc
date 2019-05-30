@@ -606,6 +606,16 @@ const router = new Router({
           name: 'UserStatistic',
           component: _import('statistic/user/UserStatistic')
         },
+        {
+          path: 'Statistic/PageShare',
+          name: 'PageShare',
+          component: _import('statistic/page/share/PageShare')
+        },
+        {
+          path: 'Statistic/PageView',
+          name: 'PageView',
+          component: _import('statistic/page/view/PageView')
+        },
         // 以下为任务计划
         {
           path: 'Scheduler',
