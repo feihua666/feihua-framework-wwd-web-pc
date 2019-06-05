@@ -1,7 +1,6 @@
 <template>
 
-  <div class="wrapper">
-    <el-container>
+  <el-container class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -13,20 +12,19 @@
                 <self-dict-select v-model="searchFormModel.type" type="upload_download_type"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button @click="resetFormClick">重置</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
                 <file-upload style="display: inline-block" ref="fileupload" trigger-btn-text="上传" :limit="1" :upload-btn-show="false" :show-file-list="false" :auto-upload="true" list-type="text" :on-success="fileUploadSucess"></file-upload>
+                <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
         </el-collapse>
         <self-table  @sortChange="sortChange" :default-sort="defaultSort" :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
-    </el-container>
-
 
     <file-download-dialog ref="filedownload"></file-download-dialog>
-  </div>
+    </el-container>
+
 </template>
 
 <script>
@@ -81,14 +79,20 @@
             buttons: [
               {
                 label: '修改名称',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.updateName
               },
               {
                 label: '下载',
+                styleType: 'primary',
+                icon: 'el-icon-arrow-down',
                 click: this.downloadFile
               },
               {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               }
             ]
@@ -223,22 +227,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
+
 </style>

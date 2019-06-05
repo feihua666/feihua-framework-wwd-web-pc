@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
       <el-form-item label="模板名称" prop="name">
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
@@ -25,7 +25,7 @@
         只对非虚拟客户端有效，如果绑定了三方模板，且三方支持则三方也有效
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addBtnClick" :loading="addLoading">添加</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="addBtnClick" :loading="addLoading">添加</el-button>
         <div>如果要发第三方的模板消息，请添加完成后再绑定三方消息模板</div>
       </el-form-item>
     </el-form>
@@ -124,7 +124,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-  padding:1.5rem;
-}
+
 </style>

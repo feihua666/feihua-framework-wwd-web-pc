@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" label-width="150px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" label-width="150px" v-loading="formDataLoading">
       <el-form-item label="标题" prop="title" required>
         <el-input  v-model="form.title"></el-input>
       </el-form-item>
@@ -367,7 +367,7 @@
         </el-form-item>
       </template>
       <el-form-item>
-        <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">修改</el-button>
       </el-form-item>
     </el-form>
     <file-upload ref="coverImageUpload" :on-success="coverImageUploadSuccess" :data="{path: 'cmsContent'}" accept="image/gif, image/jpeg, image/png" :limit="1" title="封面图片"></file-upload>
@@ -866,11 +866,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    padding:1.5rem;
-    overflow: auto;
-    height: 100%;
-  }
   .my-image-preview{
     width:150px;
     height: 150px;

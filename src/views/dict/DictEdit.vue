@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
       <el-form-item label="字典值" prop="value" required>
         <el-input  v-model="form.value"></el-input>
       </el-form-item>
@@ -35,7 +35,7 @@
         </AreaInputSelect>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">修改</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -172,9 +172,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    padding:1.5rem;
-    overflow: auto;
-    height: 100%;
-  }
 </style>

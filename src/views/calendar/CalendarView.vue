@@ -1,6 +1,6 @@
 <template>
- <div>
-   <self-calendar></self-calendar>
+  <div class="fh-page-wrapper">
+   <self-calendar class="fh-background-white fh-padding-30"></self-calendar>
  </div>
 </template>
 

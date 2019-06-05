@@ -190,6 +190,12 @@ export function getDictsByType (type) {
         params: {orderby: 'sequence', t: new Date().getTime() + Math.random()}
       }).then(response => {
         let content = response.data.data.content
+        let dictTypes = type.split(',')
+        if (dictTypes.length > 0) {
+          for (let dictType in content) {
+            cacheDict[dictType] = content[dictType]
+          }
+        }
         cacheDict[type] = content
         resolve(content)
       }).catch(err => {

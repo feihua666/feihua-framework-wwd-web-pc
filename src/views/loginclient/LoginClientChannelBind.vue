@@ -1,5 +1,5 @@
 <template>
-    <div class="wrapper">
+  <div class="fh-page-wrapper">
         <el-form ref="form" :model="form" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
           <el-form-item label="微信公众平台">
             <WeixinAccountSelect v-model="form.weixinPublicplatformAccoutId" ></WeixinAccountSelect>
@@ -8,7 +8,7 @@
             <WeixinAccountSelect v-model="form.weixinMiniprogramAccoutId" :miniprogram="true"></WeixinAccountSelect>
           </el-form-item>
             <el-form-item>
-                <el-button type="primary" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
+                <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
               <div>渠道只能绑定一个，渠道的意思是该客户端是通过什么三方访问的，比如是微信公众号里用微信授权登录</div>
             </el-form-item>
         </el-form>
@@ -105,7 +105,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wrapper{
-        padding:1.5rem;
-    }
 </style>

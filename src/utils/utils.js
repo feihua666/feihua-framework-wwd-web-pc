@@ -51,15 +51,19 @@ const removeLoadDataControl = function (value) {
 }
 // 深度获取对象属性，attr支持点，如：a.b.c
 const dGetValue = function (obj, attr) {
-  let value = obj
-  let key = attr.split('.')
-  for (let i = 0; i < key.length; i++) {
-    value = value[key[i]]
-    if (value == null || value === undefined) {
-      return null
+  if (attr) {
+    let value = obj
+    let key = attr.split('.')
+    for (let i = 0; i < key.length; i++) {
+      value = value[key[i]]
+      if (value == null || value === undefined) {
+        return null
+      }
     }
+    return value
   }
-  return value
+
+  return attr
 }
 // 转换成blob
 let getObjectURL = function (file) {

@@ -1,6 +1,6 @@
 <template>
-    <div class="wrapper">
-        <el-form ref="form" :model="form" style="width: 660px;" label-width="200px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" style="width: 660px;" label-width="200px" v-loading="formDataLoading">
           <template v-for="(item, index) in form.weixinPublicPlatforms">
             <el-form-item :label="'微信公众号' + index">
               <WeixinAccountSelect v-model="item.weixinPublicplatformAccoutId" ></WeixinAccountSelect>
@@ -27,7 +27,7 @@
           </template>
 
             <el-form-item>
-              <el-button type="primary" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
+              <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">绑定</el-button>
               <el-button @click="addWeixinPublicplatform">新增微信公众号</el-button>
               <el-button @click="addWeixinMiniprogram">新增微信小程序</el-button>
               <div>如果不选择三方模板，视为删除先前绑定的三方模板，只填写模板内容无效，请谨慎操作</div>
@@ -155,7 +155,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wrapper{
-        padding:1.5rem;
-    }
+
 </style>

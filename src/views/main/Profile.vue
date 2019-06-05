@@ -17,6 +17,7 @@
             </span>
             <el-dropdown-menu slot="dropdown">
               <el-dropdown-item command="updatePassword">修改密码</el-dropdown-item>
+              <el-dropdown-item command="showFileUpload">修改头像</el-dropdown-item>
               <el-dropdown-item command="logout">退出</el-dropdown-item>
             </el-dropdown-menu>
           </el-dropdown>
@@ -186,10 +187,11 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .head-pic{
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     border: none;
     border-radius: 50%;
+    margin-top: 3px;
   }
   .head-pic:hover{
     cursor: pointer;

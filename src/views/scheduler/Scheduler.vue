@@ -1,7 +1,6 @@
 <template>
 
-    <div class="wrapper">
-      <el-container>
+  <el-container  class="fh-page-wrapper">
         <el-main>
           <el-collapse value="1">
             <el-collapse-item title="查询条件" name="1">
@@ -26,9 +25,9 @@
                   <el-input  v-model="searchFormModel.triggerGroup"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                  <el-button type="primary" @click="addTableRowClick">添加</el-button>
-                  <el-button type="primary" @click="viewSchedulerOrigin">查看脱管列表</el-button>
+                  <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                  <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
+                  <el-button type="primary" icon="el-icon-search" @click="viewSchedulerOrigin">查看脱管列表</el-button>
                 </el-form-item>
               </el-form>
             </el-collapse-item>
@@ -38,7 +37,6 @@
         </el-main>
       </el-container>
 
-    </div>
 </template>
 
 <script>
@@ -117,47 +115,63 @@
           },
           {
             label: '操作',
-            width: 500,
+            width: '600',
             buttons: [
               {
                 label: '编辑',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.editTableRowClick,
                 disabled: this.editBtnDisabled
               },
               {
                 label: '修改执行时间',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 click: this.editTriggerTime,
                 disabled: this.editTriggerTimeBtnDisabled
               },
               {
-                label: '删除',
-                click: this.deleteTableRowClick,
-                disabled: this.deleteBtnDisabled
-              },
-              {
                 label: '发布',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 click: this.publish,
                 disabled: this.publishBtnDisabled
               },
               {
                 label: '取消发布',
                 click: this.remove,
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 disabled: this.removeBtnDisabled
               },
               {
                 label: '暂停',
                 click: this.pause,
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 disabled: this.pauseBtnDisabled
               },
               {
                 label: '恢复',
                 click: this.resume,
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 disabled: this.resumeBtnDisabled
               },
               {
                 label: '查看执行记录',
+                styleType: 'primary',
+                icon: 'el-icon-search',
                 click: this.viewExcuteRecord,
                 disabled: this.viewExcuteRecordBtnDisabled
+              },
+              {
+                label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
+                click: this.deleteTableRowClick,
+                disabled: this.deleteBtnDisabled
               }
             ]
           }
@@ -366,16 +380,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wrapper .el-collapse{
-        padding: 0 10px;
-    }
-    .el-main{
-        padding:0;
-    }
-    .el-aside{
-        border-right: 1px solid #e6ebf5;
-    }
-    .wrapper,.el-container{
-        height:100%;
-    }
+
 </style>

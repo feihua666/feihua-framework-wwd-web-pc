@@ -65,10 +65,6 @@
   height: 18px;
   text-align: center;
 }
-  .glyphicon,.el-submenu [class^="el-icon-"],.el-menu-item [class^="el-icon-"]{
-    color: #f2f2f2;
-  }
-
   .el-menu--collapse  .el-menu-item span, .el-menu--collapse  .el-submenu  .el-submenu__title span {
     height: 0;
     width: 0;
@@ -83,7 +79,12 @@
     height: 40px !important;
     line-height: 40px !important
   }
-
+  .index-aside-menu .el-submenu__title i,.index-aside-menu .el-menu-item i{
+    color: #A7B1C2;
+  }
+  .index-aside-menu .el-menu-item.is-active i {
+    color: inherit;
+  }
   .el-menu--collapse .index-aside-menu  .el-menu-item .el-submenu__icon-arrow,.el-menu--collapse .index-aside-menu   .el-submenu  .el-submenu__title .el-submenu__icon-arrow {
     display: none;
   }

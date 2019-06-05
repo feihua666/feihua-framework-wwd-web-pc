@@ -1,6 +1,5 @@
 <template>
-  <div class="wrapper">
-    <el-container>
+  <el-container class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -9,19 +8,19 @@
                 <self-dict-select v-model="searchFormModel.category" type="activity_process_category"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="deployBtnClick">部署</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="deployBtnClick">部署</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
         </el-collapse>
         <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
-    </el-container>
+
 
     <category-dialog :submit-click="setCategorySubmit" ref="categorydialog"></category-dialog>
     <deploy-dialog ref="deploydialog"></deploy-dialog>
-  </div>
+  </el-container>
 </template>
 
 <script>
@@ -78,19 +77,27 @@
             buttons: [
               {
                 label: '设置分类',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 click: this.setCategaryClick
               },
               // 激活或挂起
               {
                 label: this.activeOrSuspendLabelClick,
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 click: this.activeOrSuspendClick
               },
               {
                 label: '转换为模型',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 click: this.convertToModelClick
               },
               {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               }
             ]
@@ -241,10 +248,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-  .el-main{
-    padding:0;
-  }
 </style>

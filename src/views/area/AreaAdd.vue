@@ -1,11 +1,10 @@
 <template>
-  <div class="wrapper">
-
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="名称" prop="name" required>
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
+      <el-form-item label="名称" prop="name">
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="类型" prop="type" required>
+      <el-form-item label="类型" prop="type">
         <self-dict-select v-model="form.type" type="area_type"></self-dict-select>
       </el-form-item>
       <el-form-item label="父级" prop="parentId">
@@ -16,7 +15,7 @@
         <el-input-number v-model="form.sequence" :min="0" :max="1000" controls-position="right"></el-input-number>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addBtnClick" :loading="addLoading">添加</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="addBtnClick" :loading="addLoading">添加</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -97,9 +96,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-  padding:1.5rem;
-  overflow: auto;
-  height: 100%;
-}
+
 </style>

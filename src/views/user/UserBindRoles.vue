@@ -1,7 +1,9 @@
 <template>
-  <div>
-  <role-tree ref="roletree" :show-checkbox="true"></role-tree>
-    <el-button type="primary" size="small" @click="userBindRolesDoBtnClick" :loading="submitLoading" style="margin: 2rem 5rem;">提交</el-button>
+  <div class="fh-page-wrapper">
+    <div class="fh-background-white" style="width: 500px;">
+      <role-tree ref="roletree" :show-checkbox="true"></role-tree>
+      <el-button type="primary" size="small" @click="userBindRolesDoBtnClick" :loading="submitLoading" style="margin: 2rem 5rem;">提交</el-button>
+    </div>
   </div>
 </template>
 

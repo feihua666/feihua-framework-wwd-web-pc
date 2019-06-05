@@ -1,7 +1,7 @@
 <template>
 
- <div class="wrapper">
-   <el-collapse v-model="activeNames" style="margin: 30px;">
+ <div class="fh-page-wrapper">
+   <el-collapse v-model="activeNames">
      <el-collapse-item title="头像" name="1">
        <img class="personal-head-pic" :src="headPic"/>
      </el-collapse-item>
@@ -201,14 +201,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    height:100%;
-    overflow: auto;
-  }
 </style>
-<style>
-  .el-collapse-item__arrow {
-    /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-    margin-right: 20px;
-  }
-</style>
+

@@ -1,82 +1,95 @@
 <template>
- <div>
-   <el-table v-loading="tableLoading" :default-sort="defaultSort" @sort-change="sortChange"
-             border stripe
-     size="mini"
-     style="width: 100%" :data="mytableData">
-     <template  v-for="(item, index) in columns">
-       <el-table-column :type="item.type" v-if="item.type == 'index'" :prop="item.name" :label="item.label" :key="index" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
-       </el-table-column>
-       <el-table-column :type="item.type" v-else-if="item.type == 'selection'" :prop="item.name" :label="item.label" :key="index" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
-       </el-table-column>
-       <el-table-column :type="item.type" v-else-if="item.type == 'expand'" :prop="item.name" :label="item.label" :key="index" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
-         <template slot-scope="scope">
-           <el-form label-position="left" inline class="fh-table-expand">
-             <el-form-item v-for="(iitem, index) in columns" v-if="iitem.type !== 'expand' && iitem.type !== 'index' && iitem.type !== 'selection' && iitem.showInExpand !==false && !iitem.buttons" :label="iitem.label" :key="index">
-               <span v-if="iitem.html" v-html="iitem.html(scope.$index,scope.row)"></span>
-               <template v-else>
-                 <span>{{iitem.formatter ? iitem.formatter(scope.row) : (iitem.dict ? scope.row[iitem.dict + '' + scope.$index] ?scope.row[iitem.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,iitem) : $utils.dGetValue(scope.row, iitem.name))}}</span>
-               </template>
-             </el-form-item>
-           </el-form>
-         </template>
-       </el-table-column>
-       <template v-else>
+  <div>
+    <el-table v-loading="tableLoading" :default-sort="defaultSort" @sort-change="sortChange"
+              border stripe
+              header-row-class-name="fh-self-table-header"
+              size="mini"
+              style="width: 100%" :data="mytableData">
+      <template  v-for="(item, index) in columns">
+        <el-table-column :show-overflow-tooltip="item.showOverflowTooltip" :type="item.type" v-if="item.showInTable !== false && (item.dict || item.html || item.image || item.type == 'expand' || item.buttons)" :prop="item.name" :label="item.label" :key="index" :width="item.width" :fixed="item.fixed">
 
-         <template  v-if="item.showInTable !== false">
-       <el-table-column  v-if="item.buttons" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width" :fixed="item.fixed">
-         <template slot-scope="scope">
-           <el-button v-for="btn in item.buttons"  :key="scope.$index"
-                      @click.native.prevent="btn.click(scope.$index, scope.row)"
-                      type="text"
-                      size="small"
-                      :disabled="btnDisabled(btn.disabled, scope.$index, scope.row)"
-           >
-             <template v-if="typeof btn.label == 'function'">
-               {{btn.label(scope.$index, scope.row)}}
-             </template>
-             <template v-else-if="btn.label">
-               {{btn.label}}
-             </template>
-             <template v-else-if="btn.html">
-               <div v-if="typeof btn.html == 'function'" v-html="btn.html(scope.row)"></div>
-               <div v-else v-html="btn.html"></div>
-             </template>
-             <template v-else>
-               <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
-               <template v-else>
-                 {{item.formatter ? item.formatter(scope.row) : (item.dict ? scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item) : scope.row[item.name])}}
-               </template>
-             </template>
-           </el-button>
-         </template>
+          <template   slot-scope="scope">
+            <!-- 展开内容 showInExpand参数可 控制是否在展开行显示-->
+            <el-form v-if="item.type == 'expand'" label-position="left" inline class="fh-table-expand">
+              <el-form-item v-for="(iitem, index) in columns" v-if="iitem.type !== 'expand' && iitem.type !== 'index' && iitem.type !== 'selection' && iitem.showInExpand !==false && !iitem.buttons" :label="iitem.label" :key="index">
+                <template v-if="iitem.dict">
+                  {{scope.row[iitem.dict + '' + scope.$index] ?scope.row[iitem.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,iitem)}}
+                </template>
+                <div v-else-if="iitem.image" v-html="getImage(scope.row,iitem)"></div>
+                <div v-else-if="iitem.html" v-html="iitem.html(scope.$index,scope.row)"></div>
+                <template v-else>
+                  <span>{{iitem.formatter ? iitem.formatter(scope.row) : $utils.dGetValue(scope.row, iitem.name)}}</span>
+                </template>
+              </el-form-item>
+            </el-form>
+            <!-- showInTable 作用，表格中是否显示该列，因为行展开与表格共用一个配置项colums，这样可以实现不在表格中展示，但展开行可以展示 -->
+            <template v-else-if="item.showInTable !== false">
+              <template v-if="item.dict">
+                {{scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item)}}
+              </template>
+              <div v-else-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
+              <div v-else-if="item.image" v-html="getImage(scope.row,item)"></div>
+              <template v-else-if="item.buttons">
+                <!-- 两种方式，一种下拉按钮，一种正常排列按钮 -->
+                <el-dropdown v-if="item.dropdown && item.buttons.length > 1" trigger="click" size="mini"
+                             :type="item.buttons[0].styleType"
+                             split-button @click="item.buttons[0].click(scope.$index, scope.row)"
+                             :disabled="btnDisabled(item.buttons[0].disabled, scope.$index, scope.row)"
+                >
+                  <i v-if="item.buttons[0].icon" :class="item.buttons[0].icon"></i>{{item.buttons[0].label}}
+                  <el-dropdown-menu slot="dropdown">
+                    <el-dropdown-item v-for="(btn,index) in item.buttons"
+                                      v-if="index > 0"
+                                      :key="btn.label">
+                      <el-button
+                        :type="btn.styleType"
+                        :icon="btn.icon"
+                        size="mini"
+                        style="padding:2px 5px;"
+                        :disabled="btnDisabled(btn.disabled, scope.$index, scope.row)"
+                        @click="btn.click(scope.$index, scope.row)">{{btn.label}}</el-button>
+                    </el-dropdown-item>
+                  </el-dropdown-menu>
+                </el-dropdown>
+                <el-button v-else v-for="btn in item.buttons"  :key="scope.$index"
+                           @click.native.prevent="btn.click(scope.$index, scope.row)"
+                           :type="btn.styleType"
+                           size="mini"
+                           style="padding:2px 5px;"
+                           :icon="btn.icon"
+                           :disabled="btnDisabled(btn.disabled, scope.$index, scope.row)"
+                >
+                  <template v-if="typeof btn.label == 'function'">
+                    {{btn.label(scope.$index, scope.row)}}
+                  </template>
+                  <template v-else-if="btn.label">
+                    {{btn.label}}
+                  </template>
+                  <template v-else-if="btn.html">
+                    <div v-if="typeof btn.html == 'function'" v-html="btn.html(scope.row)"></div>
+                    <div v-else v-html="btn.html"></div>
+                  </template>
+                  <template v-else>
+                    <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
+                    <template v-else>
+                      {{item.formatter ? item.formatter(scope.row) :  $utils.dGetValue(scope.row, item.name)}}
+                    </template>
+                  </template>
+                </el-button>
+              </template>
+            </template>
 
-       </el-table-column>
-       <el-table-column v-else-if="item.dict" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
-         <template slot-scope="scope">
-         {{scope.row[item.dict + '' + scope.$index] ?scope.row[item.dict + '' + scope.$index]:setDictLabel(scope.$index,scope.row,item)}}
-         </template>
-       </el-table-column>
-       <el-table-column v-else-if="item.html" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
-         <template slot-scope="scope">
-           <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
-         </template>
-       </el-table-column>
-       <el-table-column v-else-if="item.image" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width">
-         <template slot-scope="scope">
-           <div v-if="item.image" v-html="getImage(scope.row,item)"></div>
-         </template>
-       </el-table-column>
-       <el-table-column v-else :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
-       </el-table-column>
-         </template>
-       </template>
-     </template>
+          </template>
 
-   </el-table>
-   <self-page v-if="page.dataNum > 0" :dataNum="page.dataNum" :pageNo="page.pageNo" :pageSize="page.pageSize" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
-   </self-page>
- </div>
+        </el-table-column>
+        <el-table-column :show-overflow-tooltip="item.showOverflowTooltip" v-else-if="item.showInTable !== false" :type="item.type" :prop="item.name" :label="item.label" :key="item.name" :formatter="item.formatter" :width="item.width"  :sort-by="item.sortBy" :sortable="item.sortable ? item.sortable : false">
+        </el-table-column>
+      </template>
+
+    </el-table>
+    <self-page v-if="page.dataNum > 0" :dataNum="page.dataNum" :pageNo="page.pageNo" :pageSize="page.pageSize" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
+    </self-page>
+  </div>
 </template>
 
 <script>
@@ -95,6 +108,24 @@
           return {}
         }
       },
+      /**
+       * 除了element 表格原生属性，还有一些扩展
+       * {
+       * // dict html image 只能用一个
+       *     dict: 'yes_no',
+       *     dictValue: true, // 把字典值也显示出来
+       *     html: function(index,row){},
+       *     image: true,
+       *     buttons: [{
+       *     // label或html只能用一个
+       *        label: '编辑', // function(index,row){}||string
+       *        html: '编辑', // function(index,row){}
+                styleType: 'primary',
+                icon: 'el-icon-edit',
+                click: this.editTableRowClick
+       *     }]
+       * }
+       */
       columns: {
         default: function () {
           return []
@@ -125,7 +156,27 @@
     },
     watch: {
       tableData (val) {
-        this.mytableData = val
+        let self = this
+        // 统一提前加载字典
+        let ditcs = ''
+        for (let i = 0; i < self.columns.length; i++) {
+          if (self.columns[i].dict) {
+            ditcs += self.columns[i].dict
+            if (i < self.columns.length - 1) {
+              ditcs += ','
+            }
+          }
+        }
+        // 如果包含字典
+        if (ditcs) {
+          self.$http.getDictsByType(ditcs).then(function () {
+            self.mytableData = val
+          }).catch(function () {
+            self.mytableData = val
+          })
+        } else {
+          self.mytableData = val
+        }
       }
     },
     methods: {
@@ -204,5 +255,17 @@
     margin-right: 0;
     margin-bottom: 0;
     width: 50%;
+  }
+
+</style>
+<style>
+  .el-table tr.fh-self-table-header, .el-table tr.fh-self-table-header  th{
+    background-color: #eff3f8;
+  }
+  .el-table .el-button [class*=el-icon-]+span{
+    margin-left: -3px;
+  }
+  .el-button-group .el-button--mini {
+    padding: 2px 5px !important;
   }
 </style>

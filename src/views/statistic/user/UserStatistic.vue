@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="fh-page-wrapper">
     <el-row :gutter="40" class="panel-group">
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
         <div>
@@ -217,16 +217,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    height:100%;
-    overflow: auto;
-    background-color: #EDEFF2;
-    padding: 30px;
-  }
-  .card-panel-col{
-    background-color: white;
-  }
-  .card-panel-num{
-    text-align: center;
-  }
 </style>

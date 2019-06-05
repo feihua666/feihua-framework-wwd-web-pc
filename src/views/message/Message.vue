@@ -1,7 +1,5 @@
 <template>
-
-  <div class="wrapper">
-    <el-container>
+  <el-container  class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -16,9 +14,9 @@
                 <self-dict-select v-model="searchFormModel.msgLevel" type="message_level"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="addTableRowClick">添加</el-button>
-                <el-button type="primary" @click="sendNewMessage">发送新消息</el-button>
+                <el-button type="primary"	icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary"	icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="sendNewMessage">发送新消息</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -27,7 +25,6 @@
       </el-main>
     </el-container>
 
-  </div>
 </template>
 
 <script>
@@ -68,27 +65,40 @@
           },
           {
             label: '操作',
-            width: '300',
+            width: '400',
             buttons: [
               {
                 label: '查看已读人员',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
+                disabled: this.viewReadPeopleBtnDisabled,
                 click: this.viewReadPeopleClick
               },
               {
-                label: '删除',
-                click: this.deleteTableRowClick
-              },
-              {
                 label: '发送消息',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
+                disabled: this.sendMessageBtnDisabled,
                 click: this.sendMessageClick
               },
               {
                 label: '编辑',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
+                disabled: this.editTableRowBtnDisabled,
                 click: this.editTableRowClick
               },
               {
                 label: '复制消息',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.copyTableRowClick
+              },
+              {
+                label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
+                click: this.deleteTableRowClick
               }
             ]
           }
@@ -149,6 +159,9 @@
       pageNoChange (val) {
         this.loadTableData(val)
       },
+      editTableRowBtnDisabled (index, row) {
+        return row.msgState === 'sended'
+      },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
         // sended 为字典值，代表已发送
@@ -200,6 +213,9 @@
         this.$utils.loadDataControl.add('MessageAddLoadData=true')
         this.$router.push('/Main/MessageAdd')
       },
+      sendMessageBtnDisabled (index, row) {
+        return row.msgState !== 'to_be_sended'
+      },
       // 发送已存在的消息
       sendMessageClick (index, row) {
         if (row.msgState !== 'to_be_sended') {
@@ -208,6 +224,9 @@
           this.$utils.loadDataControl.add('MessageSendLoadData=true')
           this.$router.push('/Main/MessageSend/' + row.id + '?templateId=' + row.messageTemplateId)
         }
+      },
+      viewReadPeopleBtnDisabled (index, row) {
+        return row.msgState !== 'sended'
       },
       // 查看已读人员
       viewReadPeopleClick (index, row) {
@@ -229,22 +248,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
+
 </style>
