@@ -188,6 +188,7 @@
         }
       },
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('QuestionEditLoadData=true')
         this.$router.push('/Main/Cms/QuestionEdit/' + row.id)
       },
       addTableRowClick () {

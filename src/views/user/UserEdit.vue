@@ -78,13 +78,17 @@
       }
     },
     mounted () {
+      console.log('mounted')
       this.id = this.$route.params.id
       this.loadEditData(this.id)
     },
     methods: {
       loadEditData (id) {
-        this.resetForm()
         let self = this
+        if (this.formDataLoading === true) {
+          return
+        }
+        this.resetForm()
         self.formDataLoading = true
         self.$http.get('/base/user/' + self.id)
           .then(function (response) {
@@ -146,10 +150,13 @@
     // tab切换如果参数不一样，重新加载数据
     beforeRouteEnter  (to, from, next) {
       next(vm => {
+        console.log('beforeRouteEnter')
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'UserEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

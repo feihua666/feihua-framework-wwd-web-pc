@@ -166,6 +166,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('ContentCategoryEditLoadData=true')
         this.$router.push('/Main/Cms/ContentCategoryEdit/' + row.id)
       },
       // tablb 表格删除行

@@ -317,6 +317,7 @@
       },
       // 编辑调查
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('SurveyEditLoadData=true')
         this.$router.push('/Main/Cms/SurveyEdit/' + row.id)
       },
       // 添加调查

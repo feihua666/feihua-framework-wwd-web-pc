@@ -346,7 +346,7 @@
         }
       })
 
-      console.log('mounted')
+      console.log('VisitedViews mounted')
       this.canAddUrlCollect = false
       this.isCanAddUrlCollect()
     },

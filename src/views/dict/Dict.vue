@@ -208,6 +208,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('DictEditLoadData=true')
         this.$router.push('/Main/DictEdit/' + row.id)
       },
       // tablb 表格删除行

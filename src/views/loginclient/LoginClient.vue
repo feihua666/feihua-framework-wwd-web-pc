@@ -140,6 +140,7 @@
         },
         // tablb 表格编辑行
         editTableRowClick (index, row) {
+          this.$utils.loadDataControl.add('LoginClientEditLoadData=true')
           this.$router.push('/Main/LoginClientEdit/' + row.id)
         },
         // tablb 表格删除行
@@ -166,6 +167,7 @@
           this.$router.push('/Main/LoginClientAdd')
         },
         bindTableRowClick (indwx, row) {
+          this.$utils.loadDataControl.add('LoginClientChannelBindLoadData=true')
           this.$router.push('/Main/LoginClientChannelBind/' + row.id)
         },
         bindTableRowClickBtn (indwx, row) {

@@ -211,12 +211,15 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('RoleEditLoadData=true')
         this.$router.push('/Main/RoleEdit/' + row.id)
       },
       bindDataScope (index, row) {
+        this.$utils.loadDataControl.add('RoleBindDataScopeLoadData=true')
         this.$router.push('/Main/RoleBindDataScope/' + row.id)
       },
       setFunctionResource (index, row) {
+        this.$utils.loadDataControl.add('FunResourceDataScopeDefineLoadData=true')
         this.$router.push('/Main/FunResourceDataScopeDefine/' + row.id)
       },
       // tablb 表格删除行

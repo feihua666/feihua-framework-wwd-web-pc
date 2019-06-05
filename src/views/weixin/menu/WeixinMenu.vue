@@ -204,6 +204,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('WeixinMenuEditLoadData=true')
         this.$router.push('/Main/Weixin/Menu/WeixinMenuEdit/' + row.id + '?which=' + this.searchFormModel.which)
       },
       // tablb 表格删除行

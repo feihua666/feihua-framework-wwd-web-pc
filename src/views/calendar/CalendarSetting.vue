@@ -76,6 +76,7 @@
                 cancelButtonText: '删除'
               })
                 .then(() => {
+                  this.$utils.loadDataControl.add('CalendarSettingEditLoadData=true')
                   this.$router.push('/Main/CalendarSetting/CalendarSettingEdit/' + contentItem.id)
                 })
                 .catch(action => {

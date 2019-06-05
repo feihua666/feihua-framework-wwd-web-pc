@@ -139,6 +139,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('DataScopeEditLoadData=true')
         this.$router.push('/Main/DataScopeEdit/' + row.id)
       },
       // tablb 表格删除行

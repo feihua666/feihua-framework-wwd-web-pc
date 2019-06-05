@@ -16,8 +16,6 @@
         </el-collapse>
         <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
-
-
     <category-dialog :submit-click="setCategorySubmit" ref="categorydialog"></category-dialog>
     <deploy-dialog ref="deploydialog"></deploy-dialog>
   </el-container>

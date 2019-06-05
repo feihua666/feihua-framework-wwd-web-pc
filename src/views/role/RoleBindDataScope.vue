@@ -62,9 +62,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.roleId !== vm.$route.params.roleId) {
+        let dataControl = 'RoleBindDataScopeLoadData=true'
+        if (vm.roleId !== vm.$route.params.roleId || vm.$utils.loadDataControl.has(dataControl)) {
           vm.roleId = vm.$route.params.roleId
           vm.loadBindedDataScope()
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

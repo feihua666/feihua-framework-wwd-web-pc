@@ -146,6 +146,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('LeaveEditLoadData=true')
         this.$router.push('/Main/Oa/LeaveEdit/' + row.id)
       },
       // tablb 表格删除行

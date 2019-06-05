@@ -82,7 +82,6 @@
             let tableItem = this.tableData[i]
             let userItem = this.uersMap[tableItem.userId]
             let clientItem = this.clientMap[tableItem.readClientId]
-            console.log(clientItem)
             realTableData.push({
               nickname: userItem ? userItem.nickname : null,
               isRead: this.tableData[i].isRead,

@@ -153,6 +153,7 @@
         this.$router.push('/Main/BaseConfig/BaseConfigAdd')
       },
       editConfigClick (index, row) {
+        this.$utils.loadDataControl.add('BaseConfigEditAddLoadData=true')
         this.$router.push('/Main/BaseConfig/BaseConfigEdit/' + row.id)
       },
       updateConfigClick (index, row) {
