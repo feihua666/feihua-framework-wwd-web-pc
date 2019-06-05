@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="fh-page-wrapper">
   <el-collapse v-model="activeNames">
     <el-collapse-item title="机构数据范围" name="officeDataScope">
       <OfficeDataScopeDefine :dataScopeId="dataScopeId"></OfficeDataScopeDefine>
@@ -61,14 +61,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-  height: 100%;
-  overflow: auto;
-}
-</style>
-<style>
-  .el-collapse-item__arrow {
-    /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-    margin-right: 20px;
-  }
 </style>

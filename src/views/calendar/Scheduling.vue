@@ -1,5 +1,5 @@
 <template>
- <div class="wrapper">
+  <div class="fh-page-wrapper">
    <calendar style="height: 800px;"/>
  </div>
 </template>
@@ -26,8 +26,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    height:100%;
-    overflow: auto;
-  }
 </style>

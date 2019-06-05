@@ -1,6 +1,5 @@
 <template>
-  <div class="wrapper">
-    <el-container>
+  <el-container class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -12,19 +11,19 @@
                 <self-dict-select v-model="searchFormModel.category" type="activity_process_category"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="createModelClick">新建模型</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="createModelClick">新建模型</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
         </el-collapse>
         <self-table id="modeltable" :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
-    </el-container>
+
 
     <category-dialog :submit-click="setCategorySubmit" ref="categorydialog"></category-dialog>
     <file-download-dialog ref="exportfiledownload"></file-download-dialog>
-  </div>
+    </el-container>
 </template>
 
 <script>
@@ -253,10 +252,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-  .el-main{
-    padding:0;
-  }
 </style>

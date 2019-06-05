@@ -1,7 +1,9 @@
 <template>
-  <div>
+  <div class="fh-page-wrapper">
+    <div class="fh-background-white" style="width: 500px;">
     <data-scope-tree ref="datascopetree" :show-checkbox="true"></data-scope-tree>
     <el-button type="primary" size="small" @click="userBindDataScopesDoBtnClick" :loading="submitLoading" style="margin: 2rem 5rem;">提交</el-button>
+    </div>
   </div>
 </template>
 

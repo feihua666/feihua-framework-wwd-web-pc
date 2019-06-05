@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
       <el-form-item label="名称" prop="name" required>
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
@@ -104,9 +104,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-  padding:1.5rem;
-  overflow: auto;
-  height: 100%;
-}
 </style>

@@ -1,7 +1,5 @@
 <template>
-
-  <div class="wrapper">
-    <el-container>
+  <el-container class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -16,9 +14,9 @@
                 <self-dict-select v-model="searchFormModel.headcountRule" type="wwd_headcount_rule"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="addTableRowClick">添加</el-button>
-                <el-button @click="resetFormClick">重置</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
+                <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -47,7 +45,6 @@
         </el-form>
       </el-dialog>
     </el-container>
-  </div>
 </template>
 
 <script>
@@ -67,6 +64,9 @@
         defaultSort: {prop: 'updateAt', order: 'descending'},
         columns: [
           {
+            type: 'expand'
+          },
+          {
             name: 'titleUrl',
             width: '100',
             image: true,
@@ -78,7 +78,8 @@
           },
           {
             name: 'author',
-            label: '作者'
+            label: '作者',
+            showInTable: false
           },
           {
             name: 'status',
@@ -90,27 +91,32 @@
             sortBy: 'start_time',
             name: 'startTime',
             width: '150',
-            label: '开始时间'
+            label: '开始时间',
+            showInTable: false
           },
           {
             sortable: 'custom',
             sortBy: 'end_time',
             name: 'endTime',
             width: '150',
-            label: '结束时间'
+            label: '结束时间',
+            showInTable: false
           },
           {
             name: 'headcountRule',
             dict: 'wwd_headcount_rule',
-            label: '人数规则'
+            label: '人数规则',
+            showInTable: false
           },
           {
             name: 'headcountMale',
-            label: '男人数'
+            label: '男人数',
+            showInTable: false
           },
           {
             name: 'headcountFemale',
-            label: '女人数'
+            label: '女人数',
+            showInTable: false
           },
           {
             name: 'headcount',
@@ -129,7 +135,8 @@
           {
             name: 'requireIdCard',
             dict: 'yes_no',
-            label: '是否需要身份证'
+            label: '是否需要身份证',
+            showInTable: false
           },
           {
             name: 'addr',
@@ -144,28 +151,37 @@
           },
           {
             label: '操作',
-            fixed: 'right',
-            width: '200',
+            width: '400',
             buttons: [
               {
                 label: '编辑',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.editTableRowClick
               },
               {
-                label: '删除',
-                click: this.deleteTableRowClick
-              },
-              {
                 label: '复制',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.copyTableRowClick
               },
               {
                 label: '发布状态',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.editStatusClick
               },
               {
                 label: '查看活动人员',
+                styleType: 'primary',
+                icon: 'el-icon-search',
                 click: this.participateRowClick
+              },
+              {
+                label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
+                click: this.deleteTableRowClick
               }
             ]
           }
@@ -351,31 +367,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse {
-    padding: 0 10px;
-  }
-
-  .el-main {
-    padding: 0;
-  }
-
-  .el-aside {
-    border-right: 1px solid #e6ebf5;
-  }
-
-  .wrapper, .el-container {
-    height: 100%;
-  }
-  .el-dialog__header{
-    overflow: hidden;
-    width: 300px;
-    height: 44px;
-    text-overflow: ellipsis;
-  }
-</style>
-<style>
-  .el-collapse-item__arrow {
-    /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-    margin-right: 20px;
-  }
 </style>

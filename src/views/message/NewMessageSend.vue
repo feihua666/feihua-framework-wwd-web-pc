@@ -1,6 +1,7 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 700px;" label-width="150px">
+
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 700px;" label-width="150px">
       <el-form-item label="消息模板" prop="messageTemplateId">
         <MessageTemplateSelect v-model="form.messageTemplateId" type="message_level"></MessageTemplateSelect>
       </el-form-item>
@@ -33,7 +34,7 @@
         <el-input v-model="item.vTargetValues"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="sendBtnClick" :loading="addLoading">发送</el-button>
+        <el-button type="primary"	icon="el-icon-check" @click="sendBtnClick" :loading="addLoading">发送</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -244,9 +245,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-  padding:1.5rem;
-  height: 100%;
-  overflow-y: auto;
-}
 </style>

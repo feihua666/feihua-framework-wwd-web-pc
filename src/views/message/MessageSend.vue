@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 700px;" label-width="150px">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 700px;" label-width="150px">
       <el-form-item label="发送客户端" prop="clientIds">
         <LoginClientCheckboxGroup v-on:change="changeClient"  v-model="form.clientIds"></LoginClientCheckboxGroup>
       </el-form-item>
@@ -29,7 +29,7 @@
         <el-input v-model="item.vTargetValues"></el-input>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="sendBtnClick" :loading="addLoading">发送</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="sendBtnClick" :loading="addLoading">发送</el-button>
         <div>虚拟客户端发送目标标识解释：如果是邮件客户端请输入邮件地址，如果是短信请输入手机号，如果是第三方模板请输入消息请输入三方用户标识（如微信输入openid）.以上多个以逗号分隔</div>
       </el-form-item>
     </el-form>
@@ -228,9 +228,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-  padding:1.5rem;
-  height: 100%;
-  overflow-y: auto;
-}
 </style>

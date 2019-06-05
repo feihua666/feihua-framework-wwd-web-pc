@@ -1,8 +1,10 @@
 <template>
-  <el-container>
+
+    <el-container>
     <el-aside :width="leftAsideWidth" style="background-color:#304156;overflow-x: hidden;transition: width 500ms;">
       <el-container>
-        <el-header style="padding: 0;color: #fff">
+        <el-header height="110px" style="padding: 0;color: #fff">
+          <div class="fh-logo fh-main-nav fh-main-nav-left">fh{{isCollapse? '': ' - framework'}}</div>
           <profile :is-collapse="isCollapse"></profile>
         </el-header>
         <el-main>
@@ -10,7 +12,8 @@
           <el-menu mode="vertical" :default-openeds="defaultOpeneds" class="el-menu-vertical-demo"
                    v-loading="menuLoading" :collapse="isCollapse"  v-on:open="handleOpen" v-on:close="handleClose"
                    element-loading-background="rgb(48, 65, 86)"
-                   :default-active="decodeURIComponent($route.fullPath)" background-color="#304156" text-color="#fff" active-text-color="#409EFF">
+                   unique-opened
+                   :default-active="decodeURIComponent($route.fullPath)" background-color="#304156" text-color="#A7B1C2" active-text-color="#409EFF">
             <menu-items :menus="menus"></menu-items>
           </el-menu>
           </el-scrollbar>
@@ -19,10 +22,18 @@
     </el-aside>
     <el-main>
     <el-container style="overflow: hidden;">
-      <el-header style="padding: 0;" height="34">
+      <el-header style="padding: 0;" height="84px">
+        <div class="fh-main-nav fh-main-nav-right">
+          <el-row type="flex" class="row-bg" justify="space-between">
+            <div></div>
+            <div style="width: 200px;">
+              <profile type="right" :is-collapse="isCollapse"></profile>
+            </div>
+          </el-row>
+        </div>
         <visited-views :menus="menus" :is-collapse="isCollapse" v-on:collapseLeftMenu="collapseLeftMenu"></visited-views>
       </el-header>
-      <el-main style="overflow: hidden;">
+      <el-main style="overflow: hidden;background-color: #f3f3f4;">
         <transition name="slide-left">
         <router-view style=" transition: all .05s ease;" v-if="$route.meta.keepAlive === false"></router-view>
         <keep-alive>
@@ -33,6 +44,7 @@
     </el-container>
     </el-main>
   </el-container>
+
 </template>
 <script>
   import MenuItems from './MenuItem.vue'
@@ -86,11 +98,11 @@
               }
               self.menus = self.$utils.arrayToTree(menus)
               // 默认展开
-              for (let item in self.menus) {
+              /* for (let item in self.menus) {
                 if (self.menus[item].level === 1) {
                   self.defaultOpeneds.push(self.menus[item].id)
                 }
-              }
+              } */
             }
             self.menuLoading = false
           }).catch(error => {
@@ -141,6 +153,20 @@
 .el-menu-vertical-demo:not(.el-menu--collapse) {
   width: 200px;
   min-height: 400px;
+}
+  .fh-main-nav{
+    /*display: none;*/
+    height: 50px;
+
+  }
+.fh-main-nav-left{
+  background-color: #367fa9;
+  text-align: center;
+  font-size: x-large;
+  line-height: 50px;
+}
+.fh-main-nav-right{
+  background-color: #3c8dbc;
 }
 </style>
 <style>

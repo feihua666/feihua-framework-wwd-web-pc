@@ -1,5 +1,5 @@
 <template>
- <div>
+  <div class="fh-page-wrapper">
    DemoStarter
  </div>
 </template>

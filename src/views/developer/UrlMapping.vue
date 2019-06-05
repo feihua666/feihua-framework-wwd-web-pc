@@ -1,7 +1,5 @@
 <template>
-
-  <div class="wrapper">
-    <el-container>
+  <el-container class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -22,7 +20,6 @@
       </el-main>
     </el-container>
 
-  </div>
 </template>
 
 <script>
@@ -76,22 +73,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.wrapper{
-
-}
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
 </style>

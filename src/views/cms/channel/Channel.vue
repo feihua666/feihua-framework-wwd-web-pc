@@ -1,8 +1,5 @@
 <template>
-
-  <div class="wrapper">
-
-    <el-container>
+  <el-container  class="fh-page-wrapper">
       <el-header>
         <SiteSelect style="width:100%" v-model="searchFormModel.siteId"></SiteSelect>
       </el-header>
@@ -24,9 +21,9 @@
                 </ChannelInputSelect>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="addTableRowClick">添加</el-button>
-                <el-button @click="resetFormClick">重置</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
+                <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -34,10 +31,10 @@
         <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
       </el-container>
-    </el-container>
-
     <site-select-dialog ref="siteSelectDialog" :on-success="siteSelectSuccess"/>
-  </div>
+  </el-container>
+
+
 </template>
 
 <script>
@@ -95,22 +92,30 @@
           },
           {
             label: '操作',
-            width: '200',
+            width: '300',
             buttons: [
               {
                 label: '预览',
+                styleType: 'primary',
+                icon: 'el-icon-search',
                 click: this.viewIndexAddress
               },
               {
                 label: '内容管理',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
                 click: this.jumpToContent
               },
               {
                 label: '编辑',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.editTableRowClick
               },
               {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               }
             ]
@@ -289,22 +294,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
 </style>

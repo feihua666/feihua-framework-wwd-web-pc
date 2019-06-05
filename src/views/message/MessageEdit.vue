@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
       <el-form-item label="消息模板" prop="messageTemplateId">
         <MessageTemplateSelect v-model="form.messageTemplateId"  v-on:change="templateChange"></MessageTemplateSelect>
         <div>可以使用模板来快速添加消息，如果要发送三方消息，如：微信公众号模板消息则必须使用绑定三方模板的消息模板</div>
@@ -27,7 +27,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">修改</el-button>
         <div>请注意,消息相关字段不支持额外参数(只支持模板中定义过的参数)</div>
 
       </el-form-item>
@@ -195,7 +195,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    padding:1.5rem;
-  }
 </style>

@@ -1,6 +1,7 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" label-width="100px">
+
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" label-width="100px">
       <el-form-item label="标题图" prop="titleUrl">
         <el-upload style="border: 1px solid #dcdfe6; width: 178px;height: 178px;"
                    class="avatar-uploader"
@@ -91,7 +92,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="updateBtnClick" :loading="addLoading">修改</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">修改</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -312,11 +313,6 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper {
-    padding: 1.5rem;
-    overflow: auto;
-    height: 100%;
-  }
   .avatar-uploader .el-upload {
     border: 1px dashed #d9d9d9;
     border-radius: 6px;

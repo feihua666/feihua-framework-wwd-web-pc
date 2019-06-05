@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
       <el-form-item label="开始时间" prop="startTime" required>
         <el-date-picker disabled
           v-model="form.startTime"
@@ -28,8 +28,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="agreeClick" :loading="addLoading">同意</el-button>
-        <el-button type="primary" @click="notAgreeClick" :loading="notAgreeLoading">不同意</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="agreeClick" :loading="addLoading">同意</el-button>
+        <el-button type="danger" icon="el-icon-close" @click="notAgreeClick" :loading="notAgreeLoading">不同意</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -158,7 +158,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    padding:1.5rem;
-  }
+
 </style>

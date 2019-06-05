@@ -1,6 +1,6 @@
 <template>
-  <div class="wrapper">
-  <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="120px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+  <el-form class="fh-background-white fh-padding-30" ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="120px" v-loading="formDataLoading">
     <el-form-item label="功能数据范围" prop="type">
       <self-dict-select v-model="form.type" type="functionResource_dataScope" :show-none="false"></self-dict-select>
     </el-form-item>
@@ -123,10 +123,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper,.el-form{
-    height:100%;
-  }
-  .wrapper{
-    overflow-y: auto;
-  }
 </style>

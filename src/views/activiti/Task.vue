@@ -1,6 +1,5 @@
 <template>
-  <div class="wrapper">
-    <el-container>
+    <el-container class="fh-page-wrapper">
       <el-main>
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
@@ -28,7 +27,7 @@
                 <self-dict-select v-model="searchFormModel.taskStatus" type="activity_task_status"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -37,7 +36,6 @@
       </el-main>
     </el-container>
 
-  </div>
 </template>
 
 <script>
@@ -79,10 +77,14 @@
             buttons: [
               {
                 label: this.doOrClaimLabel,
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.doOrClaimClick
               },
               {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               }
             ]
@@ -210,10 +212,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-  .el-main{
-    padding:0;
-  }
 </style>

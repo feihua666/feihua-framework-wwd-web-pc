@@ -1,6 +1,7 @@
 <template>
-  <div class="wrapper">
-    <el-row :gutter="40" class="panel-group">
+  <div class="fh-page-wrapper">
+    <div class="fh-padding-30">
+    <el-row :gutter="40" class="fh-background-white panel-group">
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
         <div>
           <div><h3>用户性别比例 <count-to :start-val="0" :end-val="userCountData.allNum || 0" :duration="2600" /></h3></div>
@@ -10,7 +11,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="40" class="panel-group">
+    <el-row :gutter="40" class="fh-background-white  panel-group">
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
         <div>
           <div><h3>在线用户性别比例 <count-to :start-val="0" :end-val="userCountData.onlineAllNum || 0" :duration="2600" /></h3></div>
@@ -20,7 +21,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="40" class="panel-group">
+    <el-row :gutter="40" class="fh-background-white  panel-group">
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
         <div>
           <h3>终端分布</h3>
@@ -29,7 +30,7 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="40" class="panel-group">
+    <el-row :gutter="40" class="fh-background-white  panel-group">
     <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
       <div>
         <h3>用户区域分布</h3>
@@ -37,7 +38,7 @@
       </div>
     </el-col>
   </el-row>
-    <el-row :gutter="40" class="panel-group">
+    <el-row :gutter="40" class="fh-background-white panel-group">
       <el-col :xs="24" :sm="24" :lg="24" class="card-panel-col">
         <div>
           <h3>在线用户区域分布</h3>
@@ -45,6 +46,7 @@
         </div>
       </el-col>
     </el-row>
+    </div>
   </div>
 </template>
 
@@ -217,16 +219,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper{
-    height:100%;
-    overflow: auto;
-    background-color: #EDEFF2;
-    padding: 30px;
-  }
-  .card-panel-col{
-    background-color: white;
-  }
-  .card-panel-num{
-    text-align: center;
-  }
 </style>

@@ -1,8 +1,7 @@
 <template>
 
-  <div class="wrapper">
-    <el-container>
-      <el-aside width="200px">
+    <el-container  class="fh-page-wrapper">
+      <el-aside width="200px" class="fh-tree-aside">
         <el-scrollbar style="height: 100%;" wrapStyle="height:100%;overflow:auto;" >
           <funResource-tree ref="lefttree" v-on:nodeClick="treeNodeClick"></funResource-tree>
          </el-scrollbar>
@@ -24,9 +23,9 @@
                 <fun-resource-input-select ref="funResourceinput" v-model="searchFormModel.parentId"></fun-resource-input-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button type="primary" @click="addTableRowClick">添加</el-button>
-                <el-button @click="resetFormClick">重置</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
+                <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -35,7 +34,6 @@
       </el-main>
     </el-container>
 
-  </div>
 </template>
 
 <script>
@@ -89,18 +87,24 @@
           },
           {
             label: '操作',
-            width: '150',
+            width: '300',
             buttons: [
               {
                 label: '编辑',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.editTableRowClick
               },
               {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               },
               {
                 label: '强制删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteForceTableRowClick
               }
             ]
@@ -241,7 +245,7 @@
         }
         return name
       },
-      iconFormatter (row) {
+      iconFormatter (index, row) {
         if (row.icon) {
           return '<i class="' + row.icon + '"></i>'
         }
@@ -255,22 +259,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
 </style>

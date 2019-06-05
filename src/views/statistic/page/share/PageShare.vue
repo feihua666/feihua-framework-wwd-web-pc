@@ -1,6 +1,6 @@
 <template>
 
-  <div class="wrapper">
+  <div class="fh-page-wrapper">
     <el-container>
       <el-main>
         <el-collapse value="1">
@@ -21,7 +21,7 @@
               </el-form-item>
 
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary"	icon="el-icon-search" @click="searchBtnClick">查询</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -49,10 +49,6 @@
       return {
         columns: [
           {
-            name: 'url',
-            label: '页面地址'
-          },
-          {
             name: 'userNickname',
             label: '分享人姓名'
           },
@@ -76,11 +72,9 @@
             label: '操作',
             buttons: [
               {
-                label: '编辑',
-                click: this.editTableRowClick
-              },
-              {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               }
             ]
@@ -179,16 +173,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wrapper .el-collapse{
-        padding: 0 10px;
-    }
-    .el-main{
-        padding:0;
-    }
-    .el-aside{
-        border-right: 1px solid #e6ebf5;
-    }
-    .wrapper,.el-container{
-        height:100%;
-    }
 </style>

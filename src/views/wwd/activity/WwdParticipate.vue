@@ -1,7 +1,6 @@
 <template>
 
-  <div class="wrapper">
-    <el-container>
+  <el-container class="fh-page-wrapper">
       <el-main>
         <el-card class="box-card">
           <div  class="text item">
@@ -30,8 +29,8 @@
                 <self-dict-select v-model="searchFormModel.payStatus" type="wwd_pay_status"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" @click="searchBtnClick">查询</el-button>
-                <el-button @click="resetFormClick">重置</el-button>
+                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -65,7 +64,6 @@
         </el-form>
       </el-dialog>
     </el-container>
-  </div>
 </template>
 
 <script>
@@ -152,10 +150,14 @@
             buttons: [
               {
                 label: '修改',
+                styleType: 'primary',
+                icon: 'el-icon-edit',
                 click: this.editTableRowClick
               }/*,
               {
                 label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
                 click: this.deleteTableRowClick
               } */
             ]
@@ -322,26 +324,5 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  .wrapper .el-collapse{
-    padding: 0 10px;
-  }
-  .el-radio-button__orig-radio:disabled:checked+.el-radio-button__inner {
-    background-color: #409EFF;
-  }
-.el-main{
-  padding:0;
-}
-.el-aside{
-  border-right: 1px solid #e6ebf5;
-}
-.wrapper,.el-container{
-  height:100%;
-}
 
-</style>
-<style>
-.el-collapse-item__arrow {
-  /* 由于用了rotate 这个东西不是个正方形所以改变角度的时候会出现滚动条 */
-  margin-right: 20px;
-}
 </style>

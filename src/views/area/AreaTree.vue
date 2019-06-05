@@ -1,6 +1,6 @@
 <template>
 <div>
-  <el-input style="width:200px;"
+  <el-input
     placeholder="输入关键字进行过滤"
     v-model="treeFilterText" clearable>
     <el-button slot="append" icon="el-icon-refresh" @click="treeRefreshBtnClick"></el-button>

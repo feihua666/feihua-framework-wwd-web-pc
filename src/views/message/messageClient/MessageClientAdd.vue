@@ -1,6 +1,7 @@
 <template>
-  <div class="wrapper">
-    <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
+
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
 
       <el-form-item label="客户端" prop="clientId">
         <LoginClientSelect  v-model="form.clientId"></LoginClientSelect>
@@ -12,7 +13,7 @@
         <SelfDictSelect  v-model="form.isEnable" type="yes_no"></SelfDictSelect>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="addBtnClick" :loading="addLoading">添加</el-button>
+        <el-button type="primary" icon="el-icon-check" @click="addBtnClick" :loading="addLoading">添加</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -100,7 +101,4 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-    .wrapper{
-        padding:1.5rem;
-    }
 </style>
