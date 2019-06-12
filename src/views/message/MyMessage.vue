@@ -177,11 +177,7 @@
           })
       },
       markTableRowLabelDisabled (index, row) {
-        if (row.isRead === 'N') {
-          return true
-        } else {
-          return false
-        }
+        return row.isRead === 'Y'
       },
       // 标记为已读
       markTableRowClick (index, row) {
