@@ -25,6 +25,12 @@
               <el-form-item label="关键字" prop="keyword">
                 <el-input  v-model="searchFormModel.keyword"></el-input>
               </el-form-item>
+              <el-form-item label="是否领队" prop="type">
+                <self-dict-select v-model="searchFormModel.type" type="yes_no"></self-dict-select>
+              </el-form-item>
+              <el-form-item label="用户状态" prop="status">
+                <self-dict-select v-model="searchFormModel.status" type="wwd_part_status"></self-dict-select>
+              </el-form-item>
               <el-form-item label="支付状态" prop="payStatus">
                 <self-dict-select v-model="searchFormModel.payStatus" type="wwd_pay_status"></self-dict-select>
               </el-form-item>
@@ -63,6 +69,14 @@
           </el-form-item>
         </el-form>
       </el-dialog>
+      <el-dialog :close-on-click-modal="false" title="预览" :visible.sync="rowUserCardInfoDialogVisible">
+        <el-card :body-style="{ padding: '0px' }">
+          <img  v-if="rowViewUrl" :src="rowViewUrl" class="image">
+          <div style="padding: 14px;word-break: break-all;">
+            <a :href="rowViewUrl" target="_blank">{{rowViewUrl}}</a>
+          </div>
+        </el-card>
+      </el-dialog>
     </el-container>
 </template>
 
@@ -79,6 +93,8 @@
     },
     data () {
       return {
+        rowUserCardInfoDialogVisible: false,
+        rowViewUrl: '',
         rowDialogVisible: false,
         addLoading: false,
         form: {
@@ -146,14 +162,21 @@
           },
           {
             label: '操作',
-            width: '200',
+            width: '250',
             buttons: [
               {
                 label: '修改',
                 styleType: 'primary',
                 icon: 'el-icon-edit',
                 click: this.editTableRowClick
-              }/*,
+              },
+              {
+                label: '查看活动人员卡片',
+                styleType: 'primary',
+                icon: 'el-icon-search',
+                click: this.userCardInfo
+              }
+              /*,
               {
                 label: '删除',
                 styleType: 'danger',
@@ -172,8 +195,10 @@
         // 搜索的查询条件
         searchFormModel: {
           wwdActivityId: null,
+          type: '',
           keyword: '',
-          payStatus: 'paid',
+          status: '',
+          payStatus: '',
           pageable: true,
           orderable: true,
           orderby: 'update_at-desc',
@@ -244,6 +269,19 @@
       // 页码改变加载对应页码数据
       pageNoChange (val) {
         this.loadTableData(val)
+      },
+      // 查看卡片
+      userCardInfo (index, row) {
+        let self = this
+        self.rowViewUrl = ''
+        self.rowUserCardInfoDialogVisible = true
+        self.$http.get('/wwd/user/cards', {wwdUserId: row.wwdUserId})
+          .then(function (response) {
+            let content = response.data.data.content
+            if (content.length > 0) {
+              self.rowViewUrl = content[0].picOriginUrl
+            }
+          })
       },
       editTableRowClick (index, row) {
         let self = this
