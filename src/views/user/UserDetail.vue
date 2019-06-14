@@ -1,11 +1,11 @@
 <template>
 
- <div class="fh-page-wrapper">
+ <div class="fh-page-wrapper fh-el-collapse-item-head-bg">
    <el-collapse v-model="activeNames">
-     <el-collapse-item title="头像" name="1">
+     <el-collapse-item title="头像" name="headpic">
        <img class="personal-head-pic" :src="headPic"/>
      </el-collapse-item>
-     <el-collapse-item title="基本信息" name="2">
+     <el-collapse-item title="基本信息" name="basicinfo">
        <el-row>
          <el-col :span="5">帐号:</el-col>
          <el-col :span="2"></el-col>
@@ -37,7 +37,31 @@
          <el-col :span="12">{{userinfo.dataOfficeName}}</el-col>
        </el-row>
      </el-collapse-item>
-     <el-collapse-item title="角色信息" name="3">
+     <el-collapse-item v-if="posts && posts.length > 0" title="岗位信息" name="postinfo">
+       <template  v-for="(item, index) in posts">
+         <el-row>
+           <el-col :span="5">{{index + 1}}</el-col>
+           <el-col :span="2"></el-col>
+           <el-col :span="12"></el-col>
+         </el-row>
+         <el-row>
+           <el-col :span="5">岗位名称:</el-col>
+           <el-col :span="2"></el-col>
+           <el-col :span="12">{{item.name}}</el-col>
+         </el-row>
+         <el-row>
+           <el-col :span="5">岗位编码:</el-col>
+           <el-col :span="2"></el-col>
+           <el-col :span="12">{{item.code}}</el-col>
+         </el-row>
+         <el-row>
+           <el-col :span="5">是否禁用:</el-col>
+           <el-col :span="2"></el-col>
+           <el-col :span="12"><SelfDictText :val="item.disabled" type="yes_no"></SelfDictText></el-col>
+         </el-row>
+       </template>
+     </el-collapse-item>
+     <el-collapse-item v-if="roles && roles.length > 0" title="角色信息" name="roleinfo">
        <template  v-for="(item, index) in roles">
          <el-row>
            <el-col :span="5">{{index + 1}}</el-col>
@@ -54,9 +78,14 @@
            <el-col :span="2"></el-col>
            <el-col :span="12">{{item.code}}</el-col>
          </el-row>
+         <el-row>
+           <el-col :span="5">是否禁用:</el-col>
+           <el-col :span="2"></el-col>
+           <el-col :span="12"><SelfDictText :val="item.disabled" type="yes_no"></SelfDictText></el-col>
+         </el-row>
        </template>
      </el-collapse-item>
-     <el-collapse-item title="登录信息" name="4">
+     <el-collapse-item v-if="logininfo && logininfo.length > 0" title="登录信息" name="logininfo">
        <template  v-for="(item, index) in logininfo">
          <el-row>
            <el-col :span="5">{{index + 1}}</el-col>
@@ -66,7 +95,7 @@
          <el-row>
            <el-col :span="5">登录客户端:</el-col>
            <el-col :span="2"></el-col>
-           <el-col :span="12">{{item.loginClient}}</el-col>
+           <el-col :span="12">{{item.loginClientName}}</el-col>
          </el-row>
          <el-row>
            <el-col :span="5">登录方式:</el-col>
@@ -102,19 +131,13 @@
          </el-row>
        </template>
      </el-collapse-item>
-     <el-collapse-item title="个人数据权限" name="5">
-       <template  v-for="(item, index) in personalDataScopes">
-         <el-row>
-           <el-col :span="5">{{index + 1}}</el-col>
-           <el-col :span="2"></el-col>
-           <el-col :span="12"></el-col>
-         </el-row>
+     <el-collapse-item v-if="personalDataScope" title="个人数据权限" name="personalDataScope">
          <el-row>
            <el-col :span="5">名称:</el-col>
            <el-col :span="2"></el-col>
-           <el-col :span="12">{{item.name}}</el-col>
+           <el-col :span="12">{{personalDataScope.name}}</el-col>
          </el-row>
-       </template>
+
      </el-collapse-item>
    </el-collapse>
 
@@ -130,11 +153,12 @@
     data () {
       return {
         id: null,
-        activeNames: ['2', '3', '4', '5'],
+        activeNames: ['basicinfo', 'postinfo', 'roleinfo', 'logininfo', 'personalDataScope'],
         userinfo: {},
         logininfo: [],
         roles: [],
-        personalDataScopes: []
+        posts: [],
+        personalDataScope: {}
       }
     },
     mounted () {
@@ -169,7 +193,8 @@
             self.userinfo = content
             self.logininfo = res.data.data.loginInfo
             self.roles = res.data.data.roles
-            self.personalDataScopes = res.data.data.personalDataScopes
+            self.posts = res.data.data.posts
+            self.personalDataScope = res.data.data.personalDataScope
           })
       },
       kickoutOffline (loginClient) {
@@ -190,7 +215,8 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'UserDetailLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadData(vm.id)
         }
@@ -202,4 +228,6 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 </style>
+<style>
 
+</style>

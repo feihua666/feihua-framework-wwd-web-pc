@@ -27,7 +27,7 @@
       SelfDictSelect,
       LoginClientSelect
     },
-    name: 'messageClientEdit',
+    name: 'MessageClientEdit',
     data () {
       return {
         // 编辑的id
@@ -59,6 +59,9 @@
     },
     methods: {
       loadEditData (id) {
+        if (this.formDataLoading === true) {
+          return
+        }
         this.resetForm()
         let self = this
         self.formDataLoading = true
@@ -85,7 +88,7 @@
               self.addLoading = true
               self.$http.put('/base/message/client/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('消息客户端修改成功')
+                  self.$message.success('消息客户端修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
@@ -112,9 +115,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'MessageClientEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

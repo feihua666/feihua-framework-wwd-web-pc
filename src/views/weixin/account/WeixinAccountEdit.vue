@@ -128,6 +128,9 @@
     },
     methods: {
       loadEditData (id) {
+        if (this.formDataLoading === true) {
+          return
+        }
         this.resetForm()
         let self = this
         self.formDataLoading = true
@@ -189,9 +192,11 @@
     beforeRouteEnter (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'WeixinAccountEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     },

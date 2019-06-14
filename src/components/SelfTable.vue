@@ -31,26 +31,67 @@
               <div v-else-if="item.image" v-html="getImage(scope.row,item)"></div>
               <template v-else-if="item.buttons">
                 <!-- 两种方式，一种下拉按钮，一种正常排列按钮 -->
-                <el-dropdown v-if="item.dropdown && item.buttons.length > 1" trigger="click" size="mini"
-                             :type="item.buttons[0].styleType"
-                             split-button @click="item.buttons[0].click(scope.$index, scope.row)"
-                             :disabled="btnDisabled(item.buttons[0].disabled, scope.$index, scope.row)"
-                >
-                  <i v-if="item.buttons[0].icon" :class="item.buttons[0].icon"></i>{{item.buttons[0].label}}
-                  <el-dropdown-menu slot="dropdown">
-                    <el-dropdown-item v-for="(btn,index) in item.buttons"
-                                      v-if="index > 0"
-                                      :key="btn.label">
-                      <el-button
-                        :type="btn.styleType"
-                        :icon="btn.icon"
-                        size="mini"
-                        style="padding:2px 5px;"
-                        :disabled="btnDisabled(btn.disabled, scope.$index, scope.row)"
-                        @click="btn.click(scope.$index, scope.row)">{{btn.label}}</el-button>
-                    </el-dropdown-item>
-                  </el-dropdown-menu>
-                </el-dropdown>
+                <template  v-if="item.dropdown && item.buttons.length > 1">
+                  <el-button
+                    @click.native.prevent="item.buttons[0].click(scope.$index, scope.row)"
+                    :type="item.buttons[0].styleType"
+                    size="mini"
+                    style="padding:2px 5px;border-bottom-right-radius:0;border-top-right-radius:0;"
+                    :icon="item.buttons[0].icon"
+                    :disabled="btnDisabled(item.buttons[0].disabled, scope.$index, scope.row)"
+                  >
+                    <template v-if="typeof item.buttons[0].label == 'function'">
+                      {{item.buttons[0].label(scope.$index, scope.row)}}
+                    </template>
+                    <template v-else-if="item.buttons[0].label">
+                      {{item.buttons[0].label}}
+                    </template>
+                    <template v-else-if="item.buttons[0].html">
+                      <div v-if="typeof item.buttons[0].html == 'function'" v-html="item.buttons[0].html(scope.row)"></div>
+                      <div v-else v-html="item.buttons[0].html"></div>
+                    </template>
+                    <template v-else>
+                      <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
+                      <template v-else>
+                        {{item.formatter ? item.formatter(scope.row) :  $utils.dGetValue(scope.row, item.name)}}
+                      </template>
+                    </template>
+                  </el-button>
+                  <el-dropdown size="mini">
+                    <el-button :type="item.buttons[0].styleType" size="mini" icon="el-icon-arrow-down" class="el-dropdown__caret-button"
+                               style="margin-left:-3px;padding:2px 5px;border-bottom-left-radius:0;border-top-left-radius:0;"></el-button>
+                    <el-dropdown-menu slot="dropdown">
+                      <el-dropdown-item v-for="(btn,index) in item.buttons"
+                                        v-if="index > 0"
+                                        :key="btn.label">
+                        <el-button
+                          :type="btn.styleType"
+                          :icon="btn.icon"
+                          size="mini"
+                          style="padding:2px 5px;"
+                          :disabled="btnDisabled(btn.disabled, scope.$index, scope.row)"
+                          @click="btn.click(scope.$index, scope.row)">
+                          <template v-if="typeof btn.label == 'function'">
+                            {{btn.label(scope.$index, scope.row)}}
+                          </template>
+                          <template v-else-if="btn.label">
+                            {{btn.label}}
+                          </template>
+                          <template v-else-if="btn.html">
+                            <div v-if="typeof btn.html == 'function'" v-html="btn.html(scope.row)"></div>
+                            <div v-else v-html="btn.html"></div>
+                          </template>
+                          <template v-else>
+                            <div v-if="item.html" v-html="item.html(scope.$index,scope.row)"></div>
+                            <template v-else>
+                              {{item.formatter ? item.formatter(scope.row) :  $utils.dGetValue(scope.row, item.name)}}
+                            </template>
+                          </template>
+                        </el-button>
+                      </el-dropdown-item>
+                    </el-dropdown-menu>
+                  </el-dropdown>
+                </template>
                 <el-button v-else v-for="btn in item.buttons"  :key="scope.$index"
                            @click.native.prevent="btn.click(scope.$index, scope.row)"
                            :type="btn.styleType"

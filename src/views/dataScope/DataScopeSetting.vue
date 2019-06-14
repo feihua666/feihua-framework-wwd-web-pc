@@ -1,5 +1,5 @@
 <template>
-  <div class="fh-page-wrapper">
+  <div class="fh-page-wrapper fh-el-collapse-item-head-bg">
   <el-collapse v-model="activeNames">
     <el-collapse-item title="机构数据范围" name="officeDataScope">
       <OfficeDataScopeDefine :dataScopeId="dataScopeId"></OfficeDataScopeDefine>
@@ -13,11 +13,16 @@
     <el-collapse-item title="数据范围的数据范围" name="dataScopeDataScope">
       <DataScopeDataScopeDefine :dataScopeId="dataScopeId"></DataScopeDataScopeDefine>
     </el-collapse-item>
-    <el-collapse-item title="字典数据范围" name="userDataScope">
-      公共资源，字典管理功能默认全部数据，但根据类型查询字典下拉选项接口根据这里设置，设置为按角色，可以实现跨部门机构或区域管理，否则设置为按用户
+    <el-collapse-item title="字典数据范围" name="dictDataScope">
       <DictDataScopeDefine :dataScopeId="dataScopeId"></DictDataScopeDefine>
     </el-collapse-item>
-    <el-collapse-item title="区域数据范围">
+    <el-collapse-item title="职务数据范围" name="postJobDataScope">
+      <PostJobDataScopeDefine :dataScopeId="dataScopeId"></PostJobDataScopeDefine>
+    </el-collapse-item>
+    <el-collapse-item title="岗位数据范围" name="postDataScope">
+      <PostDataScopeDefine :dataScopeId="dataScopeId"></PostDataScopeDefine>
+    </el-collapse-item>
+    <el-collapse-item title="区域数据范围" name="areaDataScope">
       公共资源，默认全部数据
     </el-collapse-item>
 
@@ -32,12 +37,31 @@
   import RoleDataScopeDefine from '@/views/role/RoleDataScopeDefine.vue'
   import DataScopeDataScopeDefine from '@/views/dataScope/DataScopeDataScopeDefine.vue'
   import DictDataScopeDefine from '@/views/dict/DictDataScopeDefine.vue'
+  import PostDataScopeDefine from '@/views/postjob/PostDataScopeDefine.vue'
+  import PostJobDataScopeDefine from '@/views/postjob/PostJobDataScopeDefine.vue'
   export default {
     name: 'DataScopeSetting',
-    components: { UserDataScopeDefine, OfficeDataScopeDefine, RoleDataScopeDefine, DataScopeDataScopeDefine, DictDataScopeDefine },
+    components: {
+      UserDataScopeDefine,
+      OfficeDataScopeDefine,
+      RoleDataScopeDefine,
+      DataScopeDataScopeDefine,
+      DictDataScopeDefine,
+      PostDataScopeDefine,
+      PostJobDataScopeDefine
+    },
     data () {
       return {
-        activeNames: ['userDataScope', 'officeDataScope', 'roleDataScope', 'dataScopeDataScope'],
+        activeNames: [
+          'userDataScope',
+          'officeDataScope',
+          'roleDataScope',
+          'dataScopeDataScope',
+          'dictDataScope',
+          'postJobDataScope',
+          'postDataScope',
+          'areaDataScope'
+        ],
         dataScopeId: null // 数据范围id，页面传来的
       }
     },

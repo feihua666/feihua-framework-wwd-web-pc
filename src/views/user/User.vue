@@ -22,7 +22,7 @@
                 </OfficeInputSelect>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                 <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
@@ -88,7 +88,7 @@
           },
           {
             label: '操作',
-            width: '400',
+            dropdown: true,
             buttons: [
               {
                 label: '编辑',
@@ -97,16 +97,22 @@
                 click: this.editTableRowClick
               },
               {
-                label: '绑定角色',
+                label: '分配角色',
                 styleType: 'primary',
                 icon: 'el-icon-setting',
                 click: this.userBindRolesBtnClick
               },
               {
-                label: '绑定数据范围',
+                label: '设置数据范围',
                 styleType: 'primary',
                 icon: 'el-icon-setting',
                 click: this.bindDataScope
+              },
+              {
+                label: '分配岗位',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
+                click: this.userBindPostsBtnClick
               },
               {
                 label: '用户详情',
@@ -202,6 +208,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('UserEditLoadData=true')
         this.$router.push('/Main/UserEdit/' + row.id)
       },
       // tablb 表格删除行
@@ -229,12 +236,20 @@
       },
       // 用户绑定角色
       userBindRolesBtnClick (index, row) {
+        this.$utils.loadDataControl.add('UserBindRolesLoadData=true')
         this.$router.push('/Main/UserBindRoles/' + row.id)
       },
+      // 用户绑定岗位
+      userBindPostsBtnClick (index, row) {
+        this.$utils.loadDataControl.add('UserBindPostsLoadData=true')
+        this.$router.push('/Main/UserBindPosts/' + row.id)
+      },
       bindDataScope (index, row) {
+        this.$utils.loadDataControl.add('UserBindDataScopeLoadData=true')
         this.$router.push('/Main/UserBindDataScope/' + row.id)
       },
       userDetail (index, row) {
+        this.$utils.loadDataControl.add('UserDetailLoadData=true')
         this.$router.push('/Main/UserDetail/' + row.id)
       }
     },

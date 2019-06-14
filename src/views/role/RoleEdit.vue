@@ -71,6 +71,9 @@
     },
     methods: {
       loadEditData (id) {
+        if (this.formDataLoading === true) {
+          return
+        }
         this.resetForm()
         let self = this
         self.formDataLoading = true
@@ -104,7 +107,7 @@
               self.addLoading = true
               self.$http.put('/base/role/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('角色修改成功')
+                  self.$message.success('角色修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
@@ -135,9 +138,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'RoleEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

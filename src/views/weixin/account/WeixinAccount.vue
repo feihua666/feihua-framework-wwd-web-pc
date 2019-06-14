@@ -18,7 +18,7 @@
                 <self-dict-select v-model="searchFormModel.auth" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                 <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
@@ -189,6 +189,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('WeixinAccountEditLoadData=true')
         this.$router.push('/Main/Weixin/Account/WeixinAccountEdit/' + row.id)
       },
       // tablb 表格删除行

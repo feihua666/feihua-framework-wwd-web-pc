@@ -23,7 +23,7 @@
                 </WeixinMenuInputSelect>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                 <el-button type="primary" icon="el-icon-search" @click="previewClick">预览</el-button>
                 <el-button type="primary" icon="el-icon-refresh" @click="synToWeixinClick" :loading="synToWeixinLoading">同步到微信</el-button>
@@ -204,6 +204,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('WeixinMenuEditLoadData=true')
         this.$router.push('/Main/Weixin/Menu/WeixinMenuEdit/' + row.id + '?which=' + this.searchFormModel.which)
       },
       // tablb 表格删除行

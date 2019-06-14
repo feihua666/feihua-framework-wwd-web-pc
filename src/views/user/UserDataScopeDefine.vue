@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="120px" v-loading="formDataLoading">
+  <div class="fh-page-wrapper">
+    <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="120px" v-loading="formDataLoading">
     <el-form-item label="用户数据范围" prop="type">
       <self-dict-select v-model="form.type" type="user_dataScope" :show-none="false"></self-dict-select>
     </el-form-item>
@@ -7,6 +8,7 @@
       <el-button type="primary" @click="submitBtnClick" :loading="addLoading">提交</el-button>
     </el-form-item>
   </el-form>
+  </div>
 </template>
 
 <script>

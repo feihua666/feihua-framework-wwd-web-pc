@@ -33,13 +33,9 @@
           .then(response => {
             let content = response.data.data.content
             if (content) {
-              for (let i = 0; i < content.length; i++) {
-                selectedDataScopeIds.push(content[i].dataScopeId)
-              }
-              self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
-            } else {
-              self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
+              selectedDataScopeIds.push(content.dataScopeId)
             }
+            self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
           }).catch(() => {
             self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
           })
@@ -47,11 +43,16 @@
       // 提交
       roleBindDataScopesDoBtnClick () {
         let self = this
-
+// 目前只支持选中最多一个节点
+        let selectedKeys = self.$refs.datascopetree.getCheckedKeys()
+        if (selectedKeys && selectedKeys.length > 1) {
+          self.$message.error('目前只支持最多选中一个节点')
+          return
+        }
         self.submitLoading = true
         self.$http.post('/base/role/' + self.roleId + '/dataScopes/rel', {dataScopeIds: self.$refs.datascopetree.getCheckedKeys()})
           .then(response => {
-            self.$message.info('角色绑定数据范围成功')
+            self.$message.success('角色绑定数据范围成功')
             self.submitLoading = false
           }).catch(() => {
             self.submitLoading = false
@@ -62,9 +63,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.roleId !== vm.$route.params.roleId) {
+        let dataControl = 'RoleBindDataScopeLoadData=true'
+        if (vm.roleId !== vm.$route.params.roleId || vm.$utils.loadDataControl.has(dataControl)) {
           vm.roleId = vm.$route.params.roleId
           vm.loadBindedDataScope()
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

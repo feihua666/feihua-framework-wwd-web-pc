@@ -2,13 +2,13 @@
 
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="年" prop="year" required>
+      <el-form-item label="年" prop="year">
         <el-input readonly  v-model="form.year"></el-input>
       </el-form-item>
-      <el-form-item label="月" prop="month" required>
+      <el-form-item label="月" prop="month">
         <el-input readonly  v-model="form.month"></el-input>
       </el-form-item>
-      <el-form-item label="日" prop="day" required>
+      <el-form-item label="日" prop="day">
         <el-input readonly v-model="form.day"></el-input>
       </el-form-item>
       <el-form-item label="*作息" prop="workOrRest">
@@ -80,6 +80,9 @@
     },
     methods: {
       loadEditData (id) {
+        if (this.formDataLoading === true) {
+          return
+        }
         this.resetForm()
         let self = this
         self.formDataLoading = true
@@ -136,9 +139,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'CalendarSettingEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

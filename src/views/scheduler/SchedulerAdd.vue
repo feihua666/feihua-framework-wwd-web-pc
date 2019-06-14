@@ -112,7 +112,7 @@
               self.addLoading = true
               self.$http.post('/scheduler/scheduler', self.form)
                 .then(function (response) {
-                  self.$message.info('任务计划添加成功')
+                  self.$message.success('任务计划添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

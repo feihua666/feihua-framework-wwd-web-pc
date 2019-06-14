@@ -18,7 +18,7 @@
                 <self-dict-select v-model="searchFormModel.isRead" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>
@@ -177,11 +177,7 @@
           })
       },
       markTableRowLabelDisabled (index, row) {
-        if (row.isRead === 'N') {
-          return true
-        } else {
-          return false
-        }
+        return row.isRead === 'Y'
       },
       // 标记为已读
       markTableRowClick (index, row) {

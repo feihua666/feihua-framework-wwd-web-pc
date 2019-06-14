@@ -12,7 +12,7 @@
                 <self-dict-select v-model="searchFormModel.type" type="dataScope_type"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
               </el-form-item>
             </el-form>
@@ -139,6 +139,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('DataScopeEditLoadData=true')
         this.$router.push('/Main/DataScopeEdit/' + row.id)
       },
       // tablb 表格删除行

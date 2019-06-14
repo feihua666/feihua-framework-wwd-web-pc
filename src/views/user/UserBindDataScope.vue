@@ -33,20 +33,22 @@
           .then(response => {
             let content = response.data.data.content
             if (content) {
-              for (let i = 0; i < content.length; i++) {
-                selectedDataScopeIds.push(content[i].dataScopeId)
-              }
-              self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
-            } else {
-              self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
+              selectedDataScopeIds.push(content.dataScopeId)
             }
-          }).catch(() => {
             self.$refs.datascopetree.setCheckedKeys(selectedDataScopeIds)
+          }).catch(() => {
+            self.$refs.datascopetree.setCheckedKeys([])
           })
       },
       // 提交
       userBindDataScopesDoBtnClick () {
         let self = this
+        // 目前只支持选中最多一个节点
+        let selectedKeys = self.$refs.datascopetree.getCheckedKeys()
+        if (selectedKeys && selectedKeys.length > 1) {
+          self.$message.error('目前只支持最多选中一个节点')
+          return
+        }
         self.submitLoading = true
         self.$http.post('/base/user/' + self.userId + '/dataScopes/rel', {dataScopeIds: self.$refs.datascopetree.getCheckedKeys()})
           .then(response => {
@@ -61,7 +63,8 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.userId !== vm.$route.params.userId) {
+        let dataControl = 'UserBindDataScopeLoadData=true'
+        if (vm.userId !== vm.$route.params.userId || vm.$utils.loadDataControl.has(dataControl)) {
           vm.userId = vm.$route.params.userId
           vm.loadBindedDataScope()
         }

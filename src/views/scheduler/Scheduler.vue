@@ -25,7 +25,7 @@
                   <el-input  v-model="searchFormModel.triggerGroup"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                  <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                   <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                   <el-button type="primary" icon="el-icon-search" @click="viewSchedulerOrigin">查看脱管列表</el-button>
                 </el-form-item>
@@ -115,7 +115,7 @@
           },
           {
             label: '操作',
-            width: '600',
+            dropdown: true,
             buttons: [
               {
                 label: '编辑',
@@ -201,9 +201,6 @@
       this.loadTableData(1)
     },
     methods: {
-      conslol (obj) {
-        console.log(obj)
-      },
       // 查询按钮点击事件
       searchBtnClick () {
         this.loadTableData(1)
@@ -249,6 +246,7 @@
       },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
+        this.$utils.loadDataControl.add('SchedulerEditLoadData=true')
         this.$router.push('/Main/SchedulerEdit/' + row.schedulerDto.id)
       },
       editBtnDisabled (index, row) {
@@ -359,8 +357,9 @@
       resumeBtnDisabled (index, row) {
         return row.schedulerStatus !== 'pause'
       },
-      // 恢复暂停
+      // 修改触发时间
       editTriggerTime (index, row) {
+        this.$utils.loadDataControl.add('SchedulerEditTriggerTimeLoadData=true')
         this.$router.push('/Main/SchedulerEditTriggerTime/' + row.schedulerDto.id)
       },
       editTriggerTimeBtnDisabled (index, row) {

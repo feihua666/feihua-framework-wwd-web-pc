@@ -1,13 +1,13 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
-      <el-form-item label="字典值" prop="value" required>
+      <el-form-item label="字典值" prop="value">
         <el-input  v-model="form.value"></el-input>
       </el-form-item>
-      <el-form-item label="字典名" prop="name" required>
+      <el-form-item label="字典名" prop="name">
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="字典类型" prop="type" required>
+      <el-form-item label="字典类型" prop="type">
         <el-input  v-model="form.type"></el-input>
       </el-form-item>
       <el-form-item label="描述">
@@ -16,10 +16,10 @@
       <el-form-item label="显示顺序">
         <el-input-number v-model="form.sequence" :min="0" :max="1000" controls-position="right"></el-input-number>
       </el-form-item>
-      <el-form-item label="是否系统" prop="isSystem" required>
+      <el-form-item label="是否系统" prop="isSystem">
         <self-dict-select v-model="form.isSystem" type="yes_no"></self-dict-select>
       </el-form-item>
-      <el-form-item label="是否公共" prop="isPublic" required>
+      <el-form-item label="是否公共" prop="isPublic">
         <self-dict-select v-model="form.isPublic" type="yes_no"></self-dict-select>
       </el-form-item>
       <el-form-item label="父级">
@@ -90,6 +90,9 @@
     },
     methods: {
       loadEditData (id) {
+        if (this.formDataLoading === true) {
+          return
+        }
         this.resetForm()
         let self = this
         self.formDataLoading = true
@@ -161,9 +164,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'DictEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

@@ -150,6 +150,12 @@ const router = new Router({
           meta: { menu: {name: '用户绑定角色'} }
         },
         {
+          path: 'UserBindPosts/:userId',
+          name: 'UserBindPosts',
+          component: _import('user/UserBindPosts'),
+          meta: { menu: {name: '用户绑定岗位'} }
+        },
+        {
           path: 'FunResource',
           name: 'FunResource',
           component: _import('funResource/FunResource')
@@ -651,6 +657,47 @@ const router = new Router({
           name: 'SchedulerExcuteRecord',
           component: _import('scheduler/SchedulerExcuteRecord'),
           meta: { menu: {name: '任务执行详情'}, keepAlive: true }
+        },
+        // 以下为岗位相关
+        {
+          path: 'Post',
+          name: 'Post',
+          component: _import('postjob/Post')
+        },
+        {
+          path: 'PostAdd',
+          name: 'PostAdd',
+          component: _import('postjob/PostAdd'),
+          meta: { menu: {name: '岗位添加'}, keepAlive: true }
+        },
+        {
+          path: 'PostEdit/:id',
+          name: 'PostEdit',
+          component: _import('postjob/PostEdit'),
+          meta: { menu: {name: '岗位修改'}, keepAlive: true }
+        },
+        {
+          path: 'PostBindRoles/:postId',
+          name: 'PostBindRoles',
+          component: _import('postjob/PostBindRoles'),
+          meta: { menu: {name: '岗位绑定角色'} }
+        },
+        {
+          path: 'PostJob',
+          name: 'PostJob',
+          component: _import('postjob/PostJob')
+        },
+        {
+          path: 'PostJobAdd',
+          name: 'PostJobAdd',
+          component: _import('postjob/PostJobAdd'),
+          meta: { menu: {name: '岗位职务添加'}, keepAlive: true }
+        },
+        {
+          path: 'PostJobEdit/:id',
+          name: 'PostJobEdit',
+          component: _import('postjob/PostJobEdit'),
+          meta: { menu: {name: '岗位职务修改'}, keepAlive: true }
         }
       ]
     }

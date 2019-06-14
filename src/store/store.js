@@ -12,6 +12,8 @@ let defaultLoginUser = {
 */
 export default new Vuex.Store({
   state: {
+    // 消息未读数
+    messageNum: null,
     // 语言,暂时没有用到
     lang: Cookies.get('lang') || 'zh',
     // 首页菜单与tabs相关
@@ -21,11 +23,13 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    dataControl: state => state.indexView.loadDataControl,
     visitedViews: state => state.indexView.visitedViews,
-    loginUser: state => state.loginUser
+    messageNum: state => state.messageNum
   },
   mutations: {
+    setMessageNum: (state, num) => {
+      state.messageNum = num
+    },
     // 设置语言
     setLang: (state, lang) => {
       state.lang = lang

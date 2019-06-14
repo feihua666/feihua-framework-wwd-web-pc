@@ -13,7 +13,7 @@
                   </el-date-picker>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary"	icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                  <el-button type="primary"	icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                   <el-button type="primary" icon="el-icon-refresh" @click="refreshBtnClick">刷新</el-button>
                 </el-form-item>
               </el-form>
@@ -76,6 +76,7 @@
                 cancelButtonText: '删除'
               })
                 .then(() => {
+                  this.$utils.loadDataControl.add('CalendarSettingEditLoadData=true')
                   this.$router.push('/Main/CalendarSetting/CalendarSettingEdit/' + contentItem.id)
                 })
                 .catch(action => {

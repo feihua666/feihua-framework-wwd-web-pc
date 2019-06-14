@@ -1,14 +1,25 @@
 <template>
   <el-row>
-    <el-col :class="isCollapse ? 'hidden': ''" :span="8">
+    <el-col :class="isCollapse ? 'hidden': ''" :span="6">
       <img class="head-pic" @click="showFileUpload" :src="headPic"/>
     </el-col>
-    <el-col :span="16" :class="isCollapse ? 'widthfull': ''">
+    <el-col :span="18" :class="isCollapse ? 'widthfull': ''">
       <el-row>
         <el-col :span="18" :class="isCollapse ? 'hidden': ''" style="font-size: 0.75rem;color:azure;overflow: hidden; padding: 6px;">
           <i class="glyphicon glyphicon-user"></i>&nbsp;<span class="login-username" v-if="loginUser" @click="personalDetailDialogVisible = true"> {{loginUser.nickname}}</span>
           <br>
-          <i class="glyphicon glyphicon-lock"></i>&nbsp;<span v-if="loginUser && loginUser.additionalAttr"> {{loginUser.additionalAttr.role.name}}</span>
+          <el-dropdown @command="rolePostSwitch" style="width:100%">
+            <div style="font-size: 0.75rem;color:azure;overflow: hidden;text-overflow: ellipsis;white-space: nowrap;"><i class="glyphicon glyphicon-lock"  v-if="loginUser && loginUser.role"></i><i class="glyphicon glyphicon-flag"  v-else-if="loginUser && loginUser.post"></i>&nbsp;<span v-if="loginUser && loginUser.role"> {{loginUser.role.name}}</span><span v-else-if="loginUser && loginUser.post"> {{loginUser.post.name}}</span></div>
+
+            <el-dropdown-menu slot="dropdown" style="font-size: 0.75rem;">
+              <template  v-if="loginUser && loginUser.role">
+                <el-dropdown-item style="font-size: 0.75rem;line-height: 25px;" v-for="(role, index) in loginUser.roles" :key="index" :command="role.id">{{role.name}}</el-dropdown-item>
+              </template>
+              <template  v-else-if="loginUser && loginUser.post">
+                <el-dropdown-item style="font-size: 0.75rem;line-height: 25px;" v-for="(post, index) in loginUser.posts" :key="index" :command="post.id">{{post.name}}</el-dropdown-item>
+              </template>
+            </el-dropdown-menu>
+          </el-dropdown>
         </el-col>
         <el-col :span="6" :class="isCollapse ? 'widthfull': ''" style="padding: 2px;text-align: center;">
           <el-dropdown @command="handleCommand">
@@ -64,17 +75,27 @@
           <el-row>
             <el-col :span="10">所在机构</el-col>
             <el-col :span="2"></el-col>
-            <el-col :span="12">{{loginUser.additionalAttr.office ? loginUser.additionalAttr.office.name : ''}}</el-col>
+            <el-col :span="12">{{loginUser.office ? loginUser.office.name : ''}}</el-col>
           </el-row>
           <el-row>
             <el-col :span="10">当前角色</el-col>
             <el-col :span="2"></el-col>
-            <el-col :span="12">{{loginUser.additionalAttr.role ? loginUser.additionalAttr.role.name : ''}}</el-col>
+            <el-col :span="12">{{loginUser.role ? loginUser.role.name : ''}}</el-col>
           </el-row>
           <el-row>
             <el-col :span="10">当前角色编码</el-col>
             <el-col :span="2"></el-col>
-            <el-col :span="12">{{loginUser.additionalAttr.role ? loginUser.additionalAttr.role.code : ''}}</el-col>
+            <el-col :span="12">{{loginUser.role ? loginUser.role.code : ''}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">当前岗位</el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="12">{{loginUser.post ? loginUser.post.name : ''}}</el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="10">当前岗位编码</el-col>
+            <el-col :span="2"></el-col>
+            <el-col :span="12">{{loginUser.post ? loginUser.post.code : ''}}</el-col>
           </el-row>
           <el-row></el-row>
           <el-row></el-row>
@@ -93,33 +114,76 @@
   import FileUpload from '@/components/FileUploadDialog.vue'
   import SelfDictText from '@/components/SelfDictText.vue'
   import UserUpdatePasswordCurrent from '@/views/user/UserUpdatePasswordCurrent.vue'
+  import { mapGetters } from 'vuex'
   export default {
     components: {FileUpload, UserUpdatePasswordCurrent, SelfDictText},
     name: 'Profile',
     props: {
       isCollapse: {
         default: false
+      },
+      loadMsgNum: {
+        default: false
       }
     },
     data () {
       return {
-        messageNum: null,
         personalDetailDialogVisible: false,
         loginUser: null
       }
     },
     mounted () {
-      this.getMessageNum()
-      this.getMessageNumInterval()
+      if (this.loadMsgNum) {
+        this.getMessageNum()
+        this.getMessageNumInterval()
+      }
       let self = this
       this.$http.getCurrentUserinfo().then(function (content) {
         self.loginUser = content
+      })
+      // 切换岗位角色事件
+      this.$bus.$on('rolePostSwitch', function (data) {
+        self.$http.getCurrentUserinfo().then(function (content) {
+          self.loginUser = content
+        })
       })
     },
     methods: {
       handleCommand (cmmand) {
         let self = this
         self[cmmand].call(this)
+      },
+      rolePostSwitch (id) {
+        let self = this
+        if (this.loginUser) {
+          if (this.loginUser.role) {
+            if (this.loginUser.role.id === id) {
+              return
+            }
+            self.$http.post('/base/user/role/switch', {roleId: id})
+              .then(function (res) {
+                self.$message.success('角色切换成功')
+                self.refresh()
+              }).catch(function (res) {
+                self.$message.error('角色切换失败')
+              })
+          } else if (this.loginUser.post) {
+            if (this.loginUser.post.id === id) {
+              return
+            }
+            self.$http.post('/base/user/post/switch', {post: id})
+              .then(function (res) {
+                self.$message.success('岗位切换成功')
+                self.refresh()
+              }).catch(function (res) {
+                self.$message.error('岗位切换失败')
+              })
+          }
+        }
+      },
+      refresh () {
+        // 切换成功发送事件以刷新相关组件
+        this.$bus.$emit('rolePostSwitch')
       },
       logout () {
         let self = this
@@ -164,13 +228,16 @@
         let self = this
         self.$http.get('/base/message/currentuser/messages', {isRead: 'N', pageable: true, pageNo: 1, pageSize: 1})
           .then(function (response) {
-            self.messageNum = response.data.data.page.dataNum
+            self.$store.commit('setMessageNum', response.data.data.page.dataNum)
           }).catch(() => {
-            self.messageNum = null
+            self.$store.commit('setMessageNum', null)
           })
       }
     },
     computed: {
+      ...mapGetters([
+        'messageNum'
+      ]),
       headPic () {
         if (this.loginUser && this.loginUser.photo) {
           return this.$config.file.getDownloadUrl(this.loginUser.photo)

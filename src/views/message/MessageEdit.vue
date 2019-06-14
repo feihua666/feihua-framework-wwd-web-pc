@@ -10,13 +10,13 @@
         <el-input autosize type="textarea"  v-model="form.templateParams"></el-input>
         <div>如果模板中配置了参数，请填写相关参数,发送参数只会在保存时替换，不会保存副本</div>
       </el-form-item>
-      <el-form-item label="标题" prop="title" required>
+      <el-form-item label="标题" prop="title">
         <el-input  v-model="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="简介" prop="profile" required>
+      <el-form-item label="简介" prop="profile">
         <el-input  v-model="form.profile"></el-input>
       </el-form-item>
-      <el-form-item label="消息内容" prop="content" required>
+      <el-form-item label="消息内容" prop="content">
         <el-input autosize type="textarea" v-model="form.content"></el-input>
       </el-form-item>
       <el-form-item label="消息分类" prop="msgType">
@@ -124,6 +124,9 @@
           })
       },
       loadEditData (id) {
+        if (this.formDataLoading === true) {
+          return
+        }
         this.resetForm()
         let self = this
         self.formDataLoading = true
@@ -184,9 +187,11 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        if (vm.id !== vm.$route.params.id) {
+        let dataControl = 'MessageEditLoadData=true'
+        if (vm.id !== vm.$route.params.id || vm.$utils.loadDataControl.has(dataControl)) {
           vm.id = vm.$route.params.id
           vm.loadEditData(vm.id)
+          vm.$utils.loadDataControl.remove(dataControl)
         }
       })
     }

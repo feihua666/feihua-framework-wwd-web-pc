@@ -67,7 +67,6 @@
       },
       // 左边刷新按钮，重新加载树数据
       treeRefreshBtnClick () {
-        console.log(this.which)
         this.loadTreeData()
       },
       // 加载树数据

@@ -346,15 +346,19 @@
         }
       })
 
-      console.log('mounted')
+      console.log('VisitedViews mounted')
       this.canAddUrlCollect = false
       this.isCanAddUrlCollect()
+      // 切换岗位角色事件
+      this.$bus.$on('rolePostSwitch', function (data) {
+        self.closeAll()
+      })
     },
     watch: {
       $route () {
         this.add()
-        this.canAddUrlCollect = false
-        this.isCanAddUrlCollect()
+        /* this.canAddUrlCollect = false
+        this.isCanAddUrlCollect() */
       },
       menus () {
         this.add()

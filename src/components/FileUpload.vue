@@ -23,7 +23,7 @@
         <i slot="trigger" ref="cardTrigger" class="el-icon-plus avatar-uploader-icon"></i>
       </template>
       <template v-else>
-        <el-button slot="trigger" size="small" :disabled="fileSelectSize >= limit" :loading="loading && !uploadBtnShow" type="primary">{{triggerBtnText}}</el-button>
+        <el-button slot="trigger" size="small" :icon="triggerBtnIcon" :disabled="fileSelectSize >= limit" :loading="loading && !uploadBtnShow" type="primary">{{triggerBtnText}}</el-button>
         <el-button style="margin-left: 10px;" size="small" v-if="uploadBtnShow" type="success" :loading="loading" @click="submit">{{uploadBtnText}}</el-button>
       </template>
     </el-upload>
@@ -51,6 +51,9 @@
       },
       triggerBtnText: {
         default: '选取文件'
+      },
+      triggerBtnIcon: {
+        default: ''
       },
       uploadBtnText: {
         default: '上传到服务器'

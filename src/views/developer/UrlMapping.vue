@@ -5,7 +5,7 @@
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" label-width="100px"  size="small">
               <el-form-item label="url">
-                <el-input  v-model="searchFormModel.url" placeholder="servletPath"></el-input>
+                <el-input  v-model="searchFormModel.url" placeholder="servletPath:/base/user/current"></el-input>
               </el-form-item>
               <el-form-item label="请求方法">
                 <self-dict-select v-model="searchFormModel.method" :showNone="false" type="httpRequest_method"></self-dict-select>
@@ -61,6 +61,7 @@
           .catch(function (error) {
             if (error.response.status === 404) {
               self.tableData = []
+              self.$message.error('未匹配到url')
             }
             self.tableLoading = false
           })

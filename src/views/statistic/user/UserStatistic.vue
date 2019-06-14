@@ -203,7 +203,6 @@
               let userAreaCountECO = EChartsOptionsArea()
               userAreaCountECO.series[0].data = data
               self.userAreatEChartsOptions = userAreaCountECO
-              console.log(userAreaCountECO)
               // 在线区域分布
               let userOnlineAreaCountECO = EChartsOptionsArea()
               userOnlineAreaCountECO.series[0].data = onlineData
