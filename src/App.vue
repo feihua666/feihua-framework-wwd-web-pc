@@ -59,7 +59,9 @@
   .fh-tree-aside-panel{
     width: 200px;
   }
-
+  .fh-el-collapse-item-head-bg .el-collapse-item__header{
+    background-color: aliceblue;
+  }
   /* 按钮bootstrap图标 */
   .el-button [class*=glyphicon]+span{
     margin-left: 5px;

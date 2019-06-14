@@ -1,5 +1,5 @@
 <template>
- <div>
+  <div class="fh-page-wrapper fh-background-white fh-padding-30">
    使用通用数据范围设置
  </div>
 </template>

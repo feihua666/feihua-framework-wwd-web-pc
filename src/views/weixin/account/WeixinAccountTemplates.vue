@@ -6,7 +6,7 @@
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :inline="true" size="small">
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
               </el-form-item>
             </el-form>
           </el-collapse-item>

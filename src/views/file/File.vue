@@ -12,8 +12,8 @@
                 <self-dict-select v-model="searchFormModel.type" type="upload_download_type"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
-                <file-upload style="display: inline-block" ref="fileupload" trigger-btn-text="上传" :limit="1" :upload-btn-show="false" :show-file-list="false" :auto-upload="true" list-type="text" :on-success="fileUploadSucess"></file-upload>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
+                <file-upload style="display: inline-block" ref="fileupload" trigger-btn-icon="glyphicon glyphicon-arrow-up" trigger-btn-text="上传" :limit="1" :upload-btn-show="false" :show-file-list="false" :auto-upload="true" list-type="text" :on-success="fileUploadSucess"></file-upload>
                 <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
@@ -44,6 +44,9 @@
         defaultSort: {prop: 'createAt', order: 'descending'},
         columns: [
           {
+            type: 'expand'
+          },
+          {
             name: 'name',
             label: '名称'
           },
@@ -66,7 +69,8 @@
           },
           {
             name: 'filePath',
-            label: '路径'
+            label: '路径',
+            showInTable: false
           },
           {
             sortable: 'custom',
@@ -86,7 +90,7 @@
               {
                 label: '下载',
                 styleType: 'primary',
-                icon: 'el-icon-arrow-down',
+                icon: 'glyphicon glyphicon-arrow-down',
                 click: this.downloadFile
               },
               {

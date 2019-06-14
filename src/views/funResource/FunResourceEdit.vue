@@ -9,7 +9,7 @@
       </el-scrollbar>
     </el-popover>
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="名称" prop="name" required>
+      <el-form-item label="名称" prop="name">
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="类型" prop="type">
@@ -27,9 +27,11 @@
       </el-form-item>
       <el-form-item label="url" prop="url" v-if="form.type == 'link_page' || form.type == 'link'">
         <el-input  v-model="form.url"></el-input>
+        <span v-if="form.type == 'link'">如：/Main/Iframe?url=http://www.example.com  或 /Main/User/Detail</span>
+        <span v-if="form.type == 'link_page'">如：http://www.example.com</span>
       </el-form-item>
       <el-form-item label="权限标识">
-        <el-input  v-model="form.permissions"></el-input>
+        <el-input type="textarea" autosize v-model="form.permissions"></el-input>
       </el-form-item>
       <el-form-item label="显示顺序" prop="sequence">
         <el-input-number v-model="form.sequence" :min="0" :max="1000" controls-position="right"></el-input-number>

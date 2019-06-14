@@ -125,7 +125,7 @@
               }
               self.$http.post('/scheduler/scheduler/' + self.id + '/modifyTriggerTime', form)
                 .then(function (response) {
-                  self.$message.info('任务计划时间修改成功')
+                  self.$message.success('任务计划时间修改成功')
                   self.oldCron = self.form.triggerCronExpression
                   self.addLoading = false
                 })

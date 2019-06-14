@@ -88,7 +88,7 @@
               self.addLoading = true
               self.$http.put('/base/message/client/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('消息客户端修改成功')
+                  self.$message.success('消息客户端修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

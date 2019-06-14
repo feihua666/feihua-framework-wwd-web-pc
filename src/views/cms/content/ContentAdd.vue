@@ -1,10 +1,10 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" label-width="150px">
-      <el-form-item label="标题" prop="title" required>
+      <el-form-item label="标题" prop="title">
         <el-input  v-model="form.title"></el-input>
       </el-form-item>
-      <el-form-item label="作者" prop="author" required>
+      <el-form-item label="作者" prop="author">
         <el-input  v-model="form.author" placeholder="作者"></el-input>
       </el-form-item>
       <el-form-item label="来源" prop="original">

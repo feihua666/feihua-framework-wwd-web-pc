@@ -132,7 +132,7 @@
               self.addLoading = true
               self.$http.put('/scheduler/scheduler/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('任务计划修改成功')
+                  self.$message.success('任务计划修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

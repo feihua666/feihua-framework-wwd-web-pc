@@ -34,7 +34,7 @@
             </el-form-item>
 
             <el-form-item>
-              <el-button type="primary" icon="el-icon-search" v-loading="tableLoading" @click="searchBtnClick">查询</el-button>
+              <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
               <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
               <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
             </el-form-item>
@@ -92,6 +92,11 @@
             dict: 'yes_no'
           },
           {
+            name: 'isPublic',
+            label: '是否公共',
+            dict: 'yes_no'
+          },
+          {
             name: 'parentId',
             label: '父级',
             formatter: this.dataParentFormatter
@@ -103,12 +108,19 @@
           },
           {
             label: '操作',
+            dropdown: true,
             buttons: [
               {
                 label: '编辑',
                 styleType: 'primary',
                 icon: 'el-icon-edit',
                 click: this.editTableRowClick
+              },
+              {
+                label: '分配角色',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
+                click: this.postBindRolesBtnClick
               },
               {
                 label: '删除',
@@ -258,6 +270,11 @@
           name = this.postJob[row.postJobId].name || null
         }
         return name
+      },
+      // 岗位绑定角色
+      postBindRolesBtnClick (index, row) {
+        this.$utils.loadDataControl.add('PostBindRolesLoadData=true')
+        this.$router.push('/Main/PostBindRoles/' + row.id)
       }
     },
     watch: {

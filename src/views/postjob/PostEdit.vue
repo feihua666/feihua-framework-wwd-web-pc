@@ -13,10 +13,13 @@
         <SelfDictSelect v-model="form.type" type="post_type"></SelfDictSelect>
       </el-form-item>
       <el-form-item label="岗位职务" prop="postJobId">
-        <el-input v-model="form.postJobId"></el-input>
+        <PostJobSelect v-model="form.postJobId"></PostJobSelect>
       </el-form-item>
       <el-form-item label="是否禁用" prop="disabled">
-        <el-input v-model="form.disabled"></el-input>
+        <SelfDictSelect v-model="form.disabled" type="yes_no"></SelfDictSelect>
+      </el-form-item>
+      <el-form-item label="是否公共" prop="isPublic">
+        <SelfDictSelect v-model="form.isPublic" type="yes_no"></SelfDictSelect>
       </el-form-item>
       <el-form-item label="父级" prop="parentId">
         <PostInputSelect ref="postinput"  v-model="form.parentId">
@@ -37,11 +40,13 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import OfficeInputSelect from '@/views/office/OfficeInputSelect'
   import PostInputSelect from '@/views/postjob/PostInputSelect.vue'
+  import PostJobSelect from '@/views/postjob/PostJobSelect.vue'
   export default {
     name: 'PostEdit',
     components: {
       SelfDictSelect,
       PostInputSelect,
+      PostJobSelect,
       OfficeInputSelect
     },
     data () {
@@ -57,6 +62,7 @@
           disabled: '',
           parentId: '0',
           dataOfficeId: '',
+          isPublic: '',
           updateTime: null
         },
         formDataLoading: false,
@@ -120,7 +126,7 @@
               self.addLoading = true
               self.$http.put('/base/postjob/post/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('岗位修改成功')
+                  self.$message.success('岗位修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

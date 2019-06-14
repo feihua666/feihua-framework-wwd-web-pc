@@ -4,7 +4,7 @@
         <SiteSelect style="width:100%" v-model="searchFormModel.siteId"></SiteSelect>
       </el-header>
       <el-container>
-      <el-aside width="200px">
+      <el-aside width="200px" class="fh-tree-aside">
         <el-scrollbar style="height: 100%;" wrapStyle="height:100%;overflow:auto;" >
           <ChannelTree :site-id="searchFormModel.siteId" ref="lefttree" v-on:nodeClick="treeNodeClick"></ChannelTree>
          </el-scrollbar>
@@ -21,7 +21,7 @@
                 </ChannelInputSelect>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                 <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>

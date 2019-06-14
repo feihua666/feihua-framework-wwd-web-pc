@@ -1,19 +1,20 @@
 <template>
   <div class="fh-page-wrapper">
     <div class="fh-background-white" style="width: 500px;">
-      <role-tree ref="roletree" :check-strictly="true" :show-checkbox="true"></role-tree>
-      <el-button type="primary" size="small" @click="userBindRolesDoBtnClick" :loading="submitLoading" style="margin: 2rem 5rem;">提交</el-button>
+      <PostTree ref="posttree" :check-strictly="true" :show-checkbox="true"></PostTree>
+      <el-button type="primary" size="small" @click="userBindPostsDoBtnClick" :loading="submitLoading" style="margin: 2rem 5rem;">提交</el-button>
     </div>
   </div>
 </template>
 
 <script>
-  import RoleTree from '@/views/role/RoleTree.vue'
+  import PostTree from '@/views/postjob/PostTree.vue'
 
   export default {
     components: {
-      RoleTree},
-    name: 'UserBindRoles',
+      PostTree
+    },
+    name: 'UserBindPosts',
     data () {
       return {
         userId: null,
@@ -22,36 +23,36 @@
     },
     mounted () {
       if (this.userId) {
-        this.loadBindedRoles()
+        this.loadBindedPosts()
       }
     },
     methods: {
-      // 加载已经绑定的角色
-      loadBindedRoles () {
+      // 加载已经绑定的岗位
+      loadBindedPosts () {
         let self = this
-        let selectedRoleIds = []
-        self.$http.get('/base/user/' + self.userId + '/roles/rel')
+        let selectedPostIds = []
+        self.$http.get('/base/user/' + self.userId + '/posts/rel')
           .then(response => {
             let content = response.data.data.content
             if (content) {
               for (let i = 0; i < content.length; i++) {
-                selectedRoleIds.push(content[i].roleId)
+                selectedPostIds.push(content[i].postId)
               }
-              self.$refs.roletree.setCheckedKeys(selectedRoleIds)
+              self.$refs.posttree.setCheckedKeys(selectedPostIds)
             } else {
-              self.$refs.roletree.setCheckedKeys(selectedRoleIds)
+              self.$refs.posttree.setCheckedKeys(selectedPostIds)
             }
           }).catch(() => {
-            self.$refs.roletree.setCheckedKeys(selectedRoleIds)
+            self.$refs.posttree.setCheckedKeys(selectedPostIds)
           })
       },
-      // 提交绑定的角色
-      userBindRolesDoBtnClick () {
+      // 提交绑定的岗位
+      userBindPostsDoBtnClick () {
         let self = this
         self.submitLoading = true
-        self.$http.post('/base/user/' + self.userId + '/roles/rel', {roleIds: self.$refs.roletree.getCheckedKeys()})
+        self.$http.post('/base/user/' + self.userId + '/posts/rel', {postIds: self.$refs.posttree.getCheckedKeys()})
           .then(response => {
-            self.$message.success('用户绑定角色成功')
+            self.$message.success('用户绑定岗位成功')
             self.submitLoading = false
           }).catch(() => {
             self.submitLoading = false
@@ -62,10 +63,10 @@
     beforeRouteEnter  (to, from, next) {
       next(vm => {
         // 通过 `vm` 访问组件实例
-        let dataControl = 'UserBindRolesLoadData=true'
+        let dataControl = 'UserBindPostsLoadData=true'
         if (vm.userId !== vm.$route.params.userId || vm.$utils.loadDataControl.has(dataControl)) {
           vm.userId = vm.$route.params.userId
-          vm.loadBindedRoles()
+          vm.loadBindedPosts()
         }
       })
     }

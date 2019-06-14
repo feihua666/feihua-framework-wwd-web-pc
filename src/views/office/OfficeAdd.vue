@@ -1,7 +1,7 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="名称" prop="name" required>
+      <el-form-item label="名称" prop="name">
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="类型" prop="type">
@@ -65,7 +65,7 @@
               self.addLoading = true
               self.$http.post('/base/office', self.form)
                 .then(function (response) {
-                  self.$message.info('机构添加成功')
+                  self.$message.success('机构添加成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

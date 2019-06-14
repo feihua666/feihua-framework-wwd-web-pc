@@ -5,7 +5,7 @@
       <el-container>
         <el-header height="110px" style="padding: 0;color: #fff">
           <div class="fh-logo fh-main-nav fh-main-nav-left">fh{{isCollapse? '': ' - framework'}}</div>
-          <profile :is-collapse="isCollapse"></profile>
+          <profile :is-collapse="isCollapse" :load-msg-num="true"></profile>
         </el-header>
         <el-main>
           <el-scrollbar class="self-scroll-bar-view" wrapStyle="overflow:auto;">
@@ -27,7 +27,7 @@
           <el-row type="flex" class="row-bg" justify="space-between">
             <div></div>
             <div style="width: 200px;">
-              <profile type="right" :is-collapse="isCollapse"></profile>
+              <profile type="right"></profile>
             </div>
           </el-row>
         </div>
@@ -68,6 +68,12 @@
       // 尝试加载用户信息，以确定用户登录状态
       this.loadUserInfo()
       this.loadMenus()
+      // 切换岗位角色事件
+      let self = this
+      this.$bus.$on('rolePostSwitch', function (data) {
+        self.loadUserInfo()
+        self.loadMenus()
+      })
     },
     watch: {
       isCollapse (val) {

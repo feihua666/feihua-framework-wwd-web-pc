@@ -107,7 +107,7 @@
               self.addLoading = true
               self.$http.put('/base/role/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('角色修改成功')
+                  self.$message.success('角色修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {

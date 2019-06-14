@@ -25,7 +25,7 @@
                   <el-input  v-model="searchFormModel.triggerGroup"></el-input>
                 </el-form-item>
                 <el-form-item>
-                  <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                  <el-button type="primary" icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                   <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                   <el-button type="primary" icon="el-icon-search" @click="viewSchedulerOrigin">查看脱管列表</el-button>
                 </el-form-item>
@@ -115,7 +115,7 @@
           },
           {
             label: '操作',
-            width: '600',
+            dropdown: true,
             buttons: [
               {
                 label: '编辑',

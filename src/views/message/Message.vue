@@ -14,7 +14,7 @@
                 <self-dict-select v-model="searchFormModel.msgLevel" type="message_level"></self-dict-select>
               </el-form-item>
               <el-form-item>
-                <el-button type="primary"	icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary"	icon="el-icon-search" :loading="tableLoading" @click="searchBtnClick">查询</el-button>
                 <el-button type="primary"	icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                 <el-button type="primary" icon="el-icon-plus" @click="sendNewMessage">发送新消息</el-button>
               </el-form-item>
@@ -65,7 +65,7 @@
           },
           {
             label: '操作',
-            width: '400',
+            dropdown: true,
             buttons: [
               {
                 label: '查看已读人员',

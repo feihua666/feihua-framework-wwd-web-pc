@@ -95,7 +95,7 @@
               self.addLoading = true
               self.$http.put('/base/postjob/postjob/' + self.id, self.form)
                 .then(function (response) {
-                  self.$message.info('岗位职务修改成功')
+                  self.$message.success('岗位职务修改成功')
                   self.addLoading = false
                 })
                 .catch(function (response) {
