@@ -69,9 +69,9 @@
           </el-form-item>
         </el-form>
       </el-dialog>
-      <el-dialog :close-on-click-modal="false" title="预览" :visible.sync="rowUserCardInfoDialogVisible">
+      <el-dialog :close-on-click-modal="false" title="预览" :visible.sync="rowUserCardInfoDialogVisible" width="500px">
         <el-card :body-style="{ padding: '0px' }">
-          <img  v-if="rowViewUrl" :src="rowViewUrl" class="image">
+          <img  v-if="rowViewUrl" :src="rowViewUrl" class="image" style="width:100%;">
           <div style="padding: 14px;word-break: break-all;">
             <a :href="rowViewUrl" target="_blank">{{rowViewUrl}}</a>
           </div>
@@ -273,14 +273,17 @@
       // 查看卡片
       userCardInfo (index, row) {
         let self = this
-        self.rowViewUrl = ''
-        self.rowUserCardInfoDialogVisible = true
         self.$http.get('/wwd/user/cards', {wwdUserId: row.wwdUserId})
           .then(function (response) {
             let content = response.data.data.content
+            self.rowUserCardInfoDialogVisible = true
             if (content.length > 0) {
               self.rowViewUrl = content[0].picOriginUrl
+            } else {
+              self.rowViewUrl = ''
             }
+          }).catch(function () {
+            self.$message.error('该用户没有生成卡片')
           })
       },
       editTableRowClick (index, row) {
