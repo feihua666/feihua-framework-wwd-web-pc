@@ -4,7 +4,10 @@
     <el-aside :width="leftAsideWidth" style="background-color:#304156;overflow-x: hidden;transition: width 500ms;">
       <el-container>
         <el-header height="110px" style="padding: 0;color: #fff">
-          <div class="fh-logo fh-main-nav fh-main-nav-left">fh{{isCollapse? '': ' - framework'}}</div>
+          <div class="fh-logo fh-main-nav fh-main-nav-left">
+            <img style="height:45px;" :src="logoPic">
+            <span v-if="!isCollapse">汪汪队后台管理</span>
+          </div>
           <profile :is-collapse="isCollapse" :load-msg-num="true"></profile>
         </el-header>
         <el-main>
@@ -74,6 +77,11 @@
         self.loadUserInfo()
         self.loadMenus()
       })
+    },
+    computed: {
+      logoPic () {
+        return require('@/assets/logo.png')
+      }
     },
     watch: {
       isCollapse (val) {
@@ -168,7 +176,6 @@
 .fh-main-nav-left{
   background-color: #367fa9;
   text-align: center;
-  font-size: x-large;
   line-height: 50px;
 }
 .fh-main-nav-right{
