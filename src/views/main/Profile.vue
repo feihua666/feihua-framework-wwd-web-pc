@@ -1,5 +1,5 @@
 <template>
-  <el-row>
+  <el-row style="white-space:nowrap">
     <el-col :class="isCollapse ? 'hidden': ''" :span="6">
       <img class="head-pic" @click="showFileUpload" :src="headPic"/>
     </el-col>
@@ -254,8 +254,8 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
   .head-pic{
-    width: 45px;
-    height: 45px;
+    width: 40px;
+    height: 40px;
     border: none;
     border-radius: 50%;
     margin-top: 3px;
