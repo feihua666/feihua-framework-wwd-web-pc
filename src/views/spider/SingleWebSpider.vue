@@ -10,7 +10,7 @@
           <el-option v-for="item in type"  :label="item.name"  :value="item.id" :key="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="网址" prop="url" required>
+      <el-form-item label="网址" prop="url" >
         <el-input  v-model="form.url"></el-input>
       </el-form-item>
 
@@ -20,11 +20,11 @@
           <el-option  label="静态网页"  :value="false" ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item v-if="form.dynamic" label="等待时间（秒）" prop="dynamicWaitSecond" required>
+      <el-form-item v-if="form.dynamic" label="等待时间（秒）" prop="dynamicWaitSecond" >
         <el-input  v-model="form.dynamicWaitSecond"></el-input>
       </el-form-item>
       <template v-for="(val, key, index) in form.selector">
-        <el-form-item :label="key" :prop="'selector[' + key + ']'" :key="index" required>
+        <el-form-item :label="key" :prop="'selector[' + key + ']'" :key="index" >
           <el-input  v-model="form.selector[key]"></el-input>
         </el-form-item>
       </template>

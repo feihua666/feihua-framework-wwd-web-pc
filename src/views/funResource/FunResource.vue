@@ -67,6 +67,10 @@
             label: '名称'
           },
           {
+            name: 'code',
+            label: '编码'
+          },
+          {
             name: 'type',
             label: '类型',
             dict: 'funResource_type'

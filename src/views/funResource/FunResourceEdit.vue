@@ -12,6 +12,9 @@
       <el-form-item label="名称" prop="name">
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
+      <el-form-item label="编码" prop="code" >
+        <el-input  v-model="form.code"></el-input>
+      </el-form-item>
       <el-form-item label="类型" prop="type">
         <self-dict-select v-model="form.type" v-on:change="typeChange" type="funResource_type"></self-dict-select>
       </el-form-item>
@@ -22,7 +25,7 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item label="是否显示" prop="isShow" required>
+      <el-form-item label="是否显示" prop="isShow" >
         <self-dict-select v-model="form.isShow" type="yes_no"></self-dict-select>
       </el-form-item>
       <el-form-item label="url" prop="url" v-if="form.type == 'link_page' || form.type == 'link'">
@@ -76,6 +79,7 @@
           icon: null,
           isShow: '',
           name: null,
+          code: null,
           url: null,
           type: '',
           permissions: null,
@@ -120,6 +124,7 @@
           .then(function (response) {
             let content = response.data.data.content
             self.form.name = content.name
+            self.form.code = content.code
             self.form.type = content.type
             self.form.sequence = content.sequence
             self.form.isShow = content.isShow

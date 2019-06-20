@@ -1,7 +1,7 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="开始时间" prop="startTime" required>
+      <el-form-item label="开始时间" prop="startTime" >
         <el-date-picker
           v-model="form.startTime"
           type="datetime"
@@ -9,7 +9,7 @@
           placeholder="选择时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="结束时间" prop="endTime" required>
+      <el-form-item label="结束时间" prop="endTime" >
         <el-date-picker
           v-model="form.endTime"
           type="datetime"
@@ -20,7 +20,7 @@
       <el-form-item label="请假类型" prop="leaveType">
         <self-dict-select v-model="form.leaveType" type="oa_workattendance_leave_type"></self-dict-select>
       </el-form-item>
-      <el-form-item label="请假理由" prop="reason" required>
+      <el-form-item label="请假理由" prop="reason" >
         <el-input  v-model="form.reason"></el-input>
       </el-form-item>
       <el-form-item>
