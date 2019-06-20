@@ -6,7 +6,7 @@
         <el-header height="110px" style="padding: 0;color: #fff">
           <div class="fh-logo fh-main-nav fh-main-nav-left">
             <img style="height:45px;" :src="logoPic">
-            <span v-if="!isCollapse">后台管理</span>
+            <span v-if="!isCollapse">{{$config.systemName || ''}}</span>
           </div>
           <profile :is-collapse="isCollapse" :load-msg-num="true"></profile>
         </el-header>
@@ -80,6 +80,9 @@
     },
     computed: {
       logoPic () {
+        if (this.$config.logoUrl) {
+          return this.$config.logoUrl
+        }
         return require('@/assets/logo.png')
       }
     },

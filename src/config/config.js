@@ -27,6 +27,10 @@ const config = {
   client: 'pc',
   // 百度地图ak
   bMapAk: '69a5a1e7260cd2cd298c33666e436530',
+  // 系统名称
+  systemName: '汪汪队后台管理',
+  // logo 的图片地址，不填写使用默认的
+  logoUrl: null,
   // 页面向导配置
   guideDriver: {
     doneBtnText: '完成',
