@@ -2,13 +2,13 @@
 
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 500px;" label-width="100px">
-      <el-form-item label="调查主题" prop="title" required>
+      <el-form-item label="调查主题" prop="title" >
         <el-input  v-model="form.title"></el-input>
       </el-form-item>
       <el-form-item label="调查描述" prop="description">
         <el-input type="textarea" v-model="form.description"></el-input>
       </el-form-item>
-      <el-form-item label="调查类型" prop="type" required>
+      <el-form-item label="调查类型" prop="type" >
         <SelfDictSelect  v-model="form.type" type="survey_type"></SelfDictSelect>
       </el-form-item>
       <el-form-item label="调查时间" prop="myDateRange">
@@ -24,10 +24,10 @@
       <el-form-item label="排序" prop="sequence">
         <el-input-number  :min="0" v-model="form.sequence" style="width: 100%;"></el-input-number>
       </el-form-item>
-      <el-form-item label="注册可参与" prop="register" required>
+      <el-form-item label="注册可参与" prop="register" >
         <SelfDictSelect  v-model="form.register" type="yes_no"></SelfDictSelect>
       </el-form-item>
-      <el-form-item label="可重复参与" prop="repeatLimit" required>
+      <el-form-item label="可重复参与" prop="repeatLimit" >
         <SelfDictSelect  v-model="form.repeatLimit" type="yes_no"></SelfDictSelect>
       </el-form-item>
       <el-form-item>

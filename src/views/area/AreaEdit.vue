@@ -1,10 +1,10 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form class="fh-background-white fh-padding-30" ref="form" :model="form" :rules="formRules" style="width: 460px;" label-width="100px" v-loading="formDataLoading">
-      <el-form-item label="名称" prop="name" required>
+      <el-form-item label="名称" prop="name" >
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="类型" prop="type" required>
+      <el-form-item label="类型" prop="type" >
         <self-dict-select v-model="form.type" type="area_type"></self-dict-select>
       </el-form-item>
       <el-form-item label="父级">

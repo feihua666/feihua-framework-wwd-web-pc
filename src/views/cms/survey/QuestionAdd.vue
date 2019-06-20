@@ -1,10 +1,10 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 500px;" label-width="100px">
-      <el-form-item label="问题标题" prop="name" required>
+      <el-form-item label="问题标题" prop="name" >
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="问题类型" prop="type" required>
+      <el-form-item label="问题类型" prop="type" >
         <SelfDictSelect  v-model="form.type" type="question_type"></SelfDictSelect>
       </el-form-item>
       <el-form-item label="是否换行" prop="br" v-if="isBr">

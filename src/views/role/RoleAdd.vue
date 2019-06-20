@@ -1,7 +1,7 @@
 <template>
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="名称" prop="name" required>
+      <el-form-item label="名称" prop="name" >
         <el-input  v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="编码" prop="code">
@@ -10,7 +10,7 @@
       <el-form-item label="类型" prop="type">
         <self-dict-select v-model="form.type" type="role_type"></self-dict-select>
       </el-form-item>
-      <el-form-item label="是否禁用" prop="disabled" required>
+      <el-form-item label="是否禁用" prop="disabled" >
         <self-dict-select v-model="form.disabled" type="yes_no"></self-dict-select>
       </el-form-item>
       <el-form-item label="机构">

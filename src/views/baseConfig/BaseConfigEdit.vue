@@ -7,11 +7,11 @@
                    inactive-value="N">
         </el-switch>
       </el-form-item>
-      <el-form-item label="CONFIG_KEY" prop="configKey" required>
+      <el-form-item label="CONFIG_KEY" prop="configKey" >
         <el-input v-model="form.configKey" autocomplete="off"
                   placeholder="key" readonly></el-input>
       </el-form-item>
-      <el-form-item label="CONFIG_VALUE" prop="configValue" required>
+      <el-form-item label="CONFIG_VALUE" prop="configValue" >
         <el-input type="textarea" :autosize="{ minRows: 10}" v-model="form.configValue"></el-input>
         <div>注意：如果配置内容为json,请严格按json双引号标准填写</div>
       </el-form-item>

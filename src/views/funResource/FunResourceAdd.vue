@@ -9,8 +9,11 @@
       </el-scrollbar>
     </el-popover>
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px">
-      <el-form-item label="名称" prop="name" required>
+      <el-form-item label="名称" prop="name" >
         <el-input  v-model="form.name"></el-input>
+      </el-form-item>
+      <el-form-item label="编码" prop="code" >
+        <el-input  v-model="form.code"></el-input>
       </el-form-item>
       <el-form-item label="类型" prop="type">
         <self-dict-select v-model="form.type" type="funResource_type"></self-dict-select>
@@ -22,7 +25,7 @@
         </el-input>
       </el-form-item>
 
-      <el-form-item label="是否显示" prop="isShow" required>
+      <el-form-item label="是否显示" prop="isShow" >
         <self-dict-select v-model="form.isShow" type="yes_no"></self-dict-select>
       </el-form-item>
       <el-form-item label="url" prop="url" v-if="form.type == 'link_page' || form.type == 'link'">
@@ -74,6 +77,7 @@
           icon: null,
           isShow: '',
           name: null,
+          code: null,
           url: null,
           type: '',
           permissions: null,

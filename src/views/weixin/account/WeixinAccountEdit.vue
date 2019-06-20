@@ -2,43 +2,43 @@
   <div class="fh-page-wrapper">
     <el-form ref="form" class="fh-background-white fh-padding-30" :model="form" :rules="formRules" style="width: 460px;" label-width="100px"
              v-loading="formDataLoading">
-      <el-form-item label="账号" prop="account" required>
+      <el-form-item label="账号" prop="account" >
         <el-input v-model="form.account"></el-input>
       </el-form-item>
-      <el-form-item label="名称" prop="name" required>
+      <el-form-item label="名称" prop="name" >
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="微信号" prop="weixinId">
         <el-input v-model="form.weixinId"></el-input>
       </el-form-item>
-      <el-form-item label="TOKEN" prop="token" required>
+      <el-form-item label="TOKEN" prop="token" >
         <el-input v-model="form.token"></el-input>
       </el-form-item>
-      <el-form-item label="APPID" prop="appid" required>
+      <el-form-item label="APPID" prop="appid" >
         <el-input v-model="form.appid"></el-input>
       </el-form-item>
-      <el-form-item label="APPSECRET" prop="appsecret" required>
+      <el-form-item label="APPSECRET" prop="appsecret" >
         <el-input v-model="form.appsecret"></el-input>
       </el-form-item>
-      <el-form-item label="WHICH" prop="which" w required>
+      <el-form-item label="WHICH" prop="which" w >
         <el-input v-model="form.which"></el-input>
       </el-form-item>
-      <el-form-item label="类型" prop="type"  required>
+      <el-form-item label="类型" prop="type"  >
         <self-dict-select v-model="form.type" type="weixin_account_type"></self-dict-select>
       </el-form-item>
-      <el-form-item label="是否有效" prop="status" required>
+      <el-form-item label="是否有效" prop="status" >
         <self-dict-select v-model="form.status" type="yes_no"/>
       </el-form-item>
-      <el-form-item label="认证" prop="auth" required>
+      <el-form-item label="认证" prop="auth" >
         <self-dict-select v-model="form.auth" type="yes_no"/>
       </el-form-item>
-      <el-form-item label="欢迎语类型" prop="templateType"  v-if="typeLimit.templateType" required>
+      <el-form-item label="欢迎语类型" prop="templateType"  v-if="typeLimit.templateType" >
         <self-dict-select v-model="form.templateType" type="weixin_msg_type"/>
       </el-form-item>
-      <el-form-item label="欢迎语" prop="template" v-if="typeLimit.template" required>
+      <el-form-item label="欢迎语" prop="template" v-if="typeLimit.template" >
         <el-input type="textarea" :autosize="{ minRows: 2}" v-model="form.template"></el-input>
       </el-form-item>
-      <el-form-item label="消息类型" prop="msgType"  v-if="typeLimit.msgType" required>
+      <el-form-item label="消息类型" prop="msgType"  v-if="typeLimit.msgType" >
         <self-dict-select v-model="form.msgType" type="xml_or_json_type"/>
       </el-form-item>
       <el-form-item label="备注" prop="remark">
