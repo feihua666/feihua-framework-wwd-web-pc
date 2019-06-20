@@ -302,6 +302,34 @@ export function hasLogin () {
     })
   })
 }
+
+/**
+ * 根据资源code查询是否有权限
+ * @type {{}}
+ */
+let cacheFunction = {}
+export function hasFunctionPermissionByCode (code) {
+  let promise = new Promise((resolve, reject) => {
+    if (code) {
+      if (cacheFunction[code]) {
+        resolve(cacheFunction[code])
+      } else {
+        Axios.get('/base/functionResources', {
+          params: {code: code, t: new Date().getTime() + Math.random()}
+        }).then(response => {
+          let content = response.data.data.content
+          cacheFunction[code] = content
+          resolve(content)
+        }).catch(err => {
+          reject(err)
+        })
+      }
+    } else {
+      reject(new Error('code is null'))
+    }
+  })
+  return promise
+}
 const http = {
   get: get,
   post: post,
@@ -315,6 +343,7 @@ const http = {
   getRegExps: getRegExps,
   getRegExpByType: getRegExpByType,
   getCurrentUserinfo: getCurrentUserinfo,
-  hasLogin: hasLogin
+  hasLogin: hasLogin,
+  hasPermission: hasFunctionPermissionByCode
 }
 export default http
