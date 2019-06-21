@@ -22,6 +22,9 @@
     <el-collapse-item title="岗位数据范围" name="postDataScope">
       <PostDataScopeDefine :dataScopeId="dataScopeId"></PostDataScopeDefine>
     </el-collapse-item>
+    <el-collapse-item title="用户组数据范围" name="userGroupDataScope">
+      <UserGroupDataScopeDefine :dataScopeId="dataScopeId"></UserGroupDataScopeDefine>
+    </el-collapse-item>
     <el-collapse-item title="区域数据范围" name="areaDataScope">
       公共资源，默认全部数据
     </el-collapse-item>
@@ -39,6 +42,7 @@
   import DictDataScopeDefine from '@/views/dict/DictDataScopeDefine.vue'
   import PostDataScopeDefine from '@/views/postjob/PostDataScopeDefine.vue'
   import PostJobDataScopeDefine from '@/views/postjob/PostJobDataScopeDefine.vue'
+  import UserGroupDataScopeDefine from '@/views/group/UserGroupDataScopeDefine.vue'
   export default {
     name: 'DataScopeSetting',
     components: {
@@ -48,6 +52,7 @@
       DataScopeDataScopeDefine,
       DictDataScopeDefine,
       PostDataScopeDefine,
+      UserGroupDataScopeDefine,
       PostJobDataScopeDefine
     },
     data () {
@@ -60,7 +65,8 @@
           'dictDataScope',
           'postJobDataScope',
           'postDataScope',
-          'areaDataScope'
+          'areaDataScope',
+          'userGroupDataScope'
         ],
         dataScopeId: null // 数据范围id，页面传来的
       }
