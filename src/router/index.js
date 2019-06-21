@@ -103,6 +103,23 @@ const router = new Router({
           meta: { menu: {name: '角色修改'}, keepAlive: true }
         },
         {
+          path: 'UserGroup',
+          name: 'UserGroup',
+          component: _import('group/UserGroup')
+        },
+        {
+          path: 'UserGroupAdd',
+          name: 'UserGroupAdd',
+          component: _import('group/UserGroupAdd'),
+          meta: { menu: {name: '用户分组添加'} }
+        },
+        {
+          path: 'UserGroupEdit/:id',
+          name: 'UserGroupEdit',
+          component: _import('group/UserGroupEdit'),
+          meta: { menu: {name: '用户分组修改'}, keepAlive: true }
+        },
+        {
           path: 'RoleBindDataScope/:roleId',
           name: 'RoleBindDataScope',
           component: _import('role/RoleBindDataScope'),
@@ -148,6 +165,12 @@ const router = new Router({
           name: 'UserBindRoles',
           component: _import('user/UserBindRoles'),
           meta: { menu: {name: '用户绑定角色'} }
+        },
+        {
+          path: 'UserBindUserGroups/:userId',
+          name: 'UserBindUserGroups',
+          component: _import('user/UserBindUserGroups'),
+          meta: { menu: {name: '用户绑定用户组'} }
         },
         {
           path: 'UserBindPosts/:userId',

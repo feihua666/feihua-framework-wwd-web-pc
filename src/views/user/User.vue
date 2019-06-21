@@ -115,6 +115,12 @@
                 click: this.userBindPostsBtnClick
               },
               {
+                label: '添加到用户组',
+                styleType: 'primary',
+                icon: 'el-icon-setting',
+                click: this.userBindUserGroupsBtnClick
+              },
+              {
                 label: '用户详情',
                 styleType: 'primary',
                 icon: 'el-icon-search',
@@ -238,6 +244,11 @@
       userBindRolesBtnClick (index, row) {
         this.$utils.loadDataControl.add('UserBindRolesLoadData=true')
         this.$router.push('/Main/UserBindRoles/' + row.id)
+      },
+      // 用户绑定用户组
+      userBindUserGroupsBtnClick (index, row) {
+        this.$utils.loadDataControl.add('UserBindUserGroupsLoadData=true')
+        this.$router.push('/Main/UserBindUserGroups/' + row.id)
       },
       // 用户绑定岗位
       userBindPostsBtnClick (index, row) {
