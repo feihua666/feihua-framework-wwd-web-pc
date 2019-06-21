@@ -83,6 +83,9 @@
       <el-form-item label="活动声明" prop="activityStatement">
         <el-input type="textarea" :autosize="{ minRows: 2}" v-model="form.activityStatement"></el-input>
       </el-form-item>
+      <el-form-item label="活动互选管理用户组" prop="manageUserGroupId">
+        <UserGroupInputSelect  v-model="form.manageUserGroupId"></UserGroupInputSelect>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-check" @click="addBtnClick" :loading="addLoading">添加</el-button>
       </el-form-item>
@@ -94,8 +97,9 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import TinymceEditor from '@/components/tinymceEditor/TinymceEditor.vue'
   import FileUpload from '@/components/FileUpload'
+  import UserGroupInputSelect from '@/views/group/UserGroupInputSelect.vue'
   export default {
-    components: {SelfDictSelect, TinymceEditor, FileUpload},
+    components: {SelfDictSelect, TinymceEditor, FileUpload, UserGroupInputSelect},
     name: 'WwdActivityAdd',
     data () {
       let dateTime = new Date()
@@ -129,6 +133,8 @@
           femalePrice: null,
           introduced: null,
           payType: 'online_pay',
+          mutualElectionStatus: 'no_start',
+          manageUserGroupId: null,
           activityStatement: null
         },
         addLoading: false,
@@ -185,6 +191,8 @@
               activity.femalePrice = self.form.femalePrice
               activity.introduced = self.form.introduced
               activity.payType = self.form.payType
+              activity.mutualElectionStatus = self.form.mutualElectionStatus
+              activity.manageUserGroupId = self.form.manageUserGroupId
               activity.activityStatement = self.form.activityStatement
               if (self.form.myDateRange.length === 2) {
                 activity.startTime = self.form.myDateRange[0]

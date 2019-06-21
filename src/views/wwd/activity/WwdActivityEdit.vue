@@ -91,6 +91,12 @@
           <el-radio-button label="finished">已结束</el-radio-button>
         </el-radio-group>
       </el-form-item>
+      <el-form-item label="活动互选状态" prop="mutualElectionStatus">
+        <SelfDictSelect type="mutual_election_status" v-model="form.mutualElectionStatus"></SelfDictSelect>
+      </el-form-item>
+      <el-form-item label="活动互选管理用户组" prop="manageUserGroupId">
+        <UserGroupInputSelect ref="manageUserGroup"  v-model="form.manageUserGroupId"></UserGroupInputSelect>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-check" @click="updateBtnClick" :loading="addLoading">修改</el-button>
       </el-form-item>
@@ -102,10 +108,10 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
   import TinymceEditor from '@/components/tinymceEditor/TinymceEditor.vue'
   import FileUpload from '@/components/FileUpload'
-
+  import UserGroupInputSelect from '@/views/group/UserGroupInputSelect.vue'
   export default {
     name: 'WwdActivityEdit',
-    components: {SelfDictSelect, TinymceEditor, FileUpload},
+    components: {SelfDictSelect, TinymceEditor, FileUpload, UserGroupInputSelect},
     data () {
       let dateTime = new Date()
       dateTime = dateTime.setDate(dateTime.getDate() - 1)
@@ -138,6 +144,7 @@
           femalePrice: null,
           introduced: null,
           payType: 'online_pay',
+          mutualElectionStatus: '',
           activityStatement: null
         },
         addLoading: false,
@@ -161,6 +168,9 @@
             {required: true, message: '必填', trigger: 'blur'}
           ],
           content: [
+            {required: true, message: '必填', trigger: 'blur'}
+          ],
+          mutualElectionStatus: [
             {required: true, message: '必填', trigger: 'blur'}
           ]
         }
@@ -198,12 +208,15 @@
             self.form.activityStatement = content.activityStatement
             self.form.introduced = content.introduced
             self.form.payType = content.payType
+            self.form.mutualElectionStatus = content.mutualElectionStatus
             self.form.updateTime = content.updateAt
             if (content.startTime && content.endTime) {
               self.form.myDateRange = [content.startTime, content.endTime]
             } else {
               self.form.myDateRange = ''
             }
+            self.form.manageUserGroupId = content.manageUserGroupId
+            self.$refs.manageUserGroup.initLabelName(content.manageUserGroupId)
             self.formDataLoading = false
             return Promise.resolve(content)
           }).catch(function (response) {
@@ -237,6 +250,8 @@
               activity.femalePrice = self.form.femalePrice
               activity.introduced = self.form.introduced
               activity.payType = self.form.payType
+              activity.mutualElectionStatus = self.form.mutualElectionStatus
+              activity.manageUserGroupId = self.form.manageUserGroupId
               activity.activityStatement = self.form.activityStatement
               if (self.form.myDateRange.length === 2) {
                 activity.startTime = self.form.myDateRange[0]
