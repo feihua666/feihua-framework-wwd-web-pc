@@ -64,6 +64,10 @@
             dict: 'message_state'
           },
           {
+            name: 'updateAt',
+            label: '消息时间'
+          },
+          {
             label: '操作',
             dropdown: true,
             buttons: [

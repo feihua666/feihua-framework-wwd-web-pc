@@ -579,6 +579,23 @@ const router = new Router({
         },
         // wwd
         {
+          path: 'Wwd/Banner',
+          name: 'WwdBanner',
+          component: _import('wwd/banner/WwdBanner')
+        },
+        {
+          path: 'Wwd/Banner/WwdBannerAdd',
+          name: 'WwdBannerAdd',
+          component: _import('wwd/banner/WwdBannerAdd'),
+          meta: { menu: {name: '轮播图添加'}, keepAlive: true }
+        },
+        {
+          path: 'Wwd/Banner/WwdBannerEdit/:id',
+          name: 'WwdBannerEdit',
+          component: _import('wwd/banner/WwdBannerEdit'),
+          meta: { menu: {name: '轮播图修改'}, keepAlive: true }
+        },
+        {
           path: 'Wwd/Activity',
           name: 'WwdActivity',
           component: _import('wwd/activity/WwdActivity')

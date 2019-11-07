@@ -5,17 +5,15 @@
         <el-collapse value="1">
           <el-collapse-item title="查询条件" name="1">
             <el-form ref="searchForm" :model="searchFormModel" :inline="true" size="small">
-              <el-form-item label="关键字" prop="keyword">
-                <el-input v-model="searchFormModel.keyword"></el-input>
+              <el-form-item label="关键字" prop="title">
+                <el-input v-model="searchFormModel.title"></el-input>
               </el-form-item>
-              <el-form-item label="支付方式" prop="payType">
-                <self-dict-select v-model="searchFormModel.payType" type="wwd_pay_type"></self-dict-select>
-              </el-form-item>
-              <el-form-item label="订单状态" prop="payStatus">
-                <self-dict-select v-model="searchFormModel.payStatus" type="wwd_pay_status"></self-dict-select>
+              <el-form-item label="状态" prop="status">
+                <self-dict-select v-model="searchFormModel.status" type="yes_no"></self-dict-select>
               </el-form-item>
               <el-form-item>
                 <el-button type="primary" icon="el-icon-search" @click="searchBtnClick">查询</el-button>
+                <el-button type="primary" icon="el-icon-plus" @click="addTableRowClick">添加</el-button>
                 <el-button type="warning" icon="el-icon-refresh" @click="resetFormClick">重置</el-button>
               </el-form-item>
             </el-form>
@@ -25,20 +23,6 @@
                     v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange">
         </self-table>
       </el-main>
-      <el-dialog
-        :title="statusForm.title"
-        :visible.sync="rowDialogVisible"
-        width="375px"
-        @before-close="rowDialogVisible = false">
-        <el-form ref="statusForm" :model="statusForm">
-          <el-form-item label="" prop="payStatus" required>
-            <self-dict-select v-model="statusForm.payStatus" type="wwd_pay_status"></self-dict-select>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="primary" icon="el-icon-check" @click="editStatusSaveClick"  style="width: 100%" :loading="addLoading">保存</el-button>
-          </el-form-item>
-        </el-form>
-      </el-dialog>
     </el-container>
 
 </template>
@@ -49,7 +33,7 @@
   import SelfDictSelect from '@/components/SelfDictSelect.vue'
 
   export default {
-    name: 'WwdActivityOrder',
+    name: 'WwdBanner',
     components: {
       SelfDictSelect,
       SelfTable,
@@ -59,60 +43,37 @@
       return {
         defaultSort: {prop: 'updateAt', order: 'descending'},
         addLoading: false,
-        rowDialogVisible: false,
-        statusForm: {
-          title: '',
-          id: null,
-          payStatus: 'no_pay'
-        },
         columns: [
-
           {
-            name: 'activityUrl',
+            type: 'expand'
+          },
+          {
+            name: 'titleUrl',
             width: '100',
             image: true,
             label: '标题图'
           },
           {
-            name: 'activityTitle',
+            name: 'title',
             label: '标题'
           },
           {
-            name: 'orderNo',
-            label: '订单编号'
+            name: 'redirectUrl',
+            label: '跳转链接',
+            showInTable: false
           },
           {
-            name: 'baseUserDto.photo',
-            width: '100',
-            image: true,
-            label: '用户头像'
+            name: 'type',
+            label: '类型'
           },
           {
-            name: 'baseUserDto.nickname',
-            label: '用户名'
+            name: 'status',
+            dict: 'yes_no',
+            label: '状态'
           },
           {
-            name: 'baseUserDto.gender',
-            dict: 'gender',
-            label: '性别'
-          },
-          {
-            name: 'payType',
-            dict: 'wwd_pay_type',
-            label: '支付方式'
-          },
-          {
-            name: 'payStatus',
-            dict: 'wwd_pay_status',
-            label: '订单状态'
-          },
-          {
-            name: 'price',
-            label: '订单价格'
-          },
-          {
-            name: 'remarks',
-            label: '订单备注'
+            name: 'descp',
+            label: '描述'
           },
           {
             sortable: 'custom',
@@ -132,10 +93,16 @@
             width: '200',
             buttons: [
               {
-                label: '修改支付状态',
+                label: '修改',
                 styleType: 'primary',
                 icon: 'el-icon-edit',
-                click: this.editStatusClick
+                click: this.editTableRowClick
+              },
+              {
+                label: '删除',
+                styleType: 'danger',
+                icon: 'el-icon-delete',
+                click: this.deleteTableRowClick
               }
             ]
           }
@@ -151,16 +118,12 @@
         searchFormModel: {
           orderable: true,
           orderby: 'update_at-desc',
-          keyword: '',
-          payType: '',
-          payStatus: '',
+          status: '',
+          title: '',
           pageable: true,
           pageNo: 1,
           pageSize: 10
-        },
-        dialogVisible: false,
-        synToWeixinLoading: false,
-        dialogValue: null
+        }
       }
     },
     mounted () {
@@ -191,7 +154,7 @@
           }
         }
         self.tableLoading = true
-        this.$http.get('/wwd/activity/orders', self.searchFormModel)
+        this.$http.get('/wwd/banners', self.searchFormModel)
           .then(function (response) {
             let content = response.data.data.content
             self.tableData = content
@@ -216,45 +179,14 @@
         this.page.pageNo = val
         this.loadTableData(val, true)
       },
+      addTableRowClick () {
+        this.$utils.loadDataControl.add('WwdBannerAddLoadData=true')
+        this.$router.push('/Main/Wwd/Banner/WwdBannerAdd')
+      },
       // tablb 表格编辑行
       editTableRowClick (index, row) {
-        //
-      },
-      editStatusClick (index, row) {
-        let self = this
-        let rowObj = row
-        self.rowDialogVisible = true
-        self.statusForm.title = ['[', rowObj.baseUserDto.nickname, ']', rowObj.activityTitle].join('')
-        self.statusForm.id = rowObj.id
-        self.statusForm.payStatus = rowObj.payStatus
-      },
-      // 修改活动状态
-      editStatusSaveClick () {
-        let self = this
-        if (self.addLoading === false) {
-          this.$refs['statusForm'].validate((valid) => {
-            if (valid) {
-              // 请求添加
-              self.addLoading = true
-              self.$http.put('/wwd/activity/order/' + self.statusForm.id + '/edit/' + self.statusForm.payStatus)
-                .then(function (response) {
-                  self.$message.info('修改成功')
-                  self.addLoading = false
-                  self.searchBtnClick()
-                })
-                .catch(function (response) {
-                  if (response.response.status === 404) {
-                    self.$message.error('修改失败，数据不存在或已被他人修改，请刷新列表后再试')
-                  }
-                  self.addLoading = false
-                })
-            } else {
-              return false
-            }
-          })
-        } else {
-          self.$message.info('正在请求中，请耐心等待')
-        }
+        this.$utils.loadDataControl.add('WwdBannerEditLoadData=true')
+        this.$router.push('/Main/Wwd/Banner/WwdBannerEdit/' + row.id)
       },
       // tablb 表格删除行
       deleteTableRowClick (index, row) {
@@ -262,7 +194,7 @@
         this.$confirm('确定要删除吗, 是否继续?', '提示', {
           type: 'warning'
         }).then(() => {
-          this.$http.delete('/wwd/activity/order/' + row.id)
+          this.$http.delete('/wwd/banner/' + row.id)
             .then(function (response) {
               self.$message.success('删除成功')
               // 重新加载数据
