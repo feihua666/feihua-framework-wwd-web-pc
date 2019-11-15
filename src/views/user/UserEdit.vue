@@ -62,9 +62,6 @@
         formDataLoading: false,
         addLoading: false,
         formRules: {
-          account: [
-            {required: true, message: '必填', trigger: 'blur'}
-          ],
           locked: [
             {required: true, message: '必填', trigger: 'blur'}
           ],
