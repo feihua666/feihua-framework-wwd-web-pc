@@ -69,10 +69,10 @@
         <el-input v-model="form.headcountDesc" style="width: 50%"></el-input>
       </el-form-item>
       <el-form-item  label="价格男" prop="malePrice" required>
-        <el-input-number :min="1" v-model="form.malePrice"></el-input-number> 元
+        <el-input-number :min="minPrice" v-model="form.malePrice"></el-input-number> 元
       </el-form-item>
       <el-form-item label="价格女" prop="femalePrice" required>
-        <el-input-number :min="1" v-model="form.femalePrice"></el-input-number> 元
+        <el-input-number :min="minPrice" v-model="form.femalePrice"></el-input-number> 元
       </el-form-item>
       <el-form-item label="活动内容" prop="content" required>
         <tinymce-editor v-model="form.content"></tinymce-editor>
@@ -112,6 +112,7 @@
           }
         },
         imgUrl: '',
+        minPrice: 1,
         form: {
           myDateRange: '',
           title: null,
@@ -244,6 +245,16 @@
       })
     },
     watch: {
+      'form.payType' (val) {
+        let self = this
+        if (val === 'online_pay') {
+          self.form.malePrice = self.form.malePrice > 0 ? self.form.malePrice : null
+          self.form.femalePrice = self.form.femalePrice > 0 ? self.form.femalePrice : null
+          self.minPrice = 1
+        } else {
+          self.minPrice = 0
+        }
+      },
       'form.headcountRule' (value) {
         let self = this
         let _typeLimit = {
