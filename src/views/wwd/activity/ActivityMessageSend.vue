@@ -7,31 +7,13 @@
       </el-form-item>
 
       <el-form-item label="模板参数" prop="templateParamsView">
-        <el-input autosize type="textarea"  v-model="form.templateParamsView"></el-input>
+        <el-input autosize type="textarea"  v-model="form.templateParamsView" readonly></el-input>
       </el-form-item>
 
 
       <el-form-item label="发送参数" prop="templateParams">
         <el-input autosize type="textarea"  v-model="form.templateParams"></el-input>
       </el-form-item>
-<!--      <el-form-item label="activity_first">-->
-<!--        <el-input autosize   v-model="msgParam.activity_first"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="activity_name">-->
-<!--        <el-input autosize   v-model="msgParam.activity_name"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="activity_time">-->
-<!--        <el-input autosize   v-model="msgParam.activity_time"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="activity_address">-->
-<!--        <el-input autosize   v-model="msgParam.activity_address"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="activity_remark">-->
-<!--        <el-input autosize   v-model="msgParam.activity_remark"></el-input>-->
-<!--      </el-form-item>-->
-<!--      <el-form-item label="wwdActivityId">-->
-<!--        <el-input autosize   v-model="msgParam.wwdActivityId"></el-input>-->
-<!--      </el-form-item>-->
       <el-form-item label="发送客户端" prop="clientIds">
         <LoginClientCheckboxGroup  v-model="form.clientIds" v-on:change="changeClient" ></LoginClientCheckboxGroup>
       </el-form-item>
@@ -205,7 +187,7 @@
           }
           let _form = {
             messageTemplateId: this.form.messageTemplateId,
-            targetType: this.form.targetType,
+            targetType: 'multi_people',
             targetValues: this.form.targetValues,
             clientIds: this.clientIds,
             templateParams: this.form.templateParams,
