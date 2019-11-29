@@ -601,6 +601,11 @@ const router = new Router({
           component: _import('wwd/activity/WwdActivity')
         },
         {
+          path: 'Wwd/ActivityMessageSend',
+          name: 'ActivityMessageSend',
+          component: _import('wwd/activity/ActivityMessageSend')
+        },
+        {
           path: 'Wwd/Activity/WwdActivityAdd',
           name: 'WwdActivityAdd',
           component: _import('wwd/activity/WwdActivityAdd'),
