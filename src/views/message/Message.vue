@@ -21,7 +21,7 @@
             </el-form>
           </el-collapse-item>
         </el-collapse>
-        <self-table :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
+        <self-table @sortChange="sortChange" :default-sort="defaultSort"  :columns="columns" :tableData="tableData" :page="page" :table-loading="tableLoading" v-on:pageSizeChange="pageSizeChange" v-on:pageNoChange="pageNoChange"></self-table>
       </el-main>
     </el-container>
 
@@ -40,6 +40,7 @@
     },
     data () {
       return {
+        defaultSort: {prop: 'updateAt', order: 'descending'},
         columns: [
           {
             name: 'title',
@@ -64,6 +65,8 @@
             dict: 'message_state'
           },
           {
+            sortable: 'custom',
+            sortBy: 'update_at',
             name: 'updateAt',
             label: '消息时间'
           },
@@ -115,6 +118,8 @@
         tableLoading: false,
         // 搜索的查询条件
         searchFormModel: {
+          orderable: true,
+          orderby: 'update_at-desc',
           title: '',
           msgLevel: '',
           msgType: '',
@@ -128,6 +133,10 @@
       this.loadTableData(1)
     },
     methods: {
+      sortChange (val) {
+        this.searchFormModel.orderby = val.sortBy
+        this.searchBtnClick()
+      },
       // 查询按钮点击事件
       searchBtnClick () {
         this.loadTableData(1)
