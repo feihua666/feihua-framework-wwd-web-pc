@@ -198,7 +198,7 @@
             if (valid) {
               // 请求添加
               self.addLoading = true
-              self.$http.post('/base/message/newsend/' + self.form.messageTemplateId, _form)
+              self.$http.post('/wwd/message/newsend/' + self.form.messageTemplateId, _form)
                 .then(function (response) {
                   self.$message.success('消息发送成功')
                   self.addLoading = false

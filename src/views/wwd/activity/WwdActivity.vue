@@ -214,7 +214,7 @@
       }
     },
     mounted () {
-      // this.loadTableData(1)
+      this.loadTableData(1)
     },
     methods: {
       sortChange (val) {
